@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include <lvgl.h>
 #include <TFT_eSPI.h> // ILI9488ドライバを含むライブラリ
+#include "lv_demos.h"
+
 
 
 TFT_eSPI tft = TFT_eSPI(); // TFTのインスタンスを作成
@@ -30,34 +32,7 @@ void setup() {
 
     // バッファのサイズを設定（解像度に基づいて）
 
-
-    lv_disp_draw_buf_init(&draw_buf, buf, NULL, 320 * 3);
-
-    lv_disp_drv_init(&disp_drv);
-    disp_drv.hor_res = 480; // ディスプレイの解像度を設定
-    disp_drv.ver_res = 320;
-    disp_drv.flush_cb = my_disp_flush;
-    disp_drv.draw_buf = &draw_buf;
-    lv_disp_drv_register(&disp_drv);
-
-
-    static lv_style_t style1;
-    // LVGLラベルの作成
-    lv_obj_t *label = lv_label_create(lv_scr_act());
-    //lv_label_set_text(label, "Hello, LVGL World02!");
-    lv_style_init(&style1);
-    lv_style_set_text_font(&style1, &jpfont);
-
-    lv_obj_add_style(label, &style1, 0);
-    lv_style_set_text_color(&style1, lv_color_hex(0xFFFFFF));
-    lv_label_set_text(label,"あいうえおかきくけこ");
-    // ラベルのサイズを設定
-    lv_obj_set_size(label, 200, 100);
-
-    // テキストの折り返しを設定
-    lv_label_set_long_mode(label, LV_LABEL_LONG_WRAP);
-
-    lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
+    lv_demo_widgets();
 
     Serial.println("Setup End");
 }
