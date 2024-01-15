@@ -20,7 +20,7 @@ static lv_disp_draw_buf_t draw_buf;
 static lv_color_t buf[320 * 10]; // 仮にディスプレイの垂直解像度を480ピクセルと仮定
 static lv_disp_drv_t disp_drv;
 
-LV_FONT_DECLARE(jpfont);
+//LV_FONT_DECLARE(jpfont);
 
 void setup() {
     Serial.begin(115200); // シリアル通信の初期化
