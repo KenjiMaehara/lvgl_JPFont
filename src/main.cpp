@@ -32,7 +32,7 @@ void setup() {
 
     // バッファのサイズを設定（解像度に基づいて）
 
-    lv_demo_widgets();
+    //lv_demo_widgets();
 
     Serial.println("Setup End");
 }
