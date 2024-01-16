@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <lvgl.h>
 #include <TFT_eSPI.h> // ILI9488ドライバを含むライブラリ
+#include "lv_demos.h"
 
 //#define DEBUG_MODE // デバッグモードを有効にする。デバッグが不要な場合はこの行をコメントアウト
 
@@ -133,6 +134,8 @@ void setup() {
 
     // カスタムスタイルをボタンに適用する
     lv_obj_add_style(btn, &custom_style, 0);
+
+    lv_demo_widgets();
 
 }
 
