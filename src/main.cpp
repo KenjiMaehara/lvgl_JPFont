@@ -18,7 +18,7 @@ static lv_disp_draw_buf_t draw_buf;
 static lv_color_t buf[320 * 10]; // 仮にディスプレイの垂直解像度を480ピクセルと仮定
 static lv_disp_drv_t disp_drv;
 
-LV_FONT_DECLARE(jpfont);
+//LV_FONT_DECLARE(jpfont);
 
 void setup() {
     Serial.begin(115200); // シリアル通信の初期化
@@ -49,10 +49,11 @@ void setup() {
     lv_style_set_text_font(&style1, &jpfont);
 
     lv_obj_add_style(label, &style1, 0);
-    lv_style_set_text_color(&style1, lv_color_hex(0xFFFFFF));
-    lv_label_set_text(label,"あいうえおかきくけこ");
+    //lv_style_set_text_color(&style1, lv_color_hex(0xFFFFFF));
+    lv_obj_add_style(label , &style1, 0);
+    lv_label_set_text(label,"あいうtえeおsかtきくけこ");
     // ラベルのサイズを設定
-    lv_obj_set_size(label, 200, 100);
+    lv_obj_set_size(label, 200, 200);
 
     // テキストの折り返しを設定
     lv_label_set_long_mode(label, LV_LABEL_LONG_WRAP);
