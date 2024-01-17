@@ -57,7 +57,7 @@ void setup() {
     //lv_style_set_text_color(&style1, lv_color_hex(0xFFFFFF));
     //lv_obj_add_style(label , &style1, 0);
     //lv_label_set_style(label, &style1);
-    lv_label_set_text(label,"あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめも");
+    lv_label_set_text(label,"アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワイウエオ");
     // ラベルのサイズを設定
     lv_obj_set_size(label, 200, 200);
 
