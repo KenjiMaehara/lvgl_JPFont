@@ -57,7 +57,7 @@ void setup() {
     //lv_style_set_text_color(&style1, lv_color_hex(0xFFFFFF));
     //lv_obj_add_style(label , &style1, 0);
     //lv_label_set_style(label, &style1);
-    lv_label_set_text(label,"大宮、さいたま新都心、与野、北浦和、浦和、南浦和、蕨、西川口、川口、赤羽");
+    lv_label_set_text(label,"あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめも");
     // ラベルのサイズを設定
     lv_obj_set_size(label, 200, 200);
 
