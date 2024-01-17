@@ -20,7 +20,7 @@ static lv_disp_draw_buf_t draw_buf;
 static lv_color_t buf[320 * 10]; // 仮にディスプレイの垂直解像度を480ピクセルと仮定
 static lv_disp_drv_t disp_drv;
 
-LV_FONT_DECLARE(jpFont02);
+LV_FONT_DECLARE(jpFont03);
 
 void setup() {
     Serial.begin(115200); // シリアル通信の初期化
@@ -50,14 +50,14 @@ void setup() {
 
 
     lv_style_init(&style1);
-    lv_style_set_text_font(&style1, &jpFont02);
+    lv_style_set_text_font(&style1, &jpFont03);
 
     lv_obj_t *label = lv_label_create(lv_scr_act());
     lv_obj_add_style(label, &style1, 0);
     //lv_style_set_text_color(&style1, lv_color_hex(0xFFFFFF));
     //lv_obj_add_style(label , &style1, 0);
     //lv_label_set_style(label, &style1);
-    lv_label_set_text(label,"あいうtえeおsかtきくけこ");
+    lv_label_set_text(label,"大宮、さいたま新都心、与野、北浦和、浦和、南浦和、蕨、西川口、川口、赤羽");
     // ラベルのサイズを設定
     lv_obj_set_size(label, 200, 200);
 
