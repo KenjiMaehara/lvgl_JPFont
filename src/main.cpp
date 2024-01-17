@@ -1,3 +1,5 @@
+#pragma execution_character_set("utf-8")
+
 #include <Arduino.h>
 #include <lvgl.h>
 #include <TFT_eSPI.h> // ILI9488ドライバを含むライブラリ
@@ -18,7 +20,7 @@ static lv_disp_draw_buf_t draw_buf;
 static lv_color_t buf[320 * 10]; // 仮にディスプレイの垂直解像度を480ピクセルと仮定
 static lv_disp_drv_t disp_drv;
 
-//LV_FONT_DECLARE(jpfont);
+LV_FONT_DECLARE(jpFont02);
 
 void setup() {
     Serial.begin(115200); // シリアル通信の初期化
@@ -43,14 +45,18 @@ void setup() {
 
     static lv_style_t style1;
     // LVGLラベルの作成
-    lv_obj_t *label = lv_label_create(lv_scr_act());
-    //lv_label_set_text(label, "Hello, LVGL World02!");
-    lv_style_init(&style1);
-    lv_style_set_text_font(&style1, &jpfont);
 
+    //lv_label_set_text(label, "Hello, LVGL World02!");
+
+
+    lv_style_init(&style1);
+    lv_style_set_text_font(&style1, &jpFont02);
+
+    lv_obj_t *label = lv_label_create(lv_scr_act());
     lv_obj_add_style(label, &style1, 0);
     //lv_style_set_text_color(&style1, lv_color_hex(0xFFFFFF));
-    lv_obj_add_style(label , &style1, 0);
+    //lv_obj_add_style(label , &style1, 0);
+    //lv_label_set_style(label, &style1);
     lv_label_set_text(label,"あいうtえeおsかtきくけこ");
     // ラベルのサイズを設定
     lv_obj_set_size(label, 200, 200);
