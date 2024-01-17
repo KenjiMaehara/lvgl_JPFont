@@ -56,32 +56,6 @@ void setup() {
     lv_disp_drv_register(&disp_drv);
 
 
-    static lv_style_t style1;
-    // LVGLラベルの作成
-
-    //lv_label_set_text(label, "Hello, LVGL World02!");
-
-
-    lv_style_init(&style1);
-    lv_style_set_text_font(&style1, &jpFont04);
-
-    lv_obj_t *label = lv_label_create(lv_scr_act());
-    lv_obj_add_style(label, &style1, 0);
-    //lv_style_set_text_color(&style1, lv_color_hex(0xFFFFFF));
-    //lv_obj_add_style(label , &style1, 0);
-    //lv_label_set_style(label, &style1);
-    //lv_label_set_text(label,"大宮 さいたま新都心 与野 北浦和 浦和 南浦和 魑魅魍魎");
-    // ラベルのサイズを設定
-    lv_obj_set_size(label, 200, 200);
-
-    // テキストの折り返しを設定
-    lv_label_set_long_mode(label, LV_LABEL_LONG_WRAP);
-
-    lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
-
-    // LVGLスクリーンを作成
-    //lv_obj_t * scr = lv_cont_create(NULL, NULL);
-    //lv_disp_load_scr(scr);
 
     // ボタンを作成
     lv_obj_t * btn = lv_btn_create(lv_scr_act());     // scr の代わりに lv_scr_act() を使用
@@ -94,6 +68,25 @@ void setup() {
 
     // ボタンにラベルを追加
     //lv_obj_t * label = lv_label_create(btn, NULL);
+
+
+    static lv_style_t style1;
+
+    lv_style_init(&style1);
+    lv_style_set_text_font(&style1, &jpFont04);
+
+    lv_obj_t *label = lv_label_create(btn);
+    lv_obj_add_style(label, &style1, 0);
+
+    // ラベルのサイズを設定
+    //lv_obj_set_size(label, 200, 200);
+
+    // テキストの折り返しを設定
+    lv_label_set_long_mode(label, LV_LABEL_LONG_WRAP);
+
+    lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
+
+    // テキストを設定
     lv_label_set_text(label, "テスト1");
 
     Serial.println("Setup End");
