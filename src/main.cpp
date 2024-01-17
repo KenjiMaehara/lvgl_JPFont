@@ -85,6 +85,10 @@ void setup() {
 
     // ボタンを作成
     lv_obj_t * btn = lv_btn_create(lv_scr_act());     // scr の代わりに lv_scr_act() を使用
+    int width = 200;
+    int height = 100;
+    lv_obj_set_size(btn, width, height);
+
     lv_obj_align(btn, LV_ALIGN_CENTER, 0, -20);       // LV_ALIGN_CENTER または他の適切な定数を使用
     lv_obj_add_event_cb(btn, btn_event_cb, LV_EVENT_ALL, NULL); // ボタンアクションの新しい設定方法
 
