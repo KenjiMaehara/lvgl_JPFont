@@ -20,6 +20,19 @@ static lv_disp_draw_buf_t draw_buf;
 static lv_color_t buf[320 * 10]; // 仮にディスプレイの垂直解像度を480ピクセルと仮定
 static lv_disp_drv_t disp_drv;
 
+
+
+
+void btn_event_cb(lv_event_t *event) {
+    lv_event_code_t code = lv_event_get_code(event);
+    if (code == LV_EVENT_CLICKED) {
+        Serial.println("ボタンがクリックされました");
+    }
+}
+
+
+
+
 LV_FONT_DECLARE(jpFont04);
 
 void setup() {
@@ -57,7 +70,7 @@ void setup() {
     //lv_style_set_text_color(&style1, lv_color_hex(0xFFFFFF));
     //lv_obj_add_style(label , &style1, 0);
     //lv_label_set_style(label, &style1);
-    lv_label_set_text(label,"大宮 さいたま新都心 与野 北浦和 浦和 南浦和 魑魅魍魎");
+    //lv_label_set_text(label,"大宮 さいたま新都心 与野 北浦和 浦和 南浦和 魑魅魍魎");
     // ラベルのサイズを設定
     lv_obj_set_size(label, 200, 200);
 
@@ -65,6 +78,19 @@ void setup() {
     lv_label_set_long_mode(label, LV_LABEL_LONG_WRAP);
 
     lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
+
+    // LVGLスクリーンを作成
+    //lv_obj_t * scr = lv_cont_create(NULL, NULL);
+    //lv_disp_load_scr(scr);
+
+    // ボタンを作成
+    lv_obj_t * btn = lv_btn_create(lv_scr_act());     // scr の代わりに lv_scr_act() を使用
+    lv_obj_align(btn, LV_ALIGN_CENTER, 0, -20);       // LV_ALIGN_CENTER または他の適切な定数を使用
+    lv_obj_add_event_cb(btn, btn_event_cb, LV_EVENT_ALL, NULL); // ボタンアクションの新しい設定方法
+
+    // ボタンにラベルを追加
+    //lv_obj_t * label = lv_label_create(btn, NULL);
+    lv_label_set_text(label, "テスト1");
 
     Serial.println("Setup End");
 }
