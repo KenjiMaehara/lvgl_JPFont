@@ -10,30 +10,10 @@ static lv_color_t buf[320 * 10]; // 仮にディスプレイの垂直解像度�
 static lv_disp_drv_t disp_drv;
 
 
-
-static void btn_event_cb(lv_event_t *event) {
-    count++;
-    if (count > 1)
-    {
-        count = 0;
-    }
-    
-    Serial.println("イベントハンドラ呼び出し_02");
-    lv_event_code_t code = lv_event_get_code(event);
-    if (code == LV_EVENT_CLICKED) {
-        Serial.println("ボタンがクリックされました_02");
-
-        // 画面全体を赤色に変更
-        if(count % 2 == 0){
-            lv_obj_set_style_bg_color(lv_scr_act(), lv_color_make(0, 0, 255), LV_PART_MAIN);
-        }else{
-            lv_obj_set_style_bg_color(lv_scr_act(), lv_color_make(255, 0, 0), LV_PART_MAIN);
-        }
-    }
-}
+static void btn_event_cb(lv_event_t *e);
 
 
-
+static char number_str[64] = ""; // 数字を格納する文字列
 
 void tenkey_setup() {
     Serial.begin(115200); // シリアル通信の初期化
@@ -46,7 +26,10 @@ void tenkey_setup() {
     // バッファのサイズを設定（解像度に基づいて）
 
 
-    lv_disp_draw_buf_init(&draw_buf, buf, NULL, 320 * 3);
+    // バッファのサイズを設定
+    lv_disp_draw_buf_init(&draw_buf, buf, NULL, 320 * 10); // 解像度に基づいてバッファサイズを設定
+
+
 
     lv_disp_drv_init(&disp_drv);
     disp_drv.hor_res = 480; // ディスプレイの解像度を設定
@@ -55,61 +38,62 @@ void tenkey_setup() {
     disp_drv.draw_buf = &draw_buf;
     lv_disp_drv_register(&disp_drv);
 
-
-    // タッチパッド入力デバイスを初期化して登録
     static lv_indev_drv_t indev_drv;
-    lv_indev_drv_init(&indev_drv);           // 基本的な初期化
-    indev_drv.type = LV_INDEV_TYPE_POINTER;  // タッチパッドはポインタータイプのデバイス
-    indev_drv.read_cb = my_touchpad_read;    // タッチ読み取り関数を設定
-    lv_indev_t *my_indev = lv_indev_drv_register(&indev_drv); // デバイスを登録
+    lv_indev_drv_init(&indev_drv);
+    indev_drv.type = LV_INDEV_TYPE_POINTER;
+    indev_drv.read_cb = my_touchpad_read;
+    lv_indev_drv_register(&indev_drv);
+
+    // シンプルな数値キーパッドを作成
+    lv_obj_t *btn;
+    lv_obj_t *label;
+    lv_obj_t *screen = lv_scr_act();
 
 
+    for (int i = 0; i < 12; i++) {
+        btn = lv_btn_create(screen); // シグネチャを更新
+        lv_obj_set_size(btn, 80, 45);
+        lv_obj_set_pos(btn, (i % 3) * 90 + 100, (i / 3) * 50 + 100);
+        lv_obj_add_event_cb(btn, btn_event_cb, LV_EVENT_CLICKED, NULL);
+        label = lv_label_create(btn); // シグネチャを更新
+
+        static lv_style_t button_label_style;
+        lv_style_init(&button_label_style);
+        lv_style_set_text_font(&button_label_style, &jpFont04);
+        lv_obj_add_style(label, &button_label_style, 0);
+        lv_obj_set_align(label, LV_ALIGN_CENTER); // テキストを中央に配置
 
 
-    // スタイルの作成
+        // 特定のボタンにテキストを設定
+        if (i == 9) {
+            lv_label_set_text(label, "*");
+        } else if (i == 10) {
+            lv_label_set_text(label, "0");
+        } else if (i == 11) {
+            lv_label_set_text(label, "#");
+        } else {
+            lv_label_set_text_fmt(label, "%d", i + 1);
+        }
+    }
+
+    // 数字を表示するラベルを作成
+    lv_obj_t *number_label = lv_label_create(screen); // シグネチャを更新
+    lv_label_set_text(number_label, number_str);
+    lv_obj_align(number_label, LV_ALIGN_TOP_MID, 0, 30);
+
     static lv_style_t style;
     lv_style_init(&style);
-
-    // 枠線の色と太さの設定
-    lv_style_set_border_color(&style, lv_color_black()); // 枠線の色を黒に設定
-    lv_style_set_border_width(&style, 2); // 枠線の太さを2pxに設定
-
-    // ボタンを作成
-    lv_obj_t * btn = lv_btn_create(lv_scr_act());     // scr の代わりに lv_scr_act() を使用
-    int width = 200;
-    int height = 100;
-    lv_obj_set_size(btn, width, height);
-
-    // スタイルの適用 (修正)
-    lv_obj_add_style(btn, &style, 0); // ボタンにスタイルを適用
-
-    lv_obj_align(btn, LV_ALIGN_CENTER, 0, -20);       // LV_ALIGN_CENTER または他の適切な定数を使用
-    lv_obj_add_event_cb(btn, btn_event_cb, LV_EVENT_CLICKED , NULL); // ボタンアクションの新しい設定方法
-
-    // ボタンにラベルを追加
-    //lv_obj_t * label = lv_label_create(btn, NULL);
-
-
-    static lv_style_t style1;
-
-    lv_style_init(&style1);
-    lv_style_set_text_font(&style1, &jpFont04);
-
-    lv_obj_t *label = lv_label_create(btn);
-    lv_obj_add_style(label, &style1, 0);
-
-    // ラベルのサイズを設定
-    //lv_obj_set_size(label, 200, 200);
-
-    // テキストの折り返しを設定
-    lv_label_set_long_mode(label, LV_LABEL_LONG_WRAP);
-
-    lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
-
-    // テキストを設定
-    lv_label_set_text(label, "テスト2");
+    lv_style_set_text_font(&style, &jpFont04); // フォントサイズを大きく設定
+    lv_obj_add_style(number_label, &style, 0);
 
     Serial.println("Setup End");
 }
 
 
+static void btn_event_cb(lv_event_t *e) {
+    lv_obj_t *btn = lv_event_get_target(e);
+    const char *txt = lv_label_get_text(lv_obj_get_child(btn, 0));
+    strncat(number_str, txt, sizeof(number_str) - strlen(number_str) - 1);
+    lv_obj_t *number_label = lv_obj_get_child(lv_scr_act(), -1);
+    lv_label_set_text(number_label, number_str);
+}
