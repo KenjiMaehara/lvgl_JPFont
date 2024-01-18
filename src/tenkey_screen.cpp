@@ -38,11 +38,14 @@ void tenkey_setup() {
     disp_drv.draw_buf = &draw_buf;
     lv_disp_drv_register(&disp_drv);
 
+    #if 0
+    // タッチパッド入力デバイスを初期化して登録
     static lv_indev_drv_t indev_drv;
     lv_indev_drv_init(&indev_drv);
     indev_drv.type = LV_INDEV_TYPE_POINTER;
     indev_drv.read_cb = my_touchpad_read;
     lv_indev_drv_register(&indev_drv);
+    #endif
 
     // シンプルな数値キーパッドを作成
     lv_obj_t *btn;
