@@ -58,6 +58,8 @@ static lv_disp_drv_t disp_drv;
 
 int count = 0;
 
+// ボタンを作成
+lv_obj_t * btn;
 
 static void btn_event_cb(lv_event_t *event) {
     count++;
@@ -71,6 +73,7 @@ static void btn_event_cb(lv_event_t *event) {
     if (code == LV_EVENT_CLICKED) {
         Serial.println("ボタンがクリックされました");
 
+        lv_obj_del(btn); // ボタンオブジェクトを削除
         tenkey_setup();
 
         #if 0
@@ -83,7 +86,6 @@ static void btn_event_cb(lv_event_t *event) {
         #endif
     }
 }
-
 
 
 
@@ -133,7 +135,7 @@ void setup() {
 
 
     // ボタンを作成
-    lv_obj_t * btn = lv_btn_create(lv_scr_act());     // scr の代わりに lv_scr_act() を使用
+    btn = lv_btn_create(lv_scr_act());     // scr の代わりに lv_scr_act() を使用
     int width = 200;
     int height = 100;
     lv_obj_set_size(btn, width, height);
