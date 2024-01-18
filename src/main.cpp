@@ -60,6 +60,7 @@ int count = 0;
 
 // ボタンを作成
 lv_obj_t * btn;
+lv_obj_t * btn2;
 
 static void btn_event_cb(lv_event_t *event) {
     count++;
@@ -74,6 +75,7 @@ static void btn_event_cb(lv_event_t *event) {
         Serial.println("ボタンがクリックされました");
 
         lv_obj_del(btn); // ボタンオブジェクトを削除
+        lv_obj_del(btn2); // ボタンオブジェクトを削除
         tenkey_setup();
 
         #if 0
@@ -138,7 +140,7 @@ void setup() {
     lv_style_set_text_color(&style, lv_color_make(0, 0, 0)); // テキストの色を黒に設定
 
 
-    // ボタンを作成
+    // ボタン1を作成
     btn = lv_btn_create(lv_scr_act());     // scr の代わりに lv_scr_act() を使用
     int width = 200;
     int height = 100;
@@ -172,6 +174,23 @@ void setup() {
 
     // テキストを設定
     lv_label_set_text(label, "テスト1");
+
+
+
+
+    // ボタン2の作成
+    btn2 = lv_btn_create(lv_scr_act()); 
+    lv_obj_set_size(btn2, 200, 100); // "テスト1" ボタンと同じサイズ
+    lv_obj_add_style(btn2, &style, 0); // 既存のスタイルを適用
+    lv_obj_align(btn2, LV_ALIGN_CENTER, 0, 50); // 適切な位置に配置
+
+    // ラベルの追加
+    lv_obj_t *label2 = lv_label_create(btn2);
+    lv_obj_add_style(label2, &style1, 0);
+    lv_label_set_long_mode(label2, LV_LABEL_LONG_WRAP);
+    lv_obj_align(label2, LV_ALIGN_CENTER, 0, 0);
+    lv_label_set_text(label2, "時計表示");
+
 
     Serial.println("Setup End");
 }
