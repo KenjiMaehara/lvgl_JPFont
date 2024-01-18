@@ -7,6 +7,39 @@
 
 TFT_eSPI tft = TFT_eSPI(); // TFTのインスタンスを作成
 
+void my_touchpad_read(lv_indev_drv_t *drv, lv_indev_data_t *data) {
+
+
+    uint16_t touchX, touchY;
+
+    // タッチイベントの確認
+    bool touched = tft.getTouch(&touchX, &touchY);
+
+    
+
+    if (touched) {
+
+        data->point.x = touchX;
+        data->point.y = touchY;
+        data->state = LV_INDEV_STATE_PR; // プレス状態
+
+        #ifdef DEBUG_MODE
+        Serial.println("TFT getTouch!");
+        // タッチ座標をシリアル出力
+        Serial.print("Touch X: ");
+        Serial.print(touchX);
+        Serial.print(", Touch Y: ");
+        Serial.println(touchY);
+        #endif
+    } else {
+        data->state = LV_INDEV_STATE_REL; // リリース状態
+    }
+
+    //return false; // データが常に有効であることを示す
+
+}
+
+
 // ディスプレイフラッシュ関数
 void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p) {
     tft.startWrite();
@@ -23,7 +56,7 @@ static lv_disp_drv_t disp_drv;
 
 
 
-void btn_event_cb(lv_event_t *event) {
+static void btn_event_cb(lv_event_t *event) {
     Serial.println("イベントハンドラ呼び出し");
     lv_event_code_t code = lv_event_get_code(event);
     if (code == LV_EVENT_CLICKED) {
@@ -58,6 +91,14 @@ void setup() {
     disp_drv.flush_cb = my_disp_flush;
     disp_drv.draw_buf = &draw_buf;
     lv_disp_drv_register(&disp_drv);
+
+
+    // タッチパッド入力デバイスを初期化して登録
+    static lv_indev_drv_t indev_drv;
+    lv_indev_drv_init(&indev_drv);           // 基本的な初期化
+    indev_drv.type = LV_INDEV_TYPE_POINTER;  // タッチパッドはポインタータイプのデバイス
+    indev_drv.read_cb = my_touchpad_read;    // タッチ読み取り関数を設定
+    lv_indev_t *my_indev = lv_indev_drv_register(&indev_drv); // デバイスを登録
 
 
 
