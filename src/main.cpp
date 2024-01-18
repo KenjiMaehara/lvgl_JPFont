@@ -71,12 +71,16 @@ static void btn_event_cb(lv_event_t *event) {
     if (code == LV_EVENT_CLICKED) {
         Serial.println("ボタンがクリックされました");
 
+        tenkey_setup();
+
+        #if 0
         // 画面全体を赤色に変更
         if(count % 2 == 0){
             lv_obj_set_style_bg_color(lv_scr_act(), lv_color_make(0, 0, 255), LV_PART_MAIN);
         }else{
             lv_obj_set_style_bg_color(lv_scr_act(), lv_color_make(255, 0, 0), LV_PART_MAIN);
         }
+        #endif
     }
 }
 
