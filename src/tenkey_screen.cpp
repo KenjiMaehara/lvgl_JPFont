@@ -18,10 +18,10 @@ static void btn_event_cb(lv_event_t *event) {
         count = 0;
     }
     
-    Serial.println("イベントハンドラ呼び出し");
+    Serial.println("イベントハンドラ呼び出し_02");
     lv_event_code_t code = lv_event_get_code(event);
     if (code == LV_EVENT_CLICKED) {
-        Serial.println("ボタンがクリックされました");
+        Serial.println("ボタンがクリックされました_02");
 
         // 画面全体を赤色に変更
         if(count % 2 == 0){
@@ -40,8 +40,8 @@ void tenkey_setup() {
     Serial.println("Setup Start");
 
     lv_init();
-    //tft.begin();
-    //tft.setRotation(1); // ディスプレイの向きに合わせて調整
+    tft.begin();
+    tft.setRotation(1); // ディスプレイの向きに合わせて調整
 
     // バッファのサイズを設定（解像度に基づいて）
 
