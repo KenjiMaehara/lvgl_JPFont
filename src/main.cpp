@@ -24,9 +24,13 @@ static lv_disp_drv_t disp_drv;
 
 
 void btn_event_cb(lv_event_t *event) {
+    Serial.println("イベントハンドラ呼び出し");
     lv_event_code_t code = lv_event_get_code(event);
     if (code == LV_EVENT_CLICKED) {
         Serial.println("ボタンがクリックされました");
+
+        // 画面全体を赤色に変更
+        lv_obj_set_style_bg_color(lv_scr_act(), lv_color_make(255, 0, 0), LV_PART_MAIN);
     }
 }
 
@@ -64,7 +68,7 @@ void setup() {
     lv_obj_set_size(btn, width, height);
 
     lv_obj_align(btn, LV_ALIGN_CENTER, 0, -20);       // LV_ALIGN_CENTER または他の適切な定数を使用
-    lv_obj_add_event_cb(btn, btn_event_cb, LV_EVENT_ALL, NULL); // ボタンアクションの新しい設定方法
+    lv_obj_add_event_cb(btn, btn_event_cb, LV_EVENT_CLICKED , NULL); // ボタンアクションの新しい設定方法
 
     // ボタンにラベルを追加
     //lv_obj_t * label = lv_label_create(btn, NULL);
