@@ -99,6 +99,10 @@ void setup() {
     tft.begin();
     tft.setRotation(1); // ディスプレイの向きに合わせて調整
 
+    uint16_t calData[5] = { 231, 3567, 344, 3355, 7 };
+    tft.setTouch(calData);
+
+
     // バッファのサイズを設定（解像度に基づいて）
 
 
