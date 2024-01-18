@@ -54,16 +54,27 @@ static lv_color_t buf[320 * 10]; // 仮にディスプレイの垂直解像度�
 static lv_disp_drv_t disp_drv;
 
 
+int count = 0;
 
 
 static void btn_event_cb(lv_event_t *event) {
+    count++;
+    if (count > 1)
+    {
+        count = 0;
+    }
+    
     Serial.println("イベントハンドラ呼び出し");
     lv_event_code_t code = lv_event_get_code(event);
     if (code == LV_EVENT_CLICKED) {
         Serial.println("ボタンがクリックされました");
 
         // 画面全体を赤色に変更
-        lv_obj_set_style_bg_color(lv_scr_act(), lv_color_make(255, 0, 0), LV_PART_MAIN);
+        if(count % 2 == 0){
+            lv_obj_set_style_bg_color(lv_scr_act(), lv_color_make(0, 0, 255), LV_PART_MAIN);
+        }else{
+            lv_obj_set_style_bg_color(lv_scr_act(), lv_color_make(255, 0, 0), LV_PART_MAIN);
+        }
     }
 }
 
