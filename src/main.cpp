@@ -124,6 +124,10 @@ void setup() {
     lv_style_set_border_color(&style, lv_color_black()); // 枠線の色を黒に設定
     lv_style_set_border_width(&style, 2); // 枠線の太さを2pxに設定
 
+    lv_style_set_bg_color(&style, lv_color_make(173, 255, 47)); // 黄緑色に設定
+    lv_style_set_text_color(&style, lv_color_make(0, 0, 0)); // テキストの色を黒に設定
+
+
     // ボタンを作成
     lv_obj_t * btn = lv_btn_create(lv_scr_act());     // scr の代わりに lv_scr_act() を使用
     int width = 200;
