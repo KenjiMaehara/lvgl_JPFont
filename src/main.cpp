@@ -113,11 +113,23 @@ void setup() {
 
 
 
+
+    // スタイルの作成
+    static lv_style_t style;
+    lv_style_init(&style);
+
+    // 枠線の色と太さの設定
+    lv_style_set_border_color(&style, lv_color_black()); // 枠線の色を黒に設定
+    lv_style_set_border_width(&style, 2); // 枠線の太さを2pxに設定
+
     // ボタンを作成
     lv_obj_t * btn = lv_btn_create(lv_scr_act());     // scr の代わりに lv_scr_act() を使用
     int width = 200;
     int height = 100;
     lv_obj_set_size(btn, width, height);
+
+    // スタイルの適用 (修正)
+    lv_obj_add_style(btn, &style, 0); // ボタンにスタイルを適用
 
     lv_obj_align(btn, LV_ALIGN_CENTER, 0, -20);       // LV_ALIGN_CENTER または他の適切な定数を使用
     lv_obj_add_event_cb(btn, btn_event_cb, LV_EVENT_CLICKED , NULL); // ボタンアクションの新しい設定方法
