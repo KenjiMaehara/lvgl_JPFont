@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include <lvgl.h>
 #include <TFT_eSPI.h> // ILI9488ドライバを含むライブラリ
+#include <WiFi.h>
+#include <NTPClient.h>
 #include "common.h"
 
 

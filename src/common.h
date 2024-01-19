@@ -12,4 +12,7 @@ extern TFT_eSPI tft; // TFTのインスタンスを作成
 extern void clock_setup();
 extern void start_setup();
 
+
+extern void ntpUpdateTask(void *pvParameters);
+
 #endif
