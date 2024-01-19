@@ -2,7 +2,7 @@
 
 #include <Arduino.h>
 #include <lvgl.h>
-#include "main.h"
+#include "common.h"
 #include <TFT_eSPI.h> // ILI9488ドライバを含むライブラリ
 
 
@@ -77,15 +77,20 @@ static void btn_event_cb(lv_event_t *event) {
         lv_obj_del(btn); // ボタンオブジェクトを削除
         lv_obj_del(btn2); // ボタンオブジェクトを削除
         tenkey_setup();
+    }
+}
 
-        #if 0
-        // 画面全体を赤色に変更
-        if(count % 2 == 0){
-            lv_obj_set_style_bg_color(lv_scr_act(), lv_color_make(0, 0, 255), LV_PART_MAIN);
-        }else{
-            lv_obj_set_style_bg_color(lv_scr_act(), lv_color_make(255, 0, 0), LV_PART_MAIN);
-        }
-        #endif
+
+static void btn_event_clock_cb(lv_event_t *event) {
+
+    Serial.println("clock_イベントハンドラ呼び出し");
+    lv_event_code_t code = lv_event_get_code(event);
+    if (code == LV_EVENT_CLICKED) {
+        Serial.println("clock_ボタンがクリックされました");
+
+        lv_obj_del(btn); // ボタンオブジェクトを削除
+        lv_obj_del(btn2); // ボタンオブジェクトを削除
+        clock_setup();
     }
 }
 
@@ -143,13 +148,13 @@ void setup() {
     // ボタン1を作成
     btn = lv_btn_create(lv_scr_act());     // scr の代わりに lv_scr_act() を使用
     int width = 200;
-    int height = 100;
+    int height = 50;
     lv_obj_set_size(btn, width, height);
 
     // スタイルの適用 (修正)
     lv_obj_add_style(btn, &style, 0); // ボタンにスタイルを適用
 
-    lv_obj_align(btn, LV_ALIGN_CENTER, 0, -20);       // LV_ALIGN_CENTER または他の適切な定数を使用
+    lv_obj_align(btn, LV_ALIGN_LEFT_MID, 0, -60);       // LV_ALIGN_CENTER または他の適切な定数を使用
     lv_obj_add_event_cb(btn, btn_event_cb, LV_EVENT_CLICKED , NULL); // ボタンアクションの新しい設定方法
 
     // ボタンにラベルを追加
@@ -173,16 +178,17 @@ void setup() {
     lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
 
     // テキストを設定
-    lv_label_set_text(label, "テスト1");
+    lv_label_set_text(label, "テンキーパネル");
 
 
 
 
     // ボタン2の作成
     btn2 = lv_btn_create(lv_scr_act()); 
-    lv_obj_set_size(btn2, 200, 100); // "テスト1" ボタンと同じサイズ
+    lv_obj_set_size(btn2, width, height); // "テスト1" ボタンと同じサイズ
     lv_obj_add_style(btn2, &style, 0); // 既存のスタイルを適用
-    lv_obj_align(btn2, LV_ALIGN_CENTER, 0, 50); // 適切な位置に配置
+    lv_obj_align(btn2, LV_ALIGN_LEFT_MID, 0, 0); // 適切な位置に配置
+    lv_obj_add_event_cb(btn2, btn_event_clock_cb, LV_EVENT_CLICKED , NULL); // ボタンアクションの新しい設定方法
 
     // ラベルの追加
     lv_obj_t *label2 = lv_label_create(btn2);

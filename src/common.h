@@ -9,5 +9,6 @@ extern void my_touchpad_read(lv_indev_drv_t *drv, lv_indev_data_t *data);
 extern int count;
 extern void tenkey_setup();
 extern TFT_eSPI tft; // TFTのインスタンスを作成
+extern void clock_setup();
 
 #endif

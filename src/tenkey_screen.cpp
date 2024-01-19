@@ -3,7 +3,7 @@
 #include <Arduino.h>
 #include <lvgl.h>
 #include <TFT_eSPI.h> // ILI9488ドライバを含むライブラリ
-#include "main.h"
+#include "common.h"
 
 static lv_disp_draw_buf_t draw_buf;
 static lv_color_t buf[320 * 10]; // 仮にディスプレイの垂直解像度を480ピクセルと仮定
@@ -16,15 +16,10 @@ static void btn_event_cb(lv_event_t *e);
 static char number_str[64] = ""; // 数字を格納する文字列
 
 void tenkey_setup() {
-    Serial.begin(115200); // シリアル通信の初期化
-    Serial.println("Setup Start");
 
     lv_init();
     tft.begin();
     tft.setRotation(1); // ディスプレイの向きに合わせて調整
-
-    // バッファのサイズを設定（解像度に基づいて）
-
 
     // バッファのサイズを設定
     lv_disp_draw_buf_init(&draw_buf, buf, NULL, 320 * 10); // 解像度に基づいてバッファサイズを設定
