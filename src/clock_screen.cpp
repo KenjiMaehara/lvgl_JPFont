@@ -12,6 +12,19 @@ static lv_disp_drv_t disp_drv;
 // 時刻表示用のラベル
 lv_obj_t *time_label;
 
+
+
+// WiFiの資格情報
+const char* ssid = "YOUR_SSID";
+const char* password = "YOUR_PASSWORD";
+
+// NTPクライアントの設定
+WiFiUDP ntpUDP;
+NTPClient timeClient(ntpUDP, "pool.ntp.org", 3600 * 9); // JSTの場合
+
+
+
+
 void clock_setup() {
     // TFTの初期化
     tft.begin();
@@ -38,3 +51,16 @@ void clock_setup() {
     // NTPクライアントの設定など...
 }
 
+
+
+// NTP更新用のタスク
+void ntpUpdateTask(void *pvParameters) {
+  for (;;) {
+    if (WiFi.status() == WL_CONNECTED) {
+      timeClient.update();
+      String currentTime = timeClient.getFormattedTime();
+      lv_label_set_text(time_label, currentTime.c_str());
+    }
+    vTaskDelay(3600000 / portTICK_PERIOD_MS); // 1時間ごと
+  }
+}
