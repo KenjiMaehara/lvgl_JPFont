@@ -59,6 +59,7 @@ int count = 0;
 // ボタンを作成
 lv_obj_t * btn;
 lv_obj_t * btn2;
+lv_obj_t * btn3;
 
 static void btn_event_cb(lv_event_t *event) {
     count++;
@@ -196,6 +197,24 @@ void start_setup() {
     lv_label_set_long_mode(label2, LV_LABEL_LONG_WRAP);
     lv_obj_align(label2, LV_ALIGN_CENTER, 0, 0);
     lv_label_set_text(label2, "時計表示");
+
+
+
+    // ボタン３の作成
+    btn3 = lv_btn_create(lv_scr_act()); 
+    lv_obj_set_size(btn3, width, height); // "テスト1" ボタンと同じサイズ
+    lv_obj_add_style(btn3, &style, 0); // 既存のスタイルを適用
+    lv_obj_align(btn3, LV_ALIGN_LEFT_MID, 0, 60); // 適切な位置に配置
+    lv_obj_add_event_cb(btn3, btn_event_clock_cb, LV_EVENT_CLICKED , NULL); // ボタンアクションの新しい設定方法
+
+    // ラベルの追加
+    lv_obj_t *label3 = lv_label_create(btn3);
+    lv_obj_add_style(label3, &style1, 0);
+    lv_label_set_long_mode(label3, LV_LABEL_LONG_WRAP);
+    lv_obj_align(label3, LV_ALIGN_CENTER, 0, 0);
+    lv_label_set_text(label3, "wifi設定");
+
+
 
 
     Serial.println("Setup End");
