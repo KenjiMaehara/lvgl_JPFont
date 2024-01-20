@@ -3,6 +3,7 @@
 #include <TFT_eSPI.h> // ILI9488ドライバを含むライブラリ
 #include "common.h"
 
+#define DEBUG_MODE
 
 
 TFT_eSPI tft = TFT_eSPI(); // TFTのインスタンスを作成
