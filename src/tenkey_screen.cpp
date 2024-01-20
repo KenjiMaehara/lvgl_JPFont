@@ -15,6 +15,8 @@ static void btn_event_cb(lv_event_t *e);
 
 static char number_str[64] = ""; // 数字を格納する文字列
 
+LV_FONT_DECLARE(jpFont04);
+
 void tenkey_setup() {
 
     lv_init();
