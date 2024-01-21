@@ -46,8 +46,16 @@ void clock_setup() {
     disp_drv.draw_buf = &draw_buf;
     lv_disp_drv_register(&disp_drv);
 
+
+    static lv_style_t style1;
+    lv_style_init(&style1);
+    lv_style_set_text_font(&style1, &jpFont04);
+
+
+
     // 時刻表示用ラベルの作成
     time_label = lv_label_create(lv_scr_act());
+    lv_obj_add_style(time_label, &style1, 0); // スタイルを適用
     lv_label_set_text(time_label, "00:00");
     lv_obj_align(time_label, LV_ALIGN_CENTER, 0, 0);  
     // NTPクライアントの設定など...
