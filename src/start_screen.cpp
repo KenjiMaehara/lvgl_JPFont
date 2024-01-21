@@ -59,6 +59,7 @@ int count = 0;
 // ボタンを作成
 lv_obj_t * btn;
 lv_obj_t * btn2;
+lv_obj_t * btn3;
 
 static void btn_event_cb(lv_event_t *event) {
     count++;
@@ -74,6 +75,7 @@ static void btn_event_cb(lv_event_t *event) {
 
         lv_obj_del(btn); // ボタンオブジェクトを削除
         lv_obj_del(btn2); // ボタンオブジェクトを削除
+        lv_obj_del(btn3); // ボタンオブジェクトを削除
         tenkey_setup();
     }
 }
@@ -88,6 +90,7 @@ static void btn_event_clock_cb(lv_event_t *event) {
 
         lv_obj_del(btn); // ボタンオブジェクトを削除
         lv_obj_del(btn2); // ボタンオブジェクトを削除
+        lv_obj_del(btn3); // ボタンオブジェクトを削除
         clock_setup();
     }
 }
@@ -150,10 +153,8 @@ void start_setup() {
     int width = 200;
     int height = 50;
     lv_obj_set_size(btn, width, height);
-
     // スタイルの適用 (修正)
     lv_obj_add_style(btn, &style, 0); // ボタンにスタイルを適用
-
     lv_obj_align(btn, LV_ALIGN_LEFT_MID, 0, -60);       // LV_ALIGN_CENTER または他の適切な定数を使用
     lv_obj_add_event_cb(btn, btn_event_cb, LV_EVENT_CLICKED , NULL); // ボタンアクションの新しい設定方法
 
@@ -166,12 +167,11 @@ void start_setup() {
     lv_style_init(&style1);
     lv_style_set_text_font(&style1, &jpFont04);
 
+    // ラベル1の追加
     lv_obj_t *label = lv_label_create(btn);
     lv_obj_add_style(label, &style1, 0);
-
     // ラベルのサイズを設定
     //lv_obj_set_size(label, 200, 200);
-
     // テキストの折り返しを設定
     lv_label_set_long_mode(label, LV_LABEL_LONG_WRAP);
 
@@ -190,12 +190,28 @@ void start_setup() {
     lv_obj_align(btn2, LV_ALIGN_LEFT_MID, 0, 0); // 適切な位置に配置
     lv_obj_add_event_cb(btn2, btn_event_clock_cb, LV_EVENT_CLICKED , NULL); // ボタンアクションの新しい設定方法
 
-    // ラベルの追加
+    // ラベル2の追加
     lv_obj_t *label2 = lv_label_create(btn2);
     lv_obj_add_style(label2, &style1, 0);
     lv_label_set_long_mode(label2, LV_LABEL_LONG_WRAP);
     lv_obj_align(label2, LV_ALIGN_CENTER, 0, 0);
     lv_label_set_text(label2, "時計表示");
+
+
+    // ボタン3の作成
+    btn3 = lv_btn_create(lv_scr_act()); 
+    lv_obj_set_size(btn3, width, height); // "テスト1" ボタンと同じサイズ
+    lv_obj_add_style(btn3, &style, 0); // 既存のスタイルを適用
+    lv_obj_align(btn3, LV_ALIGN_LEFT_MID, 0, 60); // 適切な位置に配置
+    lv_obj_add_event_cb(btn3, btn_event_clock_cb, LV_EVENT_CLICKED , NULL); // ボタンアクションの新しい設定方法
+
+    // ラベル3の追加
+    lv_obj_t *label3 = lv_label_create(btn3);
+    lv_obj_add_style(label3, &style1, 0);
+    lv_label_set_long_mode(label3, LV_LABEL_LONG_WRAP);
+    lv_obj_align(label3, LV_ALIGN_CENTER, 0, 0);
+    lv_label_set_text(label3, "wifi設定");
+
 
 
     Serial.println("Setup End");
