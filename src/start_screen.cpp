@@ -61,6 +61,7 @@ lv_obj_t * btn;
 lv_obj_t * btn2;
 lv_obj_t * btn3;
 lv_obj_t * btn4;
+lv_obj_t * btn5;
 
 static void btn_event_cb(lv_event_t *event) {
     count++;
@@ -78,6 +79,7 @@ static void btn_event_cb(lv_event_t *event) {
         lv_obj_del(btn2); // ボタンオブジェクトを削除
         lv_obj_del(btn3); // ボタンオブジェクトを削除
         lv_obj_del(btn4); // ボタンオブジェクトを削除
+        lv_obj_del(btn5); // ボタンオブジェクトを削除
         tenkey_setup();
     }
 }
@@ -94,6 +96,7 @@ static void btn_event_clock_cb(lv_event_t *event) {
         lv_obj_del(btn2); // ボタンオブジェクトを削除
         lv_obj_del(btn3); // ボタンオブジェクトを削除
         lv_obj_del(btn4); // ボタンオブジェクトを削除
+        lv_obj_del(btn5); // ボタンオブジェクトを削除
         clock_setup();
     }
 }
@@ -229,6 +232,23 @@ void start_setup() {
     lv_label_set_long_mode(label4, LV_LABEL_LONG_WRAP);
     lv_obj_align(label4, LV_ALIGN_CENTER, 0, 0);
     lv_label_set_text(label4, "タッチ調整");
+
+
+    // ボタン5の作成
+    btn5 = lv_btn_create(lv_scr_act()); 
+    lv_obj_set_size(btn5, width, height); // "テスト1" ボタンと同じサイズ
+    lv_obj_add_style(btn5, &style, 0); // 既存のスタイルを適用
+    lv_obj_align(btn5, LV_ALIGN_LEFT_MID, 0, 0 + 60 * 3); // 適切な位置に配置
+    lv_obj_add_event_cb(btn5, btn_event_clock_cb, LV_EVENT_CLICKED , NULL); // ボタンアクションの新しい設定方法
+
+    // ラベル5の追加
+    lv_obj_t *label5 = lv_label_create(btn5);
+    lv_obj_add_style(label5, &style1, 0);
+    lv_label_set_long_mode(label5, LV_LABEL_LONG_WRAP);
+    lv_obj_align(label5, LV_ALIGN_CENTER, 0, 0);
+    lv_label_set_text(label5, "画面テスト1");
+
+
 
 
     Serial.println("Setup End");
