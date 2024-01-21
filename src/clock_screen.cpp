@@ -17,8 +17,8 @@ lv_obj_t *time_label;
 
 
 // WiFiの資格情報
-const char* ssid = "YOUR_SSID";
-const char* password = "YOUR_PASSWORD";
+const char* ssid = "googlemain";
+const char* password = "Fdsa@0813";
 
 // NTPクライアントの設定
 WiFiUDP ntpUDP;
