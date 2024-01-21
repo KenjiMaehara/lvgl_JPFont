@@ -14,4 +14,8 @@ extern void start_setup();
 extern void task_setup();
 extern void ntpUpdateTask(void *pvParameters);
 
+// WiFiの資格情報
+extern const char* ssid;
+extern const char* password;
+
 #endif
