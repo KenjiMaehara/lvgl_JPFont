@@ -168,16 +168,20 @@ void start_setup() {
     /* タブ1を作成 */
     lv_obj_t *tab1 = lv_tabview_add_tab(tabview, "Tab 1");
     lv_obj_t *label = lv_label_create(tab1);
+    lv_obj_add_style(label, &style1, 0);
+
     lv_label_set_text(label, "これはタブ1です");
 
     /* タブ2を作成 */
     lv_obj_t *tab2 = lv_tabview_add_tab(tabview, "Tab 2");
     label = lv_label_create(tab2);
+    lv_obj_add_style(label, &style1, 0);
     lv_label_set_text(label, "これはタブ2です");
 
     /* タブ3を作成 */
     lv_obj_t *tab3 = lv_tabview_add_tab(tabview, "Tab 3");
     label = lv_label_create(tab3);
+    lv_obj_add_style(label, &style1, 0);
     lv_label_set_text(label, "これはタブ3です");
 
 
