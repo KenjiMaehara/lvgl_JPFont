@@ -7,6 +7,7 @@
 
 void setup() {
     start_setup();
+    task_setup();
 }
 
 

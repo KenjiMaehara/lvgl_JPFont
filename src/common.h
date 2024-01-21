@@ -11,8 +11,7 @@ extern void tenkey_setup();
 extern TFT_eSPI tft; // TFTのインスタンスを作成
 extern void clock_setup();
 extern void start_setup();
-
-
+extern void task_setup();
 extern void ntpUpdateTask(void *pvParameters);
 
 #endif

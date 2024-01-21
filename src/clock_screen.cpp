@@ -57,12 +57,27 @@ void clock_setup() {
 
 // NTP更新用のタスク
 void ntpUpdateTask(void *pvParameters) {
+  Serial.println("タスク_ntpUpdateTask_start");
+
   for (;;) {
+    Serial.println("test_ntpUpdateTask");
+    vTaskDelay(1000); 
+    #if 1
     if (WiFi.status() == WL_CONNECTED) {
       timeClient.update();
       String currentTime = timeClient.getFormattedTime();
-      lv_label_set_text(time_label, currentTime.c_str());
+      if (time_label != NULL) {
+        lv_label_set_text(time_label, currentTime.c_str());
+      }
+    } else {
+      Serial.println("WiFiが接続されていません");
+      // WiFiに接続できていない場合は警告メッセージを表示
+      // 使用前にNULLでないことをチェック
+      if (time_label != NULL) {
+        lv_label_set_text(time_label, "NTP接続不可 確認してください！");
+      }
     }
-    vTaskDelay(3600000 / portTICK_PERIOD_MS); // 1時間ごと
+    //vTaskDelay(3600000 / portTICK_PERIOD_MS); // 1時間ごと
+    #endif
   }
 }
