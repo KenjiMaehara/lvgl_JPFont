@@ -17,6 +17,8 @@ lv_obj_t *time_label;
 // wifi状態のラベル
 lv_obj_t *wifiStatus_label;
 
+// ボタンの作成
+lv_obj_t *settings_btn; 
 
 
 // WiFiの資格情報
@@ -44,6 +46,9 @@ static void btn_event_cb(lv_event_t *event) {
     if (code == LV_EVENT_CLICKED) {
         Serial.println("ボタンがクリックされました");
 
+        lv_obj_del(time_label); // ボタンオブジェクトを削除
+        lv_obj_del(wifiStatus_label); // ボタンオブジェクトを削除
+        lv_obj_del(settings_btn); // ボタンオブジェクトを削除
         tenkey_setup();
     }
 }
@@ -106,7 +111,7 @@ void clock_setup() {
     lv_obj_align(wifiStatus_label, LV_ALIGN_CENTER, 0, 0);
 
     // ボタンの作成
-    lv_obj_t *settings_btn = lv_btn_create(lv_scr_act());
+    settings_btn = lv_btn_create(lv_scr_act());
     lv_obj_add_style(settings_btn, &style1, 0); // スタイルを適用
     lv_obj_set_size(settings_btn, 100, 50); // ボタンのサイズ設定
     lv_obj_align(settings_btn, LV_ALIGN_BOTTOM_RIGHT, -10, -10); // 画面の右下隅に配置
