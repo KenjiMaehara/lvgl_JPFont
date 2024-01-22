@@ -14,11 +14,17 @@ static lv_disp_drv_t disp_drv;
 // 時刻表示用のラベル
 lv_obj_t *time_label;
 
+// wifi状態のラベル
+lv_obj_t *wifiStatus_label;
+
 
 
 // WiFiの資格情報
-const char* ssid = "googlemain";
-const char* password = "Fdsa@0813";
+//const char* ssid = "googlemain";
+//const char* password = "Fdsa@0813";
+const char* ssid = "20230616me_IPv6";
+const char* password = "asdf0616";
+
 
 // NTPクライアントの設定
 WiFiUDP ntpUDP;
@@ -50,15 +56,24 @@ void clock_setup() {
     static lv_style_t style1;
     lv_style_init(&style1);
     lv_style_set_text_font(&style1, &jpFont04);
-
+  
+    static lv_style_t style2;
+    lv_style_init(&style2);
+    lv_style_set_text_font(&style2, &lv_font_montserrat_28);
 
 
     // 時刻表示用ラベルの作成
     time_label = lv_label_create(lv_scr_act());
-    lv_obj_add_style(time_label, &style1, 0); // スタイルを適用
+    lv_obj_add_style(time_label, &style2, 0); // スタイルを適用
     lv_label_set_text(time_label, "00:00");
     lv_obj_align(time_label, LV_ALIGN_CENTER, 0, 0);  
-    // NTPクライアントの設定など...
+   
+    // wifi状態表示用ラベルの作成
+    wifiStatus_label = lv_label_create(lv_scr_act());
+    lv_obj_add_style(wifiStatus_label, &style1, 0); // スタイルを適用
+    lv_label_set_text(wifiStatus_label, "WiFi接続中...");
+    lv_obj_align(wifiStatus_label, LV_ALIGN_CENTER, 0, 0);
+
 }
 
 
@@ -77,12 +92,17 @@ void ntpUpdateTask(void *pvParameters) {
       if (time_label != NULL) {
         lv_label_set_text(time_label, currentTime.c_str());
       }
+      if (wifiStatus_label != NULL)
+      {
+        lv_label_set_text(wifiStatus_label, " ");
+      }
+      
     } else {
       Serial.println("WiFiが接続されていません");
       // WiFiに接続できていない場合は警告メッセージを表示
       // 使用前にNULLでないことをチェック
       if (time_label != NULL) {
-        lv_label_set_text(time_label, "NTP接続不可 確認してください！");
+        lv_label_set_text(wifiStatus_label, "NTP接続不可 確認してください！");
       }
     }
     //vTaskDelay(3600000 / portTICK_PERIOD_MS); // 1時間ごと

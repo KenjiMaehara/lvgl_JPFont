@@ -7,7 +7,8 @@
 #include <WiFi.h> // WiFiライブラリをインクルード
 
 void setup() {
-    start_setup();
+    //start_setup();
+    clock_setup();
     task_setup();
 
     WiFi.begin(ssid, password);
