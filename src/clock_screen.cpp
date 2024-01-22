@@ -38,6 +38,9 @@ void clock_setup() {
     tft.begin();
     tft.setRotation(1);
 
+    uint16_t calData[5] = { 231, 3567, 344, 3355, 7 };
+    tft.setTouch(calData);
+
     // LVGLの初期化
     lv_init();
 
