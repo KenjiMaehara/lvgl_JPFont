@@ -32,6 +32,24 @@ NTPClient timeClient(ntpUDP, "pool.ntp.org", 3600 * 9); // JSTの場合
 
 
 
+static void btn_event_cb(lv_event_t *event) {
+    count++;
+    if (count > 1)
+    {
+        count = 0;
+    }
+    
+    Serial.println("イベントハンドラ呼び出し");
+    lv_event_code_t code = lv_event_get_code(event);
+    if (code == LV_EVENT_CLICKED) {
+        Serial.println("ボタンがクリックされました");
+
+        tenkey_setup();
+    }
+}
+
+
+
 
 void clock_setup() {
     // TFTの初期化
@@ -54,6 +72,16 @@ void clock_setup() {
     disp_drv.flush_cb = my_disp_flush;
     disp_drv.draw_buf = &draw_buf;
     lv_disp_drv_register(&disp_drv);
+
+
+    #if 1
+    // タッチパッド入力デバイスを初期化して登録
+    static lv_indev_drv_t indev_drv;
+    lv_indev_drv_init(&indev_drv);
+    indev_drv.type = LV_INDEV_TYPE_POINTER;
+    indev_drv.read_cb = my_touchpad_read;
+    lv_indev_drv_register(&indev_drv);
+    #endif
 
 
     static lv_style_t style1;
@@ -82,6 +110,7 @@ void clock_setup() {
     lv_obj_add_style(settings_btn, &style1, 0); // スタイルを適用
     lv_obj_set_size(settings_btn, 100, 50); // ボタンのサイズ設定
     lv_obj_align(settings_btn, LV_ALIGN_BOTTOM_RIGHT, -10, -10); // 画面の右下隅に配置
+    lv_obj_add_event_cb(settings_btn, btn_event_cb, LV_EVENT_CLICKED , NULL); // ボタンアクションの新しい設定方法
 
     // ボタンにラベルを追加
     lv_obj_t *settings_label = lv_label_create(settings_btn);
