@@ -59,7 +59,7 @@ void clock_setup() {
   
     static lv_style_t style2;
     lv_style_init(&style2);
-    lv_style_set_text_font(&style2, &lv_font_montserrat_28);
+    lv_style_set_text_font(&style2, &lv_font_montserrat_48);
 
 
     // 時刻表示用ラベルの作成
