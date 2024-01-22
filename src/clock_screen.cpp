@@ -11,6 +11,58 @@ static lv_disp_draw_buf_t draw_buf;
 static lv_color_t buf[320 * 10];
 static lv_disp_drv_t disp_drv;
 
+
+
+
+TFT_eSPI tft = TFT_eSPI(); // TFTのインスタンスを作成
+
+void my_touchpad_read(lv_indev_drv_t *drv, lv_indev_data_t *data) {
+
+
+    uint16_t touchX, touchY;
+
+    // タッチイベントの確認
+    bool touched = tft.getTouch(&touchX, &touchY);
+
+    
+
+    if (touched) {
+
+        data->point.x = touchX;
+        data->point.y = touchY;
+        data->state = LV_INDEV_STATE_PR; // プレス状態
+
+        #ifdef DEBUG_MODE
+        Serial.println("TFT getTouch!");
+        // タッチ座標をシリアル出力
+        Serial.print("Touch X: ");
+        Serial.print(touchX);
+        Serial.print(", Touch Y: ");
+        Serial.println(touchY);
+        #endif
+    } else {
+        data->state = LV_INDEV_STATE_REL; // リリース状態
+    }
+
+    //return false; // データが常に有効であることを示す
+
+}
+
+
+// ディスプレイフラッシュ関数
+void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p) {
+    tft.startWrite();
+    tft.setAddrWindow(area->x1, area->y1, area->x2 - area->x1 + 1, area->y2 - area->y1 + 1);
+    tft.pushColors((uint16_t *)&color_p->full, (area->x2 - area->x1 + 1) * (area->y2 - area->y1 + 1), true);
+    tft.endWrite();
+    lv_disp_flush_ready(disp);
+}
+
+
+
+
+
+
 // 時刻表示用のラベル
 lv_obj_t *time_label;
 
@@ -35,24 +87,22 @@ NTPClient timeClient(ntpUDP, "pool.ntp.org", 3600 * 9); // JSTの場合
 
 
 static void btn_event_setting_cb(lv_event_t *event) {
-    count++;
-    if (count > 1)
-    {
-        count = 0;
-    }
     
     Serial.println("設定ボタン_イベントハンドラ呼び出し");
     lv_event_code_t code = lv_event_get_code(event);
     if (code == LV_EVENT_CLICKED) {
         Serial.println("設定ボタンがクリックされました");
 
-        lv_obj_del(time_label); // ボタンオブジェクトを削除
-        lv_obj_del(wifiStatus_label); // ボタンオブジェクトを削除
-        lv_obj_del(settings_btn); // ボタンオブジェクトを削除
+        //lv_obj_set_visible(time_label,false); // ボタンオブジェクトを削除
+        //lv_obj_set_visible(wifiStatus_label,false); // ボタンオブジェクトを削除
+        //lv_obj_set_visible(settings_btn,false); // ボタンオブジェクトを削除
         tenkey_setup();
     }
 }
 
+
+
+LV_FONT_DECLARE(jpFont04);
 
 
 
