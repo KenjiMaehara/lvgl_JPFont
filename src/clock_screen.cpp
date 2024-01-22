@@ -74,6 +74,18 @@ void clock_setup() {
     lv_label_set_text(wifiStatus_label, "WiFi接続中...");
     lv_obj_align(wifiStatus_label, LV_ALIGN_CENTER, 0, 0);
 
+    // ボタンの作成
+    lv_obj_t *settings_btn = lv_btn_create(lv_scr_act());
+    lv_obj_add_style(settings_btn, &style1, 0); // スタイルを適用
+    lv_obj_set_size(settings_btn, 100, 50); // ボタンのサイズ設定
+    lv_obj_align(settings_btn, LV_ALIGN_BOTTOM_RIGHT, -10, -10); // 画面の右下隅に配置
+
+    // ボタンにラベルを追加
+    lv_obj_t *settings_label = lv_label_create(settings_btn);
+    lv_label_set_text(settings_label, "設定");
+
+    // ... その他の初期化コード ...
+
 }
 
 
