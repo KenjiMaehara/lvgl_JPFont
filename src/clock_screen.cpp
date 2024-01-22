@@ -34,17 +34,17 @@ NTPClient timeClient(ntpUDP, "pool.ntp.org", 3600 * 9); // JSTの場合
 
 
 
-static void btn_event_cb(lv_event_t *event) {
+static void btn_event_setting_cb(lv_event_t *event) {
     count++;
     if (count > 1)
     {
         count = 0;
     }
     
-    Serial.println("イベントハンドラ呼び出し");
+    Serial.println("設定ボタン_イベントハンドラ呼び出し");
     lv_event_code_t code = lv_event_get_code(event);
     if (code == LV_EVENT_CLICKED) {
-        Serial.println("ボタンがクリックされました");
+        Serial.println("設定ボタンがクリックされました");
 
         lv_obj_del(time_label); // ボタンオブジェクトを削除
         lv_obj_del(wifiStatus_label); // ボタンオブジェクトを削除
@@ -57,6 +57,9 @@ static void btn_event_cb(lv_event_t *event) {
 
 
 void clock_setup() {
+    Serial.begin(115200); // シリアル通信の初期化
+    Serial.println("clock_setup Start");
+
     // TFTの初期化
     tft.begin();
     tft.setRotation(1);
@@ -115,14 +118,14 @@ void clock_setup() {
     lv_obj_add_style(settings_btn, &style1, 0); // スタイルを適用
     lv_obj_set_size(settings_btn, 100, 50); // ボタンのサイズ設定
     lv_obj_align(settings_btn, LV_ALIGN_BOTTOM_RIGHT, -10, -10); // 画面の右下隅に配置
-    lv_obj_add_event_cb(settings_btn, btn_event_cb, LV_EVENT_CLICKED , NULL); // ボタンアクションの新しい設定方法
+    lv_obj_add_event_cb(settings_btn, btn_event_setting_cb, LV_EVENT_CLICKED , NULL); // ボタンアクションの新しい設定方法
 
     // ボタンにラベルを追加
     lv_obj_t *settings_label = lv_label_create(settings_btn);
     lv_label_set_text(settings_label, "設定");
 
     // ... その他の初期化コード ...
-
+    Serial.println("clock_setup end");
 }
 
 

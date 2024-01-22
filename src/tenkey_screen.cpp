@@ -16,10 +16,13 @@ static void btn_event_cb(lv_event_t *e);
 static char number_str[64] = ""; // 数字を格納する文字列
 
 void tenkey_setup() {
+    Serial.begin(115200); // シリアル通信の初期化
+    Serial.println("tenkey_setup Start");
+
 
     lv_init();
-    tft.begin();
-    tft.setRotation(1); // ディスプレイの向きに合わせて調整
+    //tft.begin();
+    //tft.setRotation(1); // ディスプレイの向きに合わせて調整
 
     // バッファのサイズを設定
     lv_disp_draw_buf_init(&draw_buf, buf, NULL, 320 * 10); // 解像度に基づいてバッファサイズを設定
@@ -84,7 +87,7 @@ void tenkey_setup() {
     lv_style_set_text_font(&style, &jpFont04); // フォントサイズを大きく設定
     lv_obj_add_style(number_label, &style, 0);
 
-    Serial.println("Setup End");
+    Serial.println("tenkey_setup End");
 }
 
 
