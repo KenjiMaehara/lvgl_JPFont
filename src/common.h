@@ -17,6 +17,19 @@ extern void lvgl_screen_setup();
 
 extern void screen_setup();
 
+
+void create_keypad_screen(lv_obj_t *scr);
+void add_navigation_buttons(lv_obj_t *scr, lv_obj_t *next_screen, lv_obj_t *prev_screen);
+
+
+extern lv_obj_t *screen1;
+extern lv_obj_t *screen2;
+extern lv_obj_t *screen3;
+extern lv_obj_t *screen4;
+
+
+
+
 // WiFiの資格情報
 extern const char* ssid;
 extern const char* password;

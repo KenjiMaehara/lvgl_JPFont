@@ -15,12 +15,18 @@ static void btn_event_cb(lv_event_t *e);
 
 static char number_str[64] = ""; // 数字を格納する文字列
 
-void tenkey_setup() {
-    Serial.begin(115200); // シリアル通信の初期化
-    Serial.println("tenkey_setup Start");
 
 
-    lv_init();
+
+
+void create_keypad_screen(lv_obj_t *scr) {
+
+    //Serial.begin(115200); // シリアル通信の初期化
+    //Serial.println("tenkey_setup Start");
+    Serial.println("create_keypad_screen start");
+
+
+    //lv_init();
     //tft.begin();
     //tft.setRotation(1); // ディスプレイの向きに合わせて調整
 
@@ -35,15 +41,6 @@ void tenkey_setup() {
     disp_drv.flush_cb = my_disp_flush;
     disp_drv.draw_buf = &draw_buf;
     lv_disp_drv_register(&disp_drv);
-
-    #if 0
-    // タッチパッド入力デバイスを初期化して登録
-    static lv_indev_drv_t indev_drv;
-    lv_indev_drv_init(&indev_drv);
-    indev_drv.type = LV_INDEV_TYPE_POINTER;
-    indev_drv.read_cb = my_touchpad_read;
-    lv_indev_drv_register(&indev_drv);
-    #endif
 
     // シンプルな数値キーパッドを作成
     lv_obj_t *btn;
@@ -87,7 +84,9 @@ void tenkey_setup() {
     lv_style_set_text_font(&style, &jpFont04); // フォントサイズを大きく設定
     lv_obj_add_style(number_label, &style, 0);
 
-    Serial.println("tenkey_setup End");
+
+    add_navigation_buttons(scr, screen2, screen4);
+    Serial.println("create_keypad_screen End");
 }
 
 

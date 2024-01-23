@@ -96,7 +96,7 @@ static void btn_event_setting_cb(lv_event_t *event) {
         lv_obj_del(time_label); // ボタンオブジェクトを削除
         lv_obj_del(wifiStatus_label); // ボタンオブジェクトを削除
         lv_obj_del(settings_btn); // ボタンオブジェクトを削除
-        tenkey_setup();
+        //tenkey_setup();
     }
 }
 

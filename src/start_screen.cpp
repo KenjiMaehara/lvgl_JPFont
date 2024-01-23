@@ -60,11 +60,6 @@ void add_navigation_buttons(lv_obj_t *scr, lv_obj_t *next_screen, lv_obj_t *prev
     lv_label_set_text(label_back, "Back");
 }
 
-void create_keypad_screen(lv_obj_t *scr) {
-    // テンキーパネルの作成
-    // ...
-    add_navigation_buttons(scr, screen2, screen4);
-}
 
 void create_clock_screen(lv_obj_t *scr) {
     // 時刻表示のラベルを作成
