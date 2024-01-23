@@ -93,9 +93,9 @@ static void btn_event_setting_cb(lv_event_t *event) {
     if (code == LV_EVENT_CLICKED) {
         Serial.println("設定ボタンがクリックされました");
 
-        //lv_obj_set_visible(time_label,false); // ボタンオブジェクトを削除
-        //lv_obj_set_visible(wifiStatus_label,false); // ボタンオブジェクトを削除
-        //lv_obj_set_visible(settings_btn,false); // ボタンオブジェクトを削除
+        lv_obj_del(time_label); // ボタンオブジェクトを削除
+        lv_obj_del(wifiStatus_label); // ボタンオブジェクトを削除
+        lv_obj_del(settings_btn); // ボタンオブジェクトを削除
         tenkey_setup();
     }
 }
