@@ -61,11 +61,6 @@ void add_navigation_buttons(lv_obj_t *scr, lv_obj_t *next_screen, lv_obj_t *prev
 }
 
 
-void create_clock_screen(lv_obj_t *scr) {
-    // 時刻表示のラベルを作成
-    // ...
-    add_navigation_buttons(scr, screen3, screen1);
-}
 
 void create_security_screen(lv_obj_t *scr) {
     // 防犯開始・解除のボタン作成
@@ -80,12 +75,18 @@ void create_fourth_screen(lv_obj_t *scr) {
 }
 
 void btn_event_cb(lv_event_t *e) {
+
+    Serial.println("btn_event_cb start");
+
     lv_obj_t *btn = lv_event_get_target(e);
     lv_obj_t *next_screen = (lv_obj_t *)lv_obj_get_user_data(btn);
 
     if (next_screen != NULL) {
+        Serial.println("next_screen");
         lv_scr_load(next_screen);
     }
+
+    Serial.println("btn_event_cb end");
 }
 
 void update_clock(lv_timer_t *timer) {

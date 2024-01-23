@@ -18,8 +18,8 @@ extern void lvgl_screen_setup();
 extern void screen_setup();
 
 
-void create_keypad_screen(lv_obj_t *scr);
-void add_navigation_buttons(lv_obj_t *scr, lv_obj_t *next_screen, lv_obj_t *prev_screen);
+extern void create_keypad_screen(lv_obj_t *scr);
+extern void add_navigation_buttons(lv_obj_t *scr, lv_obj_t *next_screen, lv_obj_t *prev_screen);
 
 
 extern lv_obj_t *screen1;

@@ -4,13 +4,13 @@
 #include <WiFi.h>
 #include <NTPClient.h>
 #include "common.h"
+#include <time.h>
 
 
 // LVGL用のディスプレイバッファを定義
 static lv_disp_draw_buf_t draw_buf;
 static lv_color_t buf[320 * 10];
 static lv_disp_drv_t disp_drv;
-
 
 
 
@@ -62,17 +62,6 @@ void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color
 
 
 
-
-// 時刻表示用のラベル
-lv_obj_t *time_label;
-
-// wifi状態のラベル
-lv_obj_t *wifiStatus_label;
-
-// ボタンの作成
-lv_obj_t *settings_btn; 
-
-
 // WiFiの資格情報
 //const char* ssid = "googlemain";
 //const char* password = "Fdsa@0813";
@@ -83,23 +72,6 @@ const char* password = "asdf0616";
 // NTPクライアントの設定
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "pool.ntp.org", 3600 * 9); // JSTの場合
-
-
-
-static void btn_event_setting_cb(lv_event_t *event) {
-    
-    Serial.println("設定ボタン_イベントハンドラ呼び出し");
-    lv_event_code_t code = lv_event_get_code(event);
-    if (code == LV_EVENT_CLICKED) {
-        Serial.println("設定ボタンがクリックされました");
-
-        lv_obj_del(time_label); // ボタンオブジェクトを削除
-        lv_obj_del(wifiStatus_label); // ボタンオブジェクトを削除
-        lv_obj_del(settings_btn); // ボタンオブジェクトを削除
-        //tenkey_setup();
-    }
-}
-
 
 
 
@@ -145,85 +117,40 @@ void lvgl_screen_setup() {
 
 
 
-
-
-
-
-
 LV_FONT_DECLARE(jpFont04);
 
 
-void clock_setup() {
-    Serial.begin(115200); // シリアル通信の初期化
-    Serial.println("clock_setup Start");
 
+// グローバル変数として時刻を表示するラベルを宣言
+lv_obj_t *time_label;
 
-    static lv_style_t style1;
-    lv_style_init(&style1);
-    lv_style_set_text_font(&style1, &jpFont04);
-  
-    static lv_style_t style2;
-    lv_style_init(&style2);
-    lv_style_set_text_font(&style2, &lv_font_montserrat_48);
+void update_time(lv_timer_t *timer) {
+    // 現在時刻を取得
+    time_t now = time(NULL);
+    struct tm *now_tm = localtime(&now);
 
+    // 時刻を文字列に変換
+    char time_str[64];
+    strftime(time_str, sizeof(time_str), "%H:%M:%S", now_tm);
 
-    // 時刻表示用ラベルの作成
-    time_label = lv_label_create(lv_scr_act());
-    lv_obj_add_style(time_label, &style2, 0); // スタイルを適用
-    lv_label_set_text(time_label, "00:00");
-    lv_obj_align(time_label, LV_ALIGN_CENTER, 0, 0);  
-   
-    // wifi状態表示用ラベルの作成
-    wifiStatus_label = lv_label_create(lv_scr_act());
-    lv_obj_add_style(wifiStatus_label, &style1, 0); // スタイルを適用
-    lv_label_set_text(wifiStatus_label, "WiFi接続中...");
-    lv_obj_align(wifiStatus_label, LV_ALIGN_CENTER, 0, 0);
-
-    // ボタンの作成
-    settings_btn = lv_btn_create(lv_scr_act());
-    lv_obj_add_style(settings_btn, &style1, 0); // スタイルを適用
-    lv_obj_set_size(settings_btn, 100, 50); // ボタンのサイズ設定
-    lv_obj_align(settings_btn, LV_ALIGN_BOTTOM_RIGHT, -10, -10); // 画面の右下隅に配置
-    lv_obj_add_event_cb(settings_btn, btn_event_setting_cb, LV_EVENT_CLICKED , NULL); // ボタンアクションの新しい設定方法
-
-    // ボタンにラベルを追加
-    lv_obj_t *settings_label = lv_label_create(settings_btn);
-    lv_label_set_text(settings_label, "設定");
-
-    // ... その他の初期化コード ...
-    Serial.println("clock_setup end");
+    // 時刻を表示するラベルを更新
+    lv_label_set_text(time_label, time_str);
 }
 
 
 
-// NTP更新用のタスク
-void ntpUpdateTask(void *pvParameters) {
-  Serial.println("タスク_ntpUpdateTask_start");
+void create_clock_screen(lv_obj_t *scr) {
+    // 時刻を表示するラベルを作成
+    time_label = lv_label_create(scr);
+    lv_obj_align(time_label, LV_ALIGN_CENTER, 0, 0);
 
-  for (;;) {
-    Serial.println("test_ntpUpdateTask");
-    vTaskDelay(1000); 
-    #if 1
-    if (WiFi.status() == WL_CONNECTED) {
-      timeClient.update();
-      String currentTime = timeClient.getFormattedTime();
-      if (time_label != NULL) {
-        lv_label_set_text(time_label, currentTime.c_str());
-      }
-      if (wifiStatus_label != NULL)
-      {
-        lv_label_set_text(wifiStatus_label, " ");
-      }
-      
-    } else {
-      Serial.println("WiFiが接続されていません");
-      // WiFiに接続できていない場合は警告メッセージを表示
-      // 使用前にNULLでないことをチェック
-      if (time_label != NULL) {
-        lv_label_set_text(wifiStatus_label, "NTP接続不可 確認してください！");
-      }
-    }
-    //vTaskDelay(3600000 / portTICK_PERIOD_MS); // 1時間ごと
-    #endif
-  }
+    // タイマーを作成して時刻を定期的に更新
+    lv_timer_create(update_time, 1000, NULL);
+
+    // 初期表示用に現在時刻を更新
+    update_time(NULL);
+
+    add_navigation_buttons(scr, screen3, screen1);
 }
+
+
