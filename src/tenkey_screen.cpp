@@ -10,7 +10,13 @@ static void btn_event_cb(lv_event_t *e);
 
 static char number_str[64] = ""; // 数字を格納する文字列
 
+// グローバル変数で入力された数字を保持
+static char input_str[64] = "";
 
+void keypad_btn_event_cb(lv_event_t *e);
+
+// グローバル変数として数字を表示するラベルを宣言
+lv_obj_t *number_label;
 
 void create_keypad_screen(lv_obj_t *scr) {
 
@@ -43,19 +49,36 @@ void create_keypad_screen(lv_obj_t *scr) {
             lv_label_set_text(label, btn_labels[row][col]);
 
             // ボタンにイベントハンドラを追加（必要に応じて）
-            // lv_obj_add_event_cb(btn, keypad_btn_event_cb, LV_EVENT_CLICKED, NULL);
+            lv_obj_add_event_cb(btn, keypad_btn_event_cb, LV_EVENT_CLICKED, NULL);
         }
     }
+
+    // 数字を表示するラベルを作成
+    number_label = lv_label_create(scr);
+    lv_obj_align(number_label, LV_ALIGN_TOP_MID, 0, 10);
+    lv_label_set_text(number_label, ""); // 初期状態ではテキストなし
 
     add_navigation_buttons(scr, screen2, screen4);
     Serial.println("create_keypad_screen End");
 }
 
 
-static void btn_event_cb(lv_event_t *e) {
+
+void keypad_btn_event_cb(lv_event_t *e) {
     lv_obj_t *btn = lv_event_get_target(e);
-    const char *txt = lv_label_get_text(lv_obj_get_child(btn, 0));
-    strncat(number_str, txt, sizeof(number_str) - strlen(number_str) - 1);
-    lv_obj_t *number_label = lv_obj_get_child(lv_scr_act(), -1);
-    lv_label_set_text(number_label, number_str);
+    const char *btn_text = lv_label_get_text(lv_obj_get_child(btn, 0));
+
+    // 入力された数字をinput_strに追加（'C'でクリア、'E'でエンター）
+    if (strcmp(btn_text, "C") == 0) {
+        // 'C'が押された場合、入力をクリア
+        strcpy(input_str, "");
+    } else if (strcmp(btn_text, "E") != 0) {
+        // 'E'以外のボタンが押された場合、数字を追加
+        if (strlen(input_str) < sizeof(input_str) - 1) {
+            strcat(input_str, btn_text);
+        }
+    }
+
+    // input_strの内容をnumber_labelに表示
+    lv_label_set_text(number_label, input_str);
 }
