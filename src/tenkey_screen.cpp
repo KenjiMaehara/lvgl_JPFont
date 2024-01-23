@@ -5,17 +5,10 @@
 #include <TFT_eSPI.h> // ILI9488ドライバを含むライブラリ
 #include "common.h"
 
-static lv_disp_draw_buf_t draw_buf;
-static lv_color_t buf[320 * 10]; // 仮にディスプレイの垂直解像度を480ピクセルと仮定
-static lv_disp_drv_t disp_drv;
-
 
 static void btn_event_cb(lv_event_t *e);
 
-
 static char number_str[64] = ""; // 数字を格納する文字列
-
-
 
 
 
@@ -25,65 +18,34 @@ void create_keypad_screen(lv_obj_t *scr) {
     //Serial.println("tenkey_setup Start");
     Serial.println("create_keypad_screen start");
 
+    const int btn_width = 70; // ボタンの幅
+    const int btn_height = 50; // ボタンの高さ
+    const int cols = 3; // 列数
+    const int rows = 4; // 行数
 
-    //lv_init();
-    //tft.begin();
-    //tft.setRotation(1); // ディスプレイの向きに合わせて調整
+    // テンキーボタンのラベル
+    const char *btn_labels[rows][cols] = {
+        {"1", "2", "3"},
+        {"4", "5", "6"},
+        {"7", "8", "9"},
+        {"C", "0", "E"}
+    };
 
-    // バッファのサイズを設定
-    lv_disp_draw_buf_init(&draw_buf, buf, NULL, 320 * 10); // 解像度に基づいてバッファサイズを設定
+    for (int row = 0; row < rows; row++) {
+        for (int col = 0; col < cols; col++) {
+            // ボタンの作成
+            lv_obj_t *btn = lv_btn_create(scr);
+            lv_obj_set_size(btn, btn_width, btn_height);
+            lv_obj_set_pos(btn, col * btn_width, row * btn_height);
 
+            // ボタンのラベルの作成
+            lv_obj_t *label = lv_label_create(btn);
+            lv_label_set_text(label, btn_labels[row][col]);
 
-
-    lv_disp_drv_init(&disp_drv);
-    disp_drv.hor_res = 480; // ディスプレイの解像度を設定
-    disp_drv.ver_res = 320;
-    disp_drv.flush_cb = my_disp_flush;
-    disp_drv.draw_buf = &draw_buf;
-    lv_disp_drv_register(&disp_drv);
-
-    // シンプルな数値キーパッドを作成
-    lv_obj_t *btn;
-    lv_obj_t *label;
-    lv_obj_t *screen = lv_scr_act();
-
-
-    for (int i = 0; i < 12; i++) {
-        btn = lv_btn_create(screen); // シグネチャを更新
-        lv_obj_set_size(btn, 80, 45);
-        lv_obj_set_pos(btn, (i % 3) * 90 + 100, (i / 3) * 50 + 100);
-        lv_obj_add_event_cb(btn, btn_event_cb, LV_EVENT_CLICKED, NULL);
-        label = lv_label_create(btn); // シグネチャを更新
-
-        static lv_style_t button_label_style;
-        lv_style_init(&button_label_style);
-        lv_style_set_text_font(&button_label_style, &jpFont04);
-        lv_obj_add_style(label, &button_label_style, 0);
-        lv_obj_set_align(label, LV_ALIGN_CENTER); // テキストを中央に配置
-
-
-        // 特定のボタンにテキストを設定
-        if (i == 9) {
-            lv_label_set_text(label, "*");
-        } else if (i == 10) {
-            lv_label_set_text(label, "0");
-        } else if (i == 11) {
-            lv_label_set_text(label, "#");
-        } else {
-            lv_label_set_text_fmt(label, "%d", i + 1);
+            // ボタンにイベントハンドラを追加（必要に応じて）
+            // lv_obj_add_event_cb(btn, keypad_btn_event_cb, LV_EVENT_CLICKED, NULL);
         }
     }
-
-    // 数字を表示するラベルを作成
-    lv_obj_t *number_label = lv_label_create(screen); // シグネチャを更新
-    lv_label_set_text(number_label, number_str);
-    lv_obj_align(number_label, LV_ALIGN_TOP_MID, 0, 30);
-
-    static lv_style_t style;
-    lv_style_init(&style);
-    lv_style_set_text_font(&style, &jpFont04); // フォントサイズを大きく設定
-    lv_obj_add_style(number_label, &style, 0);
-
 
     add_navigation_buttons(scr, screen2, screen4);
     Serial.println("create_keypad_screen End");

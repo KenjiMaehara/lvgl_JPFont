@@ -9,7 +9,7 @@
 void setup() {
     //start_setup();
     lvgl_screen_setup();
-    clock_setup();
+    //clock_setup();
     task_setup();
     screen_setup();
 
