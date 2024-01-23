@@ -78,6 +78,7 @@ void btn_event_cb(lv_event_t *e) {
 
     Serial.println("btn_event_cb start");
 
+    #if 0
     lv_obj_t *btn = lv_event_get_target(e);
 
     // デバッグ情報の出力
@@ -87,9 +88,11 @@ void btn_event_cb(lv_event_t *e) {
     } else {
         Serial.println("Event target (button) is NULL");
     }
+    #endif
 
 
-    lv_obj_t *next_screen = (lv_obj_t *)lv_obj_get_user_data(btn);
+    //lv_obj_t *next_screen = (lv_obj_t *)lv_obj_get_user_data(btn);
+    lv_obj_t *next_screen = (lv_obj_t *)lv_event_get_user_data(e);
 
     // デバッグ情報の出力
     if (next_screen != NULL) {
