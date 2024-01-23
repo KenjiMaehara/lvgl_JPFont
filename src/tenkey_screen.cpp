@@ -6,7 +6,6 @@
 #include "common.h"
 
 
-static void btn_event_cb(lv_event_t *e);
 
 static char number_str[64] = ""; // 数字を格納する文字列
 
