@@ -15,6 +15,8 @@ extern void task_setup();
 extern void ntpUpdateTask(void *pvParameters);
 extern void lvgl_screen_setup();
 
+extern void screen_setup();
+
 // WiFiの資格情報
 extern const char* ssid;
 extern const char* password;

@@ -11,6 +11,7 @@ void setup() {
     lvgl_screen_setup();
     clock_setup();
     task_setup();
+    screen_setup();
 
     WiFi.begin(ssid, password);
 }
