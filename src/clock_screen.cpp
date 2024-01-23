@@ -102,13 +102,14 @@ static void btn_event_setting_cb(lv_event_t *event) {
 
 
 
-LV_FONT_DECLARE(jpFont04);
 
 
 
-void clock_setup() {
+
+void lvgl_screen_setup() {
+
     Serial.begin(115200); // シリアル通信の初期化
-    Serial.println("clock_setup Start");
+    Serial.println("lvgl_screen_setup Start");
 
     // TFTの初期化
     tft.begin();
@@ -140,6 +141,21 @@ void clock_setup() {
     indev_drv.read_cb = my_touchpad_read;
     lv_indev_drv_register(&indev_drv);
     #endif
+}
+
+
+
+
+
+
+
+
+LV_FONT_DECLARE(jpFont04);
+
+
+void clock_setup() {
+    Serial.begin(115200); // シリアル通信の初期化
+    Serial.println("clock_setup Start");
 
 
     static lv_style_t style1;
