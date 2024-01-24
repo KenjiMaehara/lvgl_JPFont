@@ -1,4 +1,4 @@
-//#pragma execution_character_set("utf-8")
+#define DEBUG_MODE  // デバッグモードを有効にするかどうか
 
 #include <Arduino.h>
 //#include <lvgl.h>
@@ -19,6 +19,9 @@ void setup() {
     //start_setup();
     tft.init();  // TFTの初期化
     tft.setRotation(1);  // 画面の向きを設定
+
+    uint16_t calData[5] = { 231, 3567, 344, 3355, 7 };
+    tft.setTouch(calData);
 
     drawScreen(currentScreen);  // 最初のスクリーンを描画
 
@@ -82,12 +85,17 @@ void touchEventTask(void *parameter) {
 
     while(true) {
 
-        #if 1
-
         if (tft.getTouch(&x, &y)) {
-            // 「Next」ボタンの範囲内かどうかをチェック
 
-            #if 0
+
+            #ifdef DEBUG_MODE
+            Serial.print("Touch detected at x = ");
+            Serial.print(x);
+            Serial.print(", y = ");
+            Serial.println(y);
+            #endif
+
+            // 「Next」ボタンの範囲内かどうかをチェック
             if (x >= 120 && x <= (120 + 100) && y >= 200 && y <= (200 + 40)) {
                 nextScreen();
             }
@@ -95,14 +103,9 @@ void touchEventTask(void *parameter) {
             else if (x >= 0 && x <= 100 && y >= 200 && y <= (200 + 40)) {
                 previousScreen();
             }
-            #endif
         }
-        #endif
-
         //Serial.println("touchEventTask " + String(testCount++));
         delay(100); // CPU使用率を下げるためにわずかな遅延を挿入
-
-
     }
     vTaskDelete(NULL); // タスクを削除（この例では到達しませんが、形式として）
 }
