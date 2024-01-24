@@ -10,9 +10,13 @@ void create_keypad_screen(lv_obj_t *scr);
 void create_clock_screen(lv_obj_t *scr);
 void create_security_screen(lv_obj_t *scr);
 void create_fourth_screen(lv_obj_t *scr);
+void create_test_screen(lv_obj_t *scr);
+
+
 void update_clock(lv_timer_t *timer);
 void btn_event_cb(lv_event_t *e);
 
+lv_obj_t *screen_test;
 lv_obj_t *screen1;
 lv_obj_t *screen2;
 lv_obj_t *screen3;
@@ -22,6 +26,9 @@ lv_obj_t *screen4;
 void screen_setup() {
     //lv_init();
     //ili9488_init();
+
+    screen_test = lv_obj_create(NULL);
+    create_test_screen(screen_test);
 
     screen1 = lv_obj_create(NULL);
     create_keypad_screen(screen1);
@@ -35,14 +42,16 @@ void screen_setup() {
     screen4 = lv_obj_create(NULL);
     create_fourth_screen(screen4);
 
-    lv_scr_load(screen1);
+    lv_scr_load(screen2);
 
     lv_timer_create(update_clock, 1000, NULL);
 }
 
 
 
-void add_navigation_buttons(lv_obj_t *scr, lv_obj_t *next_screen, lv_obj_t *prev_screen) {
+void add_navigation_buttons(lv_obj_t *scr, lv_obj_t *next_screen) {
+
+    #if 0
     lv_obj_t *btn_next = lv_btn_create(scr);
     lv_obj_set_size(btn_next, 100, 50);
     lv_obj_align(btn_next, LV_ALIGN_BOTTOM_RIGHT, -10, -10);
@@ -50,14 +59,26 @@ void add_navigation_buttons(lv_obj_t *scr, lv_obj_t *next_screen, lv_obj_t *prev
     lv_obj_add_event_cb(btn_next, btn_event_cb, LV_EVENT_CLICKED, NULL);
     lv_obj_t *label_next = lv_label_create(btn_next);
     lv_label_set_text(label_next, "Next");
+    #endif
 
+    #if 1
     lv_obj_t *btn_back = lv_btn_create(scr);
     lv_obj_set_size(btn_back, 100, 50);
     lv_obj_align(btn_back, LV_ALIGN_BOTTOM_LEFT, 10, -10);
-    lv_obj_set_user_data(btn_back, prev_screen);
+    lv_obj_set_user_data(btn_back, next_screen);
     lv_obj_add_event_cb(btn_back, btn_event_cb, LV_EVENT_CLICKED, NULL);
     lv_obj_t *label_back = lv_label_create(btn_back);
     lv_label_set_text(label_back, "Back");
+    #endif
+}
+
+
+void create_test_screen(lv_obj_t *scr) {
+    // 防犯開始・解除のボタン作成
+    // ...
+    Serial.println("create_test_screen start");
+
+    add_navigation_buttons(scr, screen4);
 }
 
 
@@ -65,13 +86,25 @@ void add_navigation_buttons(lv_obj_t *scr, lv_obj_t *next_screen, lv_obj_t *prev
 void create_security_screen(lv_obj_t *scr) {
     // 防犯開始・解除のボタン作成
     // ...
-    add_navigation_buttons(scr, screen4, screen2);
+    Serial.println("create_security_screen start");
+
+    lv_obj_t *Screen_name = lv_label_create(scr);
+    lv_obj_align(Screen_name, LV_ALIGN_TOP_MID, 0, 10);
+    lv_label_set_text(Screen_name, "create_security_screen"); // 初期状態ではテキストなし
+
+    add_navigation_buttons(scr, screen4);
 }
 
 void create_fourth_screen(lv_obj_t *scr) {
     // 4番目のスクリーンの内容
     // ...
-    add_navigation_buttons(scr, screen1, screen3);
+    Serial.println("create_fourth_screen start");
+
+   lv_obj_t *Screen_name = lv_label_create(scr);
+    lv_obj_align(Screen_name, LV_ALIGN_TOP_MID, 0, 10);
+    lv_label_set_text(Screen_name, "create_fourth_screen"); // 初期状態ではテキストなし
+
+    add_navigation_buttons(scr, screen1);
 }
 
 void btn_event_cb(lv_event_t *e) {
@@ -97,7 +130,7 @@ void btn_event_cb(lv_event_t *e) {
     // デバッグ情報の出力
     if (next_screen != NULL) {
         Serial.println("next_screen is not NULL");
-        lv_scr_load(next_screen);
+        //lv_scr_load(next_screen);
     } else {
         Serial.println("next_screen is NULL");
     }

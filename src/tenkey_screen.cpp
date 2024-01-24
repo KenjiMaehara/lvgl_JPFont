@@ -23,6 +23,8 @@ void create_keypad_screen(lv_obj_t *scr) {
     //Serial.println("tenkey_setup Start");
     Serial.println("create_keypad_screen start");
 
+    #if 0
+    // テンキーのボタンの数
     const int btn_width = 70; // ボタンの幅
     const int btn_height = 50; // ボタンの高さ
     const int cols = 3; // 列数
@@ -52,17 +54,21 @@ void create_keypad_screen(lv_obj_t *scr) {
         }
     }
 
+    #endif
+
     // 数字を表示するラベルを作成
     number_label = lv_label_create(scr);
     lv_obj_align(number_label, LV_ALIGN_TOP_MID, 0, 10);
-    lv_label_set_text(number_label, ""); // 初期状態ではテキストなし
+    lv_label_set_text(number_label, "test test test"); // 初期状態ではテキストなし
 
-    add_navigation_buttons(scr, screen2, screen4);
+
+
+    add_navigation_buttons(scr, screen2);
     Serial.println("create_keypad_screen End");
 }
 
 
-
+#if 0
 void keypad_btn_event_cb(lv_event_t *e) {
     lv_obj_t *btn = lv_event_get_target(e);
     const char *btn_text = lv_label_get_text(lv_obj_get_child(btn, 0));
@@ -81,3 +87,5 @@ void keypad_btn_event_cb(lv_event_t *e) {
     // input_strの内容をnumber_labelに表示
     lv_label_set_text(number_label, input_str);
 }
+
+#endif

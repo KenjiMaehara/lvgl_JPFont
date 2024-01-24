@@ -141,6 +141,12 @@ void update_time(lv_timer_t *timer) {
 
 void create_clock_screen(lv_obj_t *scr) {
     // 時刻を表示するラベルを作成
+    lv_obj_t *Screen_name = lv_label_create(scr);
+    lv_obj_align(Screen_name, LV_ALIGN_TOP_MID, 0, 10);
+    lv_label_set_text(Screen_name, "create_clock_screen"); // 初期状態ではテキストなし
+
+
+    #if 0
     time_label = lv_label_create(scr);
     lv_obj_align(time_label, LV_ALIGN_CENTER, 0, 0);
 
@@ -150,7 +156,9 @@ void create_clock_screen(lv_obj_t *scr) {
     // 初期表示用に現在時刻を更新
     update_time(NULL);
 
-    add_navigation_buttons(scr, screen3, screen1);
+    #endif
+
+    add_navigation_buttons(scr, screen3);
 }
 
 
