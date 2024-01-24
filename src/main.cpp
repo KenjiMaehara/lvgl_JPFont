@@ -51,8 +51,8 @@ void drawScreen(int screenNumber) {
   tft.println(message);  // テキストを描画
 
   // "next"と"back"ボタンを描画
-  drawButton("Next", 120, 200);  // "next"ボタン
-  drawButton("Back", 0, 200);    // "back"ボタン
+  drawButton("Next", 350, 270);  // "next"ボタン
+  drawButton("Back", 0, 270);    // "back"ボタン
 }
 
 // ボタンを描画する関数
