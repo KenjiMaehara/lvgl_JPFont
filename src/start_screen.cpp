@@ -25,6 +25,8 @@ void screen_setup() {
 
     lv_obj_t *next_scr = lv_obj_create(NULL);
     create_clock_screen(next_scr);
+    //create_area_screen(next_scr);
+
 
     lv_scr_load(next_scr);
 
