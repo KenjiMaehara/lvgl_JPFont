@@ -40,13 +40,13 @@ void screen_setup() {
     lv_timer_create(update_clock, 1000, NULL);
 }
 
-
+int test_val = 123;
 
 void add_navigation_buttons(lv_obj_t *scr, lv_obj_t *next_screen, lv_obj_t *prev_screen) {
     lv_obj_t *btn_next = lv_btn_create(scr);
     lv_obj_set_size(btn_next, 100, 50);
     lv_obj_align(btn_next, LV_ALIGN_BOTTOM_RIGHT, -10, -10);
-    lv_obj_set_user_data(btn_next, next_screen);
+    lv_obj_set_user_data(btn_next, (void*)(intptr_t)test_val);
     lv_obj_add_event_cb(btn_next, btn_event_cb, LV_EVENT_CLICKED, NULL);
     lv_obj_t *label_next = lv_label_create(btn_next);
     lv_label_set_text(label_next, "Next");
@@ -91,21 +91,22 @@ void btn_event_cb(lv_event_t *e) {
     #endif
 
 
-    lv_obj_t *next_screen = (lv_obj_t *)lv_obj_get_user_data(btn);
+    //lv_obj_t *next_screen = (int *)lv_obj_get_user_data(btn);
+    int test_data = (intptr_t)lv_obj_get_user_data(btn);
     //lv_obj_t *next_screen = (lv_obj_t *)lv_event_get_target(e);
 
     // デバッグ情報の出力
-    if (next_screen != NULL) {
+    if (test_data != NULL) {
         Serial.println("next_screen is not NULL");
-        lv_scr_load(next_screen);
+        //lv_scr_load(next_screen);
     } else {
         Serial.println("next_screen is NULL");
     }
 
 
-    if (next_screen != NULL) {
+    if (test_data != NULL) {
         Serial.println("next_screen");
-        lv_scr_load(next_screen);
+        //lv_scr_load(test_data);
     }
 
     Serial.println("btn_event_cb end");
