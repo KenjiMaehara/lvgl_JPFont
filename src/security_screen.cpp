@@ -12,8 +12,8 @@ void create_security_screen(lv_obj_t *scr) {
     Serial.println("create_security_screen Start");
 
     // ボタンの作成と設定
-    lv_obj_t * btn_02 = lv_btn_create(lv_scr_act()); // ボタンを作成
-    lv_obj_set_size(btn_02, 200, 50); // ボタンのサイズ設定
+    lv_obj_t * btn_02 = lv_btn_create(scr); // ボタンを作成
+    lv_obj_set_size(btn_02, 400, 100); // ボタンのサイズ設定
     lv_obj_center(btn_02); // ボタンを中心に配置
     lv_obj_add_event_cb(btn_02, event_handler, LV_EVENT_ALL, NULL);
 
