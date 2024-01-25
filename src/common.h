@@ -21,6 +21,8 @@ extern void lvgl_screen_setup();
 
 extern void create_keypad_screen(lv_obj_t *scr);
 extern void create_clock_screen(lv_obj_t *scr);
+extern void create_security_screen(lv_obj_t *scr);
+
 extern void add_navigation_buttons(lv_obj_t *scr, lv_obj_t *next_screen, lv_obj_t *prev_screen);
 
 

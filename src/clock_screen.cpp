@@ -6,7 +6,7 @@
 #include "common.h"
 #include <time.h>
 
-
+static void btn_event_cb(lv_event_t *e);
 
 
 
@@ -95,6 +95,9 @@ void update_time(lv_timer_t *timer) {
 
 
 void create_clock_screen(lv_obj_t *scr) {
+
+    Serial.println("create_clock_screen Start");
+
     // 時刻を表示するラベルを作成
     time_label = lv_label_create(scr);
     lv_obj_align(time_label, LV_ALIGN_CENTER, 0, 0);
@@ -105,7 +108,35 @@ void create_clock_screen(lv_obj_t *scr) {
     // 初期表示用に現在時刻を更新
     update_time(NULL);
 
-    add_navigation_buttons(scr, screen3, screen1);
+    // 新しいボタンを作成
+    lv_obj_t *btn = lv_btn_create(scr);
+    lv_obj_set_pos(btn, 360, 240); // ボタンの位置を設定
+    lv_obj_set_size(btn, 100, 50); // ボタンのサイズを設定
+
+    // ボタンのラベルを作成
+    lv_obj_t *label = lv_label_create(btn);
+    lv_label_set_text(label, "next");
+
+    // ボタンのイベントハンドラを設定
+    lv_obj_add_event_cb(btn, btn_event_cb, LV_EVENT_CLICKED, NULL);
+
+
+    Serial.println("create_clock_screen End");
 }
+
+
+
+// ボタンのイベントハンドラ
+static void btn_event_cb(lv_event_t *e) {
+    lv_event_code_t code = lv_event_get_code(e);
+    if (code == LV_EVENT_CLICKED) {
+        // 時計画面を作成して表示
+        lv_obj_t *security_scr = lv_obj_create(NULL);
+        create_security_screen(security_scr);
+        lv_scr_load(security_scr);
+    }
+}
+
+
 
 
