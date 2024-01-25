@@ -72,7 +72,7 @@ void create_keypad_screen(lv_obj_t *scr) {
     lv_label_set_text(label, "next");
 
     // ボタンのイベントハンドラを設定
-    //lv_obj_add_event_cb(btn, btn_event_cb, LV_EVENT_CLICKED, NULL);
+    lv_obj_add_event_cb(btn, btn_event_cb, LV_EVENT_CLICKED, NULL);
 
 
     Serial.println("create_keypad_screen End");
