@@ -16,6 +16,7 @@ extern void ntpUpdateTask(void *pvParameters);
 extern void lvgl_screen_setup();
 
 extern void screen_setup();
+extern void lvgl_screen_setup();
 
 
 extern void create_keypad_screen(lv_obj_t *scr);
