@@ -131,9 +131,9 @@ static void btn_event_cb(lv_event_t *e) {
     lv_event_code_t code = lv_event_get_code(e);
     if (code == LV_EVENT_CLICKED) {
         // 時計画面を作成して表示
-        lv_obj_t *security_scr = lv_obj_create(NULL);
-        create_security_screen(security_scr);
-        lv_scr_load(security_scr);
+        lv_obj_t *next_scr = lv_obj_create(NULL);
+        create_keypad_screen(next_scr);
+        lv_scr_load(next_scr);
     }
 }
 
