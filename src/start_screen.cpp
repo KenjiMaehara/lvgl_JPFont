@@ -98,6 +98,8 @@ void btn_event_cb(lv_event_t *e) {
     // デバッグ情報の出力
     if (test_data != NULL) {
         Serial.println("next_screen is not NULL");
+        Serial.print("test_data: ");
+        Serial.println(test_data);
         //lv_scr_load(next_screen);
     } else {
         Serial.println("next_screen is NULL");
