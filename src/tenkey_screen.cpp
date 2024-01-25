@@ -13,7 +13,8 @@ static char number_str[64] = ""; // 数字を格納する文字列
 static char input_str[64] = "";
 
 void keypad_btn_event_cb(lv_event_t *e);
-static void btn_event_cb(lv_obj_t *btn, lv_event_t event);
+
+static void btn_event_cb(lv_event_t *e);
 
 // グローバル変数として数字を表示するラベルを宣言
 lv_obj_t *number_label;
@@ -68,10 +69,10 @@ void create_keypad_screen(lv_obj_t *scr) {
 
     // ボタンのラベルを作成
     lv_obj_t *label = lv_label_create(btn);
-    lv_label_set_text(label, "時計画面へ");
+    lv_label_set_text(label, "next");
 
     // ボタンのイベントハンドラを設定
-    lv_obj_set_event_cb(btn, btn_event_cb);
+    //lv_obj_add_event_cb(btn, btn_event_cb, LV_EVENT_CLICKED, NULL);
 
 
     Serial.println("create_keypad_screen End");
@@ -99,9 +100,11 @@ void keypad_btn_event_cb(lv_event_t *e) {
 }
 
 
+
 // ボタンのイベントハンドラ
-static void btn_event_cb(lv_obj_t *btn, lv_event_t event) {
-    if (event == LV_EVENT_CLICKED) {
+static void btn_event_cb(lv_event_t *e) {
+    lv_event_code_t code = lv_event_get_code(e);
+    if (code == LV_EVENT_CLICKED) {
         // 時計画面を作成して表示
         lv_obj_t *clock_scr = lv_obj_create(NULL);
         create_clock_screen(clock_scr);
