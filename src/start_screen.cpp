@@ -35,6 +35,9 @@ void screen_setup() {
     screen4 = lv_obj_create(NULL);
     create_fourth_screen(screen4);
 
+    // すべてのスクリーンが生成された後にボタンにスクリーンを割り当てる
+    add_navigation_buttons(screen1, screen2, screen3);
+
     lv_scr_load(screen1);
 
     lv_timer_create(update_clock, 1000, NULL);
