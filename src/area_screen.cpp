@@ -32,7 +32,7 @@ void create_area_screen(lv_obj_t *scr) {
     lv_obj_align(btnm, LV_ALIGN_CENTER, 0, 0);
 
 
-    add_navigation_buttons(screen4, screen1, screen3);
+    add_navigation_buttons(screen4, screen5, screen3);
 
     Serial.println("create_area_screen End");
 

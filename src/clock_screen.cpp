@@ -134,6 +134,8 @@ void update_time(lv_timer_t *timer) {
 
 
 void create_clock_screen(lv_obj_t *scr) {
+
+    Serial.println("create_clock_screen Start");
     // 時刻を表示するラベルを作成
     time_label = lv_label_create(scr);
     lv_obj_align(time_label, LV_ALIGN_CENTER, 0, 0);
@@ -145,6 +147,8 @@ void create_clock_screen(lv_obj_t *scr) {
     update_time(NULL);
 
     add_navigation_buttons(scr, screen3, screen1);
+
+    Serial.println("create_clock_screen End");
 }
 
 

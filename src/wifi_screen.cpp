@@ -11,9 +11,7 @@
 const char* ssid = "20230616me_IPv6";
 const char* password = "asdf0616";
 
-// LVGLオブジェクト
-lv_obj_t *label_ssid;
-lv_obj_t *label_ip;
+
 
 void task_connectToWiFi(void * parameter) {
   WiFi.begin(ssid, password);
@@ -31,13 +29,19 @@ void task_connectToWiFi(void * parameter) {
 
 void create_wifi_screen(lv_obj_t *scr) {
 
-    // スクリーンデザインの更新
-    lv_label_set_text(label_ssid, WiFi.SSID().c_str());
-    lv_label_set_text(label_ip, WiFi.localIP().toString().c_str());
+    Serial.println("create_wifi_screen start");
+
+    // LVGLオブジェクト
+    lv_obj_t* label_ssid = lv_label_create(scr);
+    lv_obj_t* label_ip = lv_label_create(scr);
 
 
+    if (WiFi.status() == WL_CONNECTED) {
+        lv_label_set_text(label_ssid, WiFi.SSID().c_str());
+        lv_label_set_text(label_ip, WiFi.localIP().toString().c_str());
+    }
 
-    add_navigation_buttons(screen5, screen1, screen4);
+    //add_navigation_buttons(screen5, screen1, screen4);
 
-
+    Serial.println("create_wifi_screen End");
 }

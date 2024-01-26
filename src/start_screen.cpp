@@ -40,10 +40,10 @@ void screen_setup() {
     create_wifi_screen(screen5);
 
     // すべてのスクリーンが生成された後にボタンにスクリーンを割り当てる
-    add_navigation_buttons(screen1, screen2, screen4);
+    add_navigation_buttons(screen1, screen2, screen5);
     add_navigation_buttons(screen2, screen3, screen1);
     add_navigation_buttons(screen3, screen4, screen2);
-    add_navigation_buttons(screen4, screen4, screen3);
+    add_navigation_buttons(screen4, screen5, screen3);
     add_navigation_buttons(screen5, screen1, screen4);
 
     lv_scr_load(screen1);

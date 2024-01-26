@@ -28,6 +28,8 @@ void create_security_screen(lv_obj_t *scr) {
 
 
     add_navigation_buttons(scr, screen1, screen2);
+
+    Serial.println("create_security_screen End");
 }
 
 
