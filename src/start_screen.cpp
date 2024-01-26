@@ -37,6 +37,7 @@ void screen_setup() {
 
     // すべてのスクリーンが生成された後にボタンにスクリーンを割り当てる
     add_navigation_buttons(screen1, screen2, screen3);
+    add_navigation_buttons(screen2, screen3, screen4);
 
     lv_scr_load(screen1);
 
