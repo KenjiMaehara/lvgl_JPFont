@@ -62,12 +62,6 @@ void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color
 
 
 
-// WiFiの資格情報
-//const char* ssid = "googlemain";
-//const char* password = "Fdsa@0813";
-const char* ssid = "20230616me_IPv6";
-const char* password = "asdf0616";
-
 
 // NTPクライアントの設定
 WiFiUDP ntpUDP;

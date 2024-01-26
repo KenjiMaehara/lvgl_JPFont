@@ -6,4 +6,14 @@
 
 void task_setup() {
 
+  // WiFi接続タスクの作成
+  xTaskCreate(
+    task_connectToWiFi,   // タスクで実行される関数
+    "task_ConnectToWiFi", // タスク名
+    10000,           // スタックサイズ
+    NULL,            // パラメータ
+    1,               // 優先順位
+    NULL             // タスクハンドル
+  );
+
 }
