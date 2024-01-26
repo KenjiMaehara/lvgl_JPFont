@@ -12,6 +12,11 @@ const char* ssid = "20230616me_IPv6";
 const char* password = "asdf0616";
 
 
+void displayWiFiInfo(lv_obj_t *label_ssid, lv_obj_t *label_ip);
+
+lv_obj_t* label_ssid;
+lv_obj_t* label_ip;
+
 
 void task_connectToWiFi(void * parameter) {
     WiFi.begin(ssid, password);
@@ -21,6 +26,7 @@ void task_connectToWiFi(void * parameter) {
         if (WiFi.status() == WL_CONNECTED) {
             // ここに接続済み時の処理を記述
             Serial.println("Connected to WiFi");
+            displayWiFiInfo(label_ssid, label_ip); // WiFi情報の表示更新
             vTaskDelay(10000 / portTICK_PERIOD_MS); // 10秒ごとにチェック
         } else {
             // 接続が失われた場合の再接続処理
@@ -51,8 +57,8 @@ void create_wifi_screen(lv_obj_t *scr) {
     Serial.println("create_wifi_screen start");
 
     // LVGLオブジェクト
-    lv_obj_t* label_ssid = lv_label_create(scr);
-    lv_obj_t* label_ip = lv_label_create(scr);
+    label_ssid = lv_label_create(scr);
+    label_ip = lv_label_create(scr);
 
     // ラベルの位置を設定（必要に応じて調整してください）
     lv_obj_align(label_ssid, LV_ALIGN_CENTER, 0, -30);
