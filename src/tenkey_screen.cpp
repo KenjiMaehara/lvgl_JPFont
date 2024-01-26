@@ -36,6 +36,12 @@ void create_keypad_screen(lv_obj_t *scr) {
         {"C", "0", "E"}
     };
 
+    // スタイルを定義
+    static lv_style_t style;
+    lv_style_init(&style);
+    lv_style_set_border_color(&style, lv_color_black());
+    lv_style_set_border_width(&style, 2); // 枠線の幅を2ピクセルに設定
+
     for (int row = 0; row < rows; row++) {
         for (int col = 0; col < cols; col++) {
             // ボタンの作成
@@ -47,6 +53,9 @@ void create_keypad_screen(lv_obj_t *scr) {
             lv_obj_t *label = lv_label_create(btn);
             lv_label_set_text(label, btn_labels[row][col]);
 
+            // ボタンにスタイルを適用
+            lv_obj_add_style(btn, &style, 0);
+
             // ボタンにイベントハンドラを追加（必要に応じて）
             lv_obj_add_event_cb(btn, keypad_btn_event_cb, LV_EVENT_CLICKED, NULL);
         }
@@ -56,6 +65,9 @@ void create_keypad_screen(lv_obj_t *scr) {
     number_label = lv_label_create(scr);
     lv_obj_align(number_label, LV_ALIGN_TOP_MID, 0, 10);
     lv_label_set_text(number_label, ""); // 初期状態ではテキストなし
+
+    // Set a larger font for the number label
+    lv_obj_set_style_text_font(number_label, &lv_font_montserrat_22, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     add_navigation_buttons(screen2, screen3, screen1);
     Serial.println("create_keypad_screen End");
