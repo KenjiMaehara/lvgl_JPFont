@@ -25,10 +25,10 @@ void screen_setup() {
     //ili9488_init();
 
     screen1 = lv_obj_create(NULL);
-    create_keypad_screen(screen1);
+    create_clock_screen(screen1);
 
     screen2 = lv_obj_create(NULL);
-    create_clock_screen(screen2);
+    create_keypad_screen(screen2);
 
     screen3 = lv_obj_create(NULL);
     create_security_screen(screen3);

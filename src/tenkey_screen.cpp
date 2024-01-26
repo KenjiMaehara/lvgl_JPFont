@@ -57,7 +57,7 @@ void create_keypad_screen(lv_obj_t *scr) {
     lv_obj_align(number_label, LV_ALIGN_TOP_MID, 0, 10);
     lv_label_set_text(number_label, ""); // 初期状態ではテキストなし
 
-    add_navigation_buttons(scr, screen2, screen3);
+    add_navigation_buttons(screen2, screen3, screen1);
     Serial.println("create_keypad_screen End");
 }
 
