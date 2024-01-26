@@ -41,7 +41,7 @@ void create_keypad_screen(lv_obj_t *scr) {
             // ボタンの作成
             lv_obj_t *btn = lv_btn_create(scr);
             lv_obj_set_size(btn, btn_width, btn_height);
-            lv_obj_set_pos(btn, col * btn_width, row * btn_height);
+            lv_obj_set_pos(btn, 55 + 70 + col * btn_width, 70 + row * btn_height);
 
             // ボタンのラベルの作成
             lv_obj_t *label = lv_label_create(btn);
