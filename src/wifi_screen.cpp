@@ -42,14 +42,17 @@ void task_connectToWiFi(void * parameter) {
 // WiFi接続のステータスを確認し、接続が完了している場合にSSIDとIPアドレスを表示する関数
 void displayWiFiInfo(lv_obj_t *label_ssid, lv_obj_t *label_ip) {
     if (WiFi.status() == WL_CONNECTED) {
-        lv_label_set_text(label_ssid, WiFi.SSID().c_str());
-        lv_label_set_text(label_ip, WiFi.localIP().toString().c_str());
+        // SSIDとIPアドレスのテキストに追加の説明を付ける
+        String ssid_text = "SSID:      " + WiFi.SSID();
+        String ip_text = "IP address:     " + WiFi.localIP().toString();
+
+        lv_label_set_text(label_ssid, ssid_text.c_str());
+        lv_label_set_text(label_ip, ip_text.c_str());
     } else {
         lv_label_set_text(label_ssid, "SSID: Not connected");
         lv_label_set_text(label_ip, "IP: Not connected");
     }
 }
-
 
 
 void create_wifi_screen(lv_obj_t *scr) {
