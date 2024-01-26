@@ -42,12 +42,14 @@ void create_keypad_screen(lv_obj_t *scr) {
     lv_style_set_border_color(&style, lv_color_black());
     lv_style_set_border_width(&style, 2); // 枠線の幅を2ピクセルに設定
 
+    const int spacing = 10; // ボタン間の余白
+
     for (int row = 0; row < rows; row++) {
         for (int col = 0; col < cols; col++) {
             // ボタンの作成
             lv_obj_t *btn = lv_btn_create(scr);
             lv_obj_set_size(btn, btn_width, btn_height);
-            lv_obj_set_pos(btn, 55 + 70 + col * btn_width, 70 + row * btn_height);
+            lv_obj_set_pos(btn, 55 + 70 + col * (btn_width + spacing), 70 + row * (btn_height + spacing));
 
             // ボタンのラベルの作成
             lv_obj_t *label = lv_label_create(btn);
