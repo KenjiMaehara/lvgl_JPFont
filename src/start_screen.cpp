@@ -65,12 +65,6 @@ void add_navigation_buttons(lv_obj_t *scr, lv_obj_t *next_screen, lv_obj_t *prev
 
 
 
-void create_security_screen(lv_obj_t *scr) {
-    // 防犯開始・解除のボタン作成
-    // ...
-    add_navigation_buttons(scr, screen4, screen2);
-}
-
 void create_fourth_screen(lv_obj_t *scr) {
     // 4番目のスクリーンの内容
     // ...
