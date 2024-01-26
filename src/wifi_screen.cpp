@@ -14,16 +14,22 @@ const char* password = "asdf0616";
 
 
 void task_connectToWiFi(void * parameter) {
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("\nConnected to WiFi");
+    WiFi.begin(ssid, password);
 
-
-  // このタスクの終了
-  vTaskDelete(NULL);
+    // 無限ループでWiFiのステータスを監視
+    for (;;) {
+        if (WiFi.status() == WL_CONNECTED) {
+            // ここに接続済み時の処理を記述
+            Serial.println("Connected to WiFi");
+            vTaskDelay(10000 / portTICK_PERIOD_MS); // 10秒ごとにチェック
+        } else {
+            // 接続が失われた場合の再接続処理
+            Serial.println("Reconnecting to WiFi...");
+            WiFi.disconnect();
+            WiFi.begin(ssid, password);
+            vTaskDelay(5000 / portTICK_PERIOD_MS); // 5秒ごとに再接続試行
+        }
+    }
 }
 
 
