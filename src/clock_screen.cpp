@@ -176,6 +176,9 @@ void create_clock_screen(lv_obj_t *scr) {
     time_label = lv_label_create(scr);
     lv_obj_align(time_label, LV_ALIGN_CENTER, 0, 0);
 
+    // ラベルのフォントサイズを大きくする
+    lv_obj_set_style_text_font(time_label, &lv_font_montserrat_48, 0);
+
     // タイマーを作成して時刻を定期的に更新
     lv_timer_create(update_time, 1000, NULL);
 
