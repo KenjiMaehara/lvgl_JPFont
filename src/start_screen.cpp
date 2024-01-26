@@ -33,11 +33,13 @@ void screen_setup() {
     create_security_screen(screen3);
 
     screen4 = lv_obj_create(NULL);
-    create_fourth_screen(screen4);
+    create_area_screen(screen4);
 
     // すべてのスクリーンが生成された後にボタンにスクリーンを割り当てる
-    add_navigation_buttons(screen1, screen2, screen3);
+    add_navigation_buttons(screen1, screen2, screen4);
     add_navigation_buttons(screen2, screen3, screen1);
+    add_navigation_buttons(screen3, screen4, screen2);
+    add_navigation_buttons(screen4, screen1, screen3);
 
     lv_scr_load(screen1);
 
