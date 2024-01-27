@@ -78,6 +78,8 @@ void create_wifi_screen(lv_obj_t *scr) {
 
     Serial.println("create_wifi_screen start");
 
+    isScanningWiFi = true;  // スキャン開始
+
     // LVGLオブジェクト
     label_ssid = lv_label_create(scr);
     label_ip = lv_label_create(scr);
@@ -114,7 +116,7 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
     WiFi.disconnect(true);  // 強制的に切断
     delay(100);  // 切断処理のための短いディレイ
 
-    isScanningWiFi = true;  // スキャン開始
+    //isScanningWiFi = true;  // スキャン開始
 
     if (WiFi.status() != WL_DISCONNECTED) {
         // WiFiが接続されている場合はスキャンを中止

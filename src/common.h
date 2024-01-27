@@ -36,6 +36,8 @@ extern lv_obj_t *screen4;
 extern lv_obj_t *screen5;
 
 
+// グローバル変数としてフラグを定義
+extern volatile bool isScanningWiFi;
 
 
 // WiFiの資格情報
