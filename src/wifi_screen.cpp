@@ -15,6 +15,9 @@ const char* password = "asdf0616";
 void displayWiFiInfo(lv_obj_t *label_ssid, lv_obj_t *label_ip);
 void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label);
 
+// グローバル変数の定義
+lv_obj_t* wifi_list_label;
+
 lv_obj_t* label_ssid;
 lv_obj_t* label_ip;
 
@@ -22,13 +25,14 @@ lv_obj_t* label_ip;
 volatile bool isScanningWiFi = false;
 
 void task_connectToWiFi(void * parameter) {
-    WiFi.begin(ssid, password);
+    //WiFi.begin(ssid, password);
 
     // 無限ループでWiFiのステータスを監視
     for (;;) {
         if (isScanningWiFi) {
             // WiFiスキャン中は何もしない
-            vTaskDelay(1000 / portTICK_PERIOD_MS); // 一時停止
+            vTaskDelay(5000 / portTICK_PERIOD_MS); // 一時停止
+            Serial.println("wifi_scanning...");
             continue;
         }  
 
@@ -37,7 +41,7 @@ void task_connectToWiFi(void * parameter) {
             Serial.println("Connected to WiFi");
             displayWiFiInfo(label_ssid, label_ip); // WiFi情報の表示更新
             vTaskDelay(10000 / portTICK_PERIOD_MS); // 10秒ごとにチェック
-        } else {
+        } else if (WiFi.status() != WL_CONNECTED && isScanningWiFi == true) {
             // 接続が失われた場合の再接続処理
             Serial.println("Reconnecting to WiFi...");
             WiFi.disconnect();
@@ -63,6 +67,12 @@ void displayWiFiInfo(lv_obj_t *label_ssid, lv_obj_t *label_ip) {
     }
 }
 
+// タイマーコールバック関数
+void onTimer(TimerHandle_t xTimer) {
+    scanAndDisplayWiFiNetworks(wifi_list_label); // wifi_list_labelは適切に定義する
+}
+
+
 
 void create_wifi_screen(lv_obj_t *scr) {
 
@@ -80,10 +90,12 @@ void create_wifi_screen(lv_obj_t *scr) {
     displayWiFiInfo(label_ssid, label_ip);
 
     // WiFiリストラベルの作成
-    lv_obj_t* wifi_list_label = lv_label_create(scr);
+    wifi_list_label = lv_label_create(scr);
     lv_obj_align(wifi_list_label, LV_ALIGN_CENTER, 0, 60); // 位置の調整
-    // スキャンして表示
-    scanAndDisplayWiFiNetworks(wifi_list_label);
+
+    // タイマーの設定（10秒ごとに onTimer を呼び出す）
+    TimerHandle_t timer = xTimerCreate("WifiScanTimer", pdMS_TO_TICKS(10000), pdTRUE, (void*)0, onTimer);
+    xTimerStart(timer, 0);
 
     add_navigation_buttons(screen5, screen1, screen4);
 
@@ -96,7 +108,21 @@ struct WiFiNetwork {
 };
 
 void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
-    isScanningWiFi = true; // スキャン開始
+    // WiFiモジュールをステーションモードに設定
+    WiFi.mode(WIFI_STA);
+    delay(100);  // WiFiモジュールのオフ処理のためのディレイ
+    WiFi.disconnect(true);  // 強制的に切断
+    delay(100);  // 切断処理のための短いディレイ
+
+    isScanningWiFi = true;  // スキャン開始
+
+    if (WiFi.status() != WL_DISCONNECTED) {
+        // WiFiが接続されている場合はスキャンを中止
+        lv_label_set_text(wifi_list_label, "WiFi is connected, cannot scan");
+        Serial.println("WiFi is connected, cannot scan");
+        isScanningWiFi = false;
+        return;
+    }
 
     const int maxNetworks = 10; // 表示する最大ネットワーク数
     int n = WiFi.scanNetworks();
