@@ -13,6 +13,7 @@ const char* password = "asdf0616";
 
 
 void displayWiFiInfo(lv_obj_t *label_ssid, lv_obj_t *label_ip);
+void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label);
 
 lv_obj_t* label_ssid;
 lv_obj_t* label_ip;
@@ -70,7 +71,59 @@ void create_wifi_screen(lv_obj_t *scr) {
     // WiFi情報を表示
     displayWiFiInfo(label_ssid, label_ip);
 
+    // WiFiリストラベルの作成
+    lv_obj_t* wifi_list_label = lv_label_create(scr);
+    lv_obj_align(wifi_list_label, LV_ALIGN_CENTER, 0, 60); // 位置の調整
+    // スキャンして表示
+    scanAndDisplayWiFiNetworks(wifi_list_label);
+
     add_navigation_buttons(screen5, screen1, screen4);
 
     Serial.println("create_wifi_screen End");
+}
+
+struct WiFiNetwork {
+    String SSID;
+    int32_t RSSI;
+};
+
+void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
+    const int maxNetworks = 10; // 表示する最大ネットワーク数
+    int n = WiFi.scanNetworks();
+    if (n == 0) {
+        lv_label_set_text(wifi_list_label, "No networks found");
+    } else {
+        if (n > maxNetworks) {
+            n = maxNetworks; // ネットワークの数を制限
+        }
+
+        // 動的メモリ割り当て
+        WiFiNetwork* networks = new WiFiNetwork[n];
+        if (networks == nullptr) {
+            lv_label_set_text(wifi_list_label, "Memory allocation failed");
+            return;
+        }
+
+        // ネットワークの情報を保存
+        for (int i = 0; i < n; ++i) {
+            networks[i].SSID = WiFi.SSID(i);
+            networks[i].RSSI = WiFi.RSSI(i);
+        }
+
+        // ネットワークをRSSIでソート
+        std::sort(networks, networks + n, [](const WiFiNetwork &a, const WiFiNetwork &b) {
+            return a.RSSI > b.RSSI;
+        });
+
+        // ソートされたリストを表示
+        String wifi_list_str = "Nearby WiFi Networks:\\n";
+        for (int i = 0; i < n; ++i) {
+            wifi_list_str += String(i + 1) + ": " + networks[i].SSID + " (RSSI: " + networks[i].RSSI + ")\\n";
+        }
+        lv_label_set_text(wifi_list_label, wifi_list_str.c_str());
+
+        // 割り当てられたメモリを解放
+        delete[] networks;
+    }
+    WiFi.scanDelete(); // スキャン結果をクリア
 }
