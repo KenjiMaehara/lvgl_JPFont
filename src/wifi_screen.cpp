@@ -108,11 +108,13 @@ struct WiFiNetwork {
 };
 
 void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
+
+    WiFi.disconnect(true);  // 強制的に切断
+    delay(1000);  // 切断処理のための短いディレイ    
     // WiFiモジュールをステーションモードに設定
     WiFi.mode(WIFI_STA);
-    delay(100);  // WiFiモジュールのオフ処理のためのディレイ
-    WiFi.disconnect(true);  // 強制的に切断
-    delay(100);  // 切断処理のための短いディレイ
+    delay(1000);  // WiFiモジュールのオフ処理のためのディレイ
+
 
     isScanningWiFi = true;  // スキャン開始
 
