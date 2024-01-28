@@ -47,4 +47,7 @@ extern void buzzer_beep();
 extern void buzzer_setup();
 extern void led_setup();
 
+extern bool ledOn;
+
+
 #endif

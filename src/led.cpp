@@ -7,6 +7,9 @@
 
 Adafruit_MCP23X17 mcp;
 
+// led.cpp
+bool ledOn = false; // グローバル変数を定義
+
 // LED点滅タスク
 void blinkLedTask(void *parameter) {
     Serial.println("blinkLedTask Start");
@@ -16,15 +19,32 @@ void blinkLedTask(void *parameter) {
     mcp.pinMode(i, OUTPUT);
   }
 
-  while (true) {
-    for (int i = 0; i < 8; i++) {
-      mcp.digitalWrite(i, HIGH);
-    }
-    vTaskDelay(1000 / portTICK_PERIOD_MS); // 1000ms待つ
-    for (int i = 0; i < 8; i++) {
-      mcp.digitalWrite(i, LOW);
-    }
-    vTaskDelay(1000 / portTICK_PERIOD_MS); // 1000ms待つ}
+    while (true) {
+
+        #if 0
+        for (int i = 0; i < 8; i++) {
+          mcp.digitalWrite(i, HIGH);
+        }
+        vTaskDelay(1000 / portTICK_PERIOD_MS); // 1000ms待つ
+        for (int i = 0; i < 8; i++) {
+          mcp.digitalWrite(i, LOW);
+        }
+        vTaskDelay(1000 / portTICK_PERIOD_MS); // 1000ms待つ}
+        #endif
+
+        if (ledOn) {
+            // 全てのLEDを点灯
+            for (int i = 0; i < 8; i++) {
+                mcp.digitalWrite(i, HIGH);
+            }
+        } else {
+            // 全てのLEDを消灯
+            for (int i = 0; i < 8; i++) {
+                mcp.digitalWrite(i, LOW);
+            }
+        }
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+
     }
 }
 
