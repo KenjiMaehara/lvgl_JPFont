@@ -45,5 +45,6 @@ extern const char* password;
 
 extern void buzzer_beep();
 extern void buzzer_setup();
+extern void led_setup();
 
 #endif
