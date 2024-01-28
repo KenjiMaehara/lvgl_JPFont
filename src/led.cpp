@@ -19,10 +19,13 @@ void blinkLedTask(void *parameter) {
   while (true) {
     for (int i = 0; i < 8; i++) {
       mcp.digitalWrite(i, HIGH);
-      vTaskDelay(1000 / portTICK_PERIOD_MS); // 1000ms待つ
+    }
+    vTaskDelay(1000 / portTICK_PERIOD_MS); // 1000ms待つ
+    for (int i = 0; i < 8; i++) {
       mcp.digitalWrite(i, LOW);
     }
-  }
+    vTaskDelay(1000 / portTICK_PERIOD_MS); // 1000ms待つ}
+    }
 }
 
 void led_setup() {
