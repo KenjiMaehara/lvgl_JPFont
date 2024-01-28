@@ -40,6 +40,7 @@ static void event_handler(lv_event_t * e) {
 
     if(lv_event_get_code(e) == LV_EVENT_CLICKED) {
         buzzer_beep();
+        Serial.println("buzzer_beep_on");
 
         if(strcmp(lv_label_get_text(label), "Disarmed") == 0) {
             lv_label_set_text(label, "Armed");
