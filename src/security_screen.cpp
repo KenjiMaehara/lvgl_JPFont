@@ -39,6 +39,8 @@ static void event_handler(lv_event_t * e) {
     lv_obj_t * label = lv_obj_get_child(btn, 0);
 
     if(lv_event_get_code(e) == LV_EVENT_CLICKED) {
+        buzzer_beep();
+
         if(strcmp(lv_label_get_text(label), "Disarmed") == 0) {
             lv_label_set_text(label, "Armed");
             lv_obj_set_style_bg_color(btn, lv_color_make(0, 255, 0), 0); // 緑色に設定

@@ -4,6 +4,10 @@
 #include "common.h"
 
 
+
+
+
+
 void task_setup() {
 
   // WiFi接続タスクの作成

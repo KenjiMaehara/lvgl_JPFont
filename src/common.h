@@ -42,4 +42,8 @@ extern lv_obj_t *screen5;
 extern const char* ssid;
 extern const char* password;
 
+
+extern void buzzer_beep();
+extern void buzzer_setup();
+
 #endif
