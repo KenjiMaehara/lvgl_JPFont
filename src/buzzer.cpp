@@ -27,7 +27,7 @@ void writeRegister(int device, byte address, byte value) {
 
 void soundBuzzer() {
     writeRegister(MCP23017_ADDRESS, GPIOB, 0x08); // ブザーをオンにする
-    delay(500); // 0.5秒待つ
+    delay(200); // 0.5秒待つ
     writeRegister(MCP23017_ADDRESS, GPIOB, 0x00); // ブザーをオフにする
 }
 
@@ -41,7 +41,7 @@ void buzzer_beep() {
     xTaskCreate(
         task_soundBuzzer,   // タスクで実行される関数
         "task_soundBuzzer", // タスク名
-        1000,           // スタックサイズ
+        5000,           // スタックサイズ
         NULL,            // パラメータ
         1,               // 優先順位
         NULL             // タスクハンドル
