@@ -27,7 +27,7 @@ void writeRegister(int device, byte address, byte value) {
 
 void soundBuzzer() {
     writeRegister(MCP23017_ADDRESS, GPIOB, 0x08); // ブザーをオンにする
-    delay(200); // 0.2秒待つ
+    delay(100); // 0.1秒待つ
     writeRegister(MCP23017_ADDRESS, GPIOB, 0x00); // ブザーをオフにする
 }
 
