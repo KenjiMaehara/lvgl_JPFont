@@ -3,7 +3,7 @@
 
 #include <TFT_eSPI.h> // ILI9488ドライバを含むライブラリ
 #include <lvgl.h>
-#include "mcpArray.h"
+//#include "mcpArray.h"
 
 // ここにextern宣言を追加
 //extern TFT_eSPI tft; // 例えば TFT_eSPI オブジェクトの宣言
@@ -52,6 +52,6 @@ extern void led_setup();
 
 extern bool ledOn;
 extern SemaphoreHandle_t ledSemaphore; // セマフォを定義
-extern MCPArray mcp;  // MCPArrayクラスのインスタンスをexternとして宣言
+//extern MCPArray mcp;  // MCPArrayクラスのインスタンスをexternとして宣言
 
 #endif
