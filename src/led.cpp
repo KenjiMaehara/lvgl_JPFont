@@ -41,7 +41,7 @@ void blinkLedTask(void *parameter) {
 
 void led_setup() {
 
-    #if 1
+    #if 0
     Wire.begin(); // I2Cの初期化
 
     // 0x20アドレスのMCP23017のすべてのピンを出力として設定
