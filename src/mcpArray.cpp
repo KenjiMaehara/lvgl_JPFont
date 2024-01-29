@@ -1,5 +1,6 @@
 #include <Wire.h>
 #include "Adafruit_MCP23X17.h"
+#include "common.h"
 
 class MCPArray {
 public:
@@ -15,8 +16,8 @@ public:
     }
 
 private:
-    static const int MCP_COUNT = 4;  // 接続されているMCP23017の数
-    static const int MCP_BASE_ADDR = 0x21;  // 最初のMCP23017のアドレス
+    static const int MCP_COUNT = 5;  // 接続されているMCP23017の数
+    static const int MCP_BASE_ADDR = 0x20;  // 最初のMCP23017のアドレス
     Adafruit_MCP23X17 mcp_devices[MCP_COUNT];
 };
 

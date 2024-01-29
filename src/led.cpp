@@ -5,6 +5,7 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include <freertos/semphr.h>
+#include "common.h"
 
 Adafruit_MCP23X17 mcp_Secur_LED;
 Adafruit_MCP23X17 mcp_local_input;
