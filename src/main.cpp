@@ -7,6 +7,8 @@
 #include <WiFi.h> // WiFiライブラリをインクルード
 
 void setup() {
+    Serial.begin(115200);
+    Serial.println("setup Start");
     //start_setup();
     lvgl_screen_setup();
     //clock_setup();
@@ -16,6 +18,7 @@ void setup() {
     led_setup();
 
     WiFi.begin(ssid, password);
+    Serial.println("setup End");
 }
 
 
