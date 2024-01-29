@@ -40,21 +40,27 @@ void blinkLedTask(void *parameter) {
 }
 
 void led_setup() {
-  Wire.begin(26, 25); // ESP32のIO26(SDA)とIO25(SCL)を指定
-  mcp_Secur_LED.begin_I2C(0x21, &Wire); // MCP23017のI2Cアドレスを指定（必要に応じて変更）
-  
-  // LEDを出力に設定
-  for (int i = 0; i < 8; i++) {
-    mcp_Secur_LED.pinMode(i, OUTPUT);
-  }
+    Wire.begin(); // I2Cの初期化
 
-  mcp_local_input.begin_I2C(0x22, &Wire);  // MCP23017のI2Cアドレスを0x22として初期化
+    // 0x20アドレスのMCP23017のすべてのピンを出力として設定
+    for (int i = 0; i < 16; i++) {
+        mcp[0x20].pinMode(i, OUTPUT);
+    }
 
-  // GPA0からGPA7までを入力として設定
-  for (int i = 0; i < 8; i++) {
-    mcp_local_input.pinMode(i, INPUT);
-  }
+    // 0x21アドレスのMCP23017のすべてのピンを出力として設定
+    for (int i = 0; i < 16; i++) {
+        mcp[0x21].pinMode(i, OUTPUT);
+    }
 
+    // 0x23アドレスのMCP23017のすべてのピンを出力として設定
+    for (int i = 0; i < 16; i++) {
+        mcp[0x23].pinMode(i, OUTPUT);
+    }
+
+    // 0x24アドレスのMCP23017のすべてのピンを出力として設定
+    for (int i = 0; i < 16; i++) {
+        mcp[0x24].pinMode(i, OUTPUT);
+    }
 
   // セマフォの作成
   ledSemaphore = xSemaphoreCreateBinary();
