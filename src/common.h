@@ -48,6 +48,6 @@ extern void buzzer_setup();
 extern void led_setup();
 
 extern bool ledOn;
-
+extern SemaphoreHandle_t ledSemaphore; // セマフォを定義
 
 #endif
