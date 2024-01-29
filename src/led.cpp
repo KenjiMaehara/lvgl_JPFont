@@ -7,9 +7,9 @@
 #include <freertos/semphr.h>
 #include "common.h"
 
-Adafruit_MCP23X17 mcp_Secur_LED;
-Adafruit_MCP23X17 mcp_local_input;
-Adafruit_MCP23X17 mcp_emg_LED;
+//Adafruit_MCP23X17 mcp_Secur_LED;
+//Adafruit_MCP23X17 mcp_local_input;
+//Adafruit_MCP23X17 mcp_emg_LED;
 
 SemaphoreHandle_t ledSemaphore; // セマフォを定義
 
@@ -26,12 +26,14 @@ void blinkLedTask(void *parameter) {
           if (ledOn) {
               // 全てのLEDを点灯
               for (int i = 0; i < 8; i++) {
-                  mcp_Secur_LED.digitalWrite(i, HIGH);
+                  //mcp_Secur_LED.digitalWrite(i, HIGH);
+                  mcp[0x21].digitalWrite(i, HIGH);
               }
           } else {
               // 全てのLEDを消灯
               for (int i = 0; i < 8; i++) {
-                  mcp_Secur_LED.digitalWrite(i, LOW);
+                  //mcp_Secur_LED.digitalWrite(i, LOW);
+                  mcp[0x21].digitalWrite(i, LOW);
               }
           }
         }
