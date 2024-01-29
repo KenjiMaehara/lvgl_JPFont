@@ -26,14 +26,12 @@ void blinkLedTask(void *parameter) {
           if (ledOn) {
               // 全てのLEDを点灯
               for (int i = 0; i < 8; i++) {
-                  //mcp_Secur_LED.digitalWrite(i, HIGH);
-                  mcp[0x21].digitalWrite(i, HIGH);
+                  //mcp[0x21].digitalWrite(i, HIGH);
               }
           } else {
               // 全てのLEDを消灯
               for (int i = 0; i < 8; i++) {
-                  //mcp_Secur_LED.digitalWrite(i, LOW);
-                  mcp[0x21].digitalWrite(i, LOW);
+                  //mcp[0x21].digitalWrite(i, LOW);
               }
           }
         }
@@ -42,6 +40,8 @@ void blinkLedTask(void *parameter) {
 }
 
 void led_setup() {
+
+    #if 1
     Wire.begin(); // I2Cの初期化
 
     // 0x20アドレスのMCP23017のすべてのピンを出力として設定
@@ -63,6 +63,7 @@ void led_setup() {
     for (int i = 0; i < 16; i++) {
         mcp[0x24].pinMode(i, OUTPUT);
     }
+    #endif
 
   // セマフォの作成
   ledSemaphore = xSemaphoreCreateBinary();
