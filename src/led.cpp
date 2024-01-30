@@ -1,10 +1,11 @@
 #include <Wire.h>
 //#include "Adafruit_MCP23017.h"
-#include "Adafruit_MCP23X17.h"
+#include <Adafruit_MCP23X17.h>
 #include <Arduino.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include <freertos/semphr.h>
+#include "common.h"
 
 Adafruit_MCP23X17 mcp[5];
 //Adafruit_MCP23X17 mcp_local_input;
@@ -15,7 +16,7 @@ SemaphoreHandle_t ledSemaphore; // セマフォを定義
 // led.cpp
 bool ledOn = false; // グローバル変数を定義
 
-#define MCP_BASE_ADDR 0x20
+
 
 #define EMG_INPUT_CH1 0
 #define EMG_INPUT_CH2 1
