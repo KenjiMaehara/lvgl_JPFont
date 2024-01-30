@@ -84,12 +84,20 @@ void led_setup() {
     mcp[0x22 - MCP_BASE_ADDR].pinMode(i, INPUT);
   }
 
+  // GPAポートの割り込みを有効にする
+  mcp[0x22 - MCP_BASE_ADDR].setupInterrupts(true, false, LOW);  // ミラーリング無し、オープンドレイン無し、アクティブロー
+
+  // GPA0～GPA7の割り込みを有効にする
+  for (int i = 0; i < 8; i++) {
+      mcp[0x22 - MCP_BASE_ADDR].setupInterruptPin(i, CHANGE);  // 状態変化で割り込みを発生
+  }
+
 
   // セマフォの作成
   ledSemaphore = xSemaphoreCreateBinary();
   
 
   // LED点滅タスクを作成
-  xTaskCreate(blinkLedTask, "Blink LED Task", 2048, NULL, 1, NULL);
+  xTaskCreate(blinkLedTask, "Blink LED Task", 4096, NULL, 1, NULL);
 }
 

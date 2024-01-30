@@ -16,7 +16,7 @@ void sensor_input_setup() {
   // GPA0からGPA7を入力として設定し、プルアップ抵抗を有効化
   for (int i = 0; i < 8; i++) {
 
-    lastState[i] = mcp[0x21 - MCP_BASE_ADDR].digitalRead(i);
+    lastState[i] = mcp[0x20 - MCP_BASE_ADDR].digitalRead(i);
   }
 
   // ピン監視タスクの作成
