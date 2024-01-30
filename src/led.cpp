@@ -45,6 +45,21 @@ void blinkLedTask(void *parameter) {
 
 void led_setup() {
   Wire.begin(26, 25); // ESP32のIO26(SDA)とIO25(SCL)を指定
+
+  mcp[0x20 - MCP_BASE_ADDR].begin_I2C(0x20, &Wire); // MCP23017のI2Cアドレスを指定（必要に応じて変更）
+  
+  // 入力に設定
+  for (int i = 0; i < 8; i++) {
+    mcp[0x20 - MCP_BASE_ADDR].pinMode(i, INPUT);
+  }
+
+  // 出力に設定
+  for (int i = 8; i < 16; i++) {
+    mcp[0x20 - MCP_BASE_ADDR].pinMode(i, OUTPUT);
+  }
+
+
+
   mcp[0x21 - MCP_BASE_ADDR].begin_I2C(0x21, &Wire); // MCP23017のI2Cアドレスを指定（必要に応じて変更）
   
   // LEDを出力に設定
