@@ -20,15 +20,18 @@ void sensor_input_setup() {
   }
 
   // ピン監視タスクの作成
-  xTaskCreate(pinMonitorTask, "Pin Monitor", 1000, NULL, 1, NULL);
+  xTaskCreate(pinMonitorTask, "Pin Monitor", 2000, NULL, 1, NULL);
 }
 
 
 // ピンの状態を監視するタスク
 void pinMonitorTask(void *pvParameters) {
+
+  Serial.println("pinMonitorTask Start");
+  
   for (;;) {
     for (int i = 0; i < 8; i++) {
-      int currentState = mcp[0x21 - MCP_BASE_ADDR].digitalRead(i);
+      int currentState = mcp[0x20 - MCP_BASE_ADDR].digitalRead(i);
       if (currentState != lastState[i]) {
         handlePinChange(i, currentState);
         lastState[i] = currentState;
@@ -38,7 +41,15 @@ void pinMonitorTask(void *pvParameters) {
   }
 }
 
+
+int value[8];
 // ピンの変化を処理するハンドラ
 void handlePinChange(int pin, int state) {
-  // ここにピンの変化に応じた処理を記述
+  Serial.println("handlePinChange Start");
+  if(pin == 7)
+  {
+      for (int i = 0; i < 8; i++) {
+        mcp[0x21 - MCP_BASE_ADDR].digitalWrite(i+8, mcp[0x22 - MCP_BASE_ADDR].digitalRead(i));
+      }
+  }
 }
