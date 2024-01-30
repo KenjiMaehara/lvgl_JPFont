@@ -17,6 +17,15 @@ bool ledOn = false; // グローバル変数を定義
 
 #define MCP_BASE_ADDR 0x20
 
+#define EMG_INPUT_CH1 0
+#define EMG_INPUT_CH2 1
+#define EMG_INPUT_CH3 2
+#define EMG_INPUT_CH4 3
+#define EMG_INPUT_CH5 4
+#define EMG_INPUT_CH6 5
+#define EMG_INPUT_CH7 6
+#define EMG_INPUT_CH8 7
+
 // LED点滅タスク
 void blinkLedTask(void *parameter) {
     Serial.println("blinkLedTask Start");
