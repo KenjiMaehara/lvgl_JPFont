@@ -20,7 +20,7 @@ void sensor_input_setup() {
   }
 
   // ピン監視タスクの作成
-  xTaskCreate(pinMonitorTask, "Pin Monitor", 2000, NULL, 1, NULL);
+  xTaskCreate(pinMonitorTask, "Pin Monitor", 10000, NULL, 1, NULL);
 }
 
 
