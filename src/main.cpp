@@ -85,7 +85,7 @@ void blinkTask(void *pvParameters) {
       }
     }
 
-    delay(500); // 500ミリ秒待機
+    delay(100); // 500ミリ秒待機
   }
 }
 
