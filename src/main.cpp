@@ -20,9 +20,10 @@ void setup() {
   }
 
   // すべてのデバイスのGPB0～7と、アドレス0x21、0x23、0x24のGPA0～7を出力として設定
+  // アドレス0x20のGPB3と、アドレス0x22のGPB0～3を除外
   for (int addr = 0; addr < 5; addr++) {
     for (int pin = 8; pin < 16; pin++) {
-      if (!(addr == 0 && pin == 11)) { // アドレス0x20のGPB3を除外
+      if (!(addr == 0 && pin == 11) && !(addr == 2 && pin >= 8 && pin <= 11)) {
         mcp[addr].pinMode(pin, OUTPUT);
       }
     }
@@ -38,7 +39,7 @@ void loop() {
   // すべてのデバイスのすべての出力ピンをHIGHに設定（LED ON）
   for (int addr = 0; addr < 5; addr++) {
     for (int pin = 8; pin < 16; pin++) {
-      if (!(addr == 0 && pin == 11)) { // アドレス0x20のGPB3を除外
+      if (!(addr == 0 && pin == 11) && !(addr == 2 && pin >= 8 && pin <= 11)) {
         mcp[addr].digitalWrite(pin, HIGH);
       }
     }
@@ -53,7 +54,7 @@ void loop() {
   // すべてのデバイスのすべての出力ピンをLOWに設定（LED OFF）
   for (int addr = 0; addr < 5; addr++) {
     for (int pin = 8; pin < 16; pin++) {
-      if (!(addr == 0 && pin == 11)) { // アドレス0x20のGPB3を除外
+      if (!(addr == 0 && pin == 11) && !(addr == 2 && pin >= 8 && pin <= 11)) {
         mcp[addr].digitalWrite(pin, LOW);
       }
     }
