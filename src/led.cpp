@@ -46,7 +46,7 @@ void blinkLedTask(void *parameter) {
               }
           }
         }
-
+        vTaskDelay(100 / portTICK_PERIOD_MS); // 0.1秒ごとにチェック
     }
 }
 

@@ -48,6 +48,7 @@ void task_connectToWiFi(void * parameter) {
             WiFi.begin(ssid, password);
             vTaskDelay(5000 / portTICK_PERIOD_MS); // 5秒ごとに再接続試行
         }
+        vTaskDelay(100 / portTICK_PERIOD_MS); // 0.1秒ごとにチェック
     }
 }
 
