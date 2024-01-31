@@ -13,8 +13,9 @@ void setup() {
     task_setup();
     screen_setup();
     buzzer_setup();
-    sensor_input_setup();
+  
     led_setup();
+    sensor_input_setup();
 
     WiFi.begin(ssid, password);
 }
