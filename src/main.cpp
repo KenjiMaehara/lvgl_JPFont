@@ -63,29 +63,30 @@ void loop() {
 void blinkTask(void *pvParameters) {
   Serial.println("blinkTask start"); // タスク開始の通知
 
+  bool lastState[8] = {HIGH, HIGH, HIGH, HIGH, HIGH, HIGH, HIGH, HIGH}; // 前回の状態を保持する変数
+  bool currentState[8]; // 現在の状態を保持する変数
+
   for (;;) { // 無限ループ
     bool isLowDetected = false;
     
-    // アドレス0x22hのMCP23017のGPA0～7をチェック
+    // アドレス0x22hのMCP23017のGPA0～7をスキャンし、状態を保存
     for (int pin = 0; pin < 8; pin++) {
-      if (mcp[2].digitalRead(pin) == LOW) {
-        isLowDetected = true;
-        break;
+      currentState[pin] = mcp[2].digitalRead(pin);
+      if (currentState[pin] != lastState[pin]) {
+        isLowDetected = true; // 状態が変わったらフラグを設定
       }
+      lastState[pin] = currentState[pin]; // 現在の状態を保存
     }
 
     if (isLowDetected) {
-      // LOWが検出された場合、アドレス0x21hのMCP23017のGPB0～7に接続されたLEDを点灯
-      for (int pin = 8; pin < 16; pin++) {
-        mcp[1].digitalWrite(pin, HIGH);
-      }
-    } else {
-      // LOWが検出されない場合、LEDを消灯
-      for (int pin = 8; pin < 16; pin++) {
-        mcp[1].digitalWrite(pin, LOW);
+      // 状態に変化があった場合、アドレス0x21hのMCP23017のGPB0～7に出力
+      for (int pin = 0; pin < 8; pin++) {
+        mcp[1].digitalWrite(8 + pin, currentState[pin]);
       }
     }
 
     delay(500); // 500ミリ秒待機
   }
 }
+
+
