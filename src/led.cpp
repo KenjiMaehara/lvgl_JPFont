@@ -93,11 +93,15 @@ void led_setup() {
   }
 
 
+  #if 0
   // セマフォの作成
   ledSemaphore = xSemaphoreCreateBinary();
-  
+  #endif
 
+
+  #if 0
   // LED点滅タスクを作成
   xTaskCreate(blinkLedTask, "Blink LED Task", 4096, NULL, 1, NULL);
+  #endif
 }
 

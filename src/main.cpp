@@ -8,21 +8,23 @@
 
 void setup() {
     //start_setup();
-    lvgl_screen_setup();
+    //lvgl_screen_setup();
     //clock_setup();
-    task_setup();
-    screen_setup();
-    buzzer_setup();
+    //task_setup();
+    //screen_setup();
+    //buzzer_setup();
   
     led_setup();
     sensor_input_setup();
 
-    WiFi.begin(ssid, password);
+    //WiFi.begin(ssid, password);
 }
 
 
 
 void loop() {
+    #if 0
     lv_task_handler();
     delay(5);
+    #endif
 }
