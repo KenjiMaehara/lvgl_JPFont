@@ -13,14 +13,16 @@ void handlePinChange(int pin, int state);
 
 void sensor_input_setup() {
 
+  #if 0
   // GPA0からGPA7を入力として設定し、プルアップ抵抗を有効化
   for (int i = 0; i < 8; i++) {
 
     lastState[i] = mcp[0x20 - MCP_BASE_ADDR].digitalRead(i);
   }
+  #endif
 
   // ピン監視タスクの作成
-  xTaskCreate(pinMonitorTask, "Pin Monitor", 5000, NULL, 1, NULL);
+  xTaskCreate(pinMonitorTask, "Pin Monitor", 5000, NULL, 3, NULL);
 }
 
 
