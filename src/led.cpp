@@ -82,7 +82,7 @@ void led_setup() {
   // GPA0からGPA7までを入力として設定
   for (int i = 0; i < 16; i++) {
     mcp[0x22 - MCP_BASE_ADDR].pinMode(i, INPUT);
-  }
+      }
 
   // GPAポートの割り込みを有効にする
   mcp[0x22 - MCP_BASE_ADDR].setupInterrupts(true, false, LOW);  // ミラーリング無し、オープンドレイン無し、アクティブロー
@@ -97,7 +97,10 @@ void led_setup() {
   ledSemaphore = xSemaphoreCreateBinary();
   
 
+  #if 0
   // LED点滅タスクを作成
-  xTaskCreate(blinkLedTask, "Blink LED Task", 4096, NULL, 1, NULL);
+  xTaskCreate(blinkLedTask, "Blink LED Task", 4096, NULL, 2, NULL);
+  #endif
+
 }
 

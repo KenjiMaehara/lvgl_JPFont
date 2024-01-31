@@ -20,7 +20,7 @@ void sensor_input_setup() {
   }
 
   // ピン監視タスクの作成
-  xTaskCreate(pinMonitorTask, "Pin Monitor", 10000, NULL, 1, NULL);
+  xTaskCreate(pinMonitorTask, "Pin Monitor", 2000, NULL, 1, NULL);
 }
 
 
@@ -51,10 +51,11 @@ void pinMonitorTask(void *pvParameters) {
       Serial.println(currentPin7State);
       lastPin7State = currentPin7State;
     }
-
+    vTaskDelay(pdMS_TO_TICKS(50));  // ポーリング間隔
     // 他のピンの状態をチェック
     for (int i = 0; i < 8; i++) {
       int currentState = mcp[0x20 - MCP_BASE_ADDR].digitalRead(i);
+      vTaskDelay(pdMS_TO_TICKS(50));  // ポーリング間隔
       if (currentState != lastState[i]) {
         handlePinChange(i, currentState);
         lastState[i] = currentState;
@@ -72,7 +73,21 @@ void handlePinChange(int pin, int state) {
   if(pin == 7)
   {
       for (int i = 0; i < 8; i++) {
-        mcp[0x21 - MCP_BASE_ADDR].digitalWrite(i+8, mcp[0x22 - MCP_BASE_ADDR].digitalRead(i));
+        value[i] = mcp[0x22 - MCP_BASE_ADDR].digitalRead(i);
+        delay(50);
+      }
+
+      for (int i = 0; i < 8; i++) {
+        mcp[0x21 - MCP_BASE_ADDR].digitalWrite(i+8, value[i]);
+        delay(50);
+      }
+
+      // GPAポートの割り込みを有効にする
+      mcp[0x22 - MCP_BASE_ADDR].setupInterrupts(true, false, LOW);  // ミラーリング無し、オープンドレイン無し、アクティブロー
+
+      // GPA0～GPA7の割り込みを有効にする
+      for (int i = 0; i < 8; i++) {
+        mcp[0x22 - MCP_BASE_ADDR].setupInterruptPin(i, CHANGE);  // 状態変化で割り込みを発生
       }
   }
 }
