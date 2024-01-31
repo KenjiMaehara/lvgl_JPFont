@@ -163,8 +163,10 @@ void update_time(lv_timer_t *timer) {
     // 時刻を表示するラベルを更新
     lv_label_set_text(time_label, time_str);
 
+    #if 0
     // TFT表示用に時刻をシリアル出力
     Serial.println(time_str);
+    #endif
 }
 
 
