@@ -41,6 +41,15 @@ void setup() {
     }
   }
 
+  // 割り込みの設定
+  mcp[2].setupInterrupts(true, false, LOW); // ミラーリング無効, デフォルト値をLOWに設定
+
+  // GPA0～7の各ピンに対して割り込みを有効化
+  for (int pin = 0; pin < 8; pin++) {
+    mcp[2].setupInterruptPin(pin, CHANGE); // ピンの状態が変化した場合に割り込みが発生
+  }
+
+
   // タスクの作成とスケジューリング
   xTaskCreate(
     blinkTask,   // タスク関数
@@ -63,29 +72,48 @@ void loop() {
 void blinkTask(void *pvParameters) {
   Serial.println("blinkTask start"); // タスク開始の通知
 
-  bool lastState[8] = {HIGH, HIGH, HIGH, HIGH, HIGH, HIGH, HIGH, HIGH}; // 前回の状態を保持する変数
-  bool currentState[8]; // 現在の状態を保持する変数
+  bool lastInterruptState = HIGH; // 前回の割り込み状態を保持する変数
+  bool currentState[8]; // 現在の0x22hの入力状態を保持する変数
 
   for (;;) { // 無限ループ
     bool isLowDetected = false;
-    
-    // アドレス0x22hのMCP23017のGPA0～7をスキャンし、状態を保存
-    for (int pin = 0; pin < 8; pin++) {
-      currentState[pin] = mcp[2].digitalRead(pin);
-      if (currentState[pin] != lastState[pin]) {
-        isLowDetected = true; // 状態が変わったらフラグを設定
+    bool interruptState = mcp[0].digitalRead(7); // アドレス0x20hのGPA7の状態を読み取る
+
+    // 割り込み状態のデバッグ出力
+    Serial.print("Interrupt State: ");
+    Serial.println(interruptState);
+
+    // 割り込み状態に変化があった場合のみチェック
+    if (interruptState != lastInterruptState) {
+      lastInterruptState = interruptState; // 現在の割り込み状態を保存
+
+      if (interruptState == LOW) { // 割り込みがLOWの場合
+        // アドレス0x22hのMCP23017のGPA0～7をスキャンし、状態を保存
+        for (int pin = 0; pin < 8; pin++) {
+          currentState[pin] = mcp[2].digitalRead(pin);
+          // 入力状態のデバッグ出力
+          Serial.print("Input Pin ");
+          Serial.print(pin);
+          Serial.print(": ");
+          Serial.println(currentState[pin]);
+        }
+        isLowDetected = true; // 割り込みがあったのでフラグを設定
       }
-      lastState[pin] = currentState[pin]; // 現在の状態を保存
     }
 
     if (isLowDetected) {
       // 状態に変化があった場合、アドレス0x21hのMCP23017のGPB0～7に出力
       for (int pin = 0; pin < 8; pin++) {
         mcp[1].digitalWrite(8 + pin, currentState[pin]);
+        // 出力状態のデバッグ出力
+        Serial.print("Output Pin ");
+        Serial.print(pin);
+        Serial.print(": ");
+        Serial.println(currentState[pin]);
       }
     }
 
-    delay(100); // 500ミリ秒待機
+    delay(100); // 100ミリ秒待機
   }
 }
 
