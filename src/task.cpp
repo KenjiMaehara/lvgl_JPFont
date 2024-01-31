@@ -3,12 +3,16 @@
 #include <TFT_eSPI.h> // ILI9488ドライバを含むライブラリ
 #include "common.h"
 
-
+#define STOP_TASK   // この行をコメントアウトするとタスクが実行されます
 
 
 
 
 void task_setup() {
+
+  #ifdef STOP_TASK
+  return;
+  #endif
 
   // WiFi接続タスクの作成
   xTaskCreate(
@@ -19,5 +23,7 @@ void task_setup() {
     1,               // 優先順位
     NULL             // タスクハンドル
   );
+
+
 
 }

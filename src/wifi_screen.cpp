@@ -93,9 +93,11 @@ void create_wifi_screen(lv_obj_t *scr) {
     wifi_list_label = lv_label_create(scr);
     lv_obj_align(wifi_list_label, LV_ALIGN_CENTER, 0, 60); // 位置の調整
 
+    #if 0
     // タイマーの設定（10秒ごとに onTimer を呼び出す）
     TimerHandle_t timer = xTimerCreate("WifiScanTimer", pdMS_TO_TICKS(10000), pdTRUE, (void*)0, onTimer);
     xTimerStart(timer, 0);
+    #endif
 
     add_navigation_buttons(screen5, screen1, screen4);
 
