@@ -20,7 +20,7 @@ void sensor_input_setup() {
   }
 
   // ピン監視タスクの作成
-  xTaskCreate(pinMonitorTask, "Pin Monitor", 10000, NULL, 1, NULL);
+  xTaskCreate(pinMonitorTask, "Pin Monitor", 5000, NULL, 1, NULL);
 }
 
 
@@ -57,7 +57,11 @@ void handlePinChange(int pin, int state) {
         // アドレス0x22のMCP23017のGPA0～GPA7の状態を一括で読み取る
         uint8_t portAState = mcp[0x22 - MCP_BASE_ADDR].readGPIO(0);
 
+        // portAStateの値をシリアルポートに出力
+        Serial.print("Port A State: 0x");
+        Serial.println(portAState, HEX);
+
         // 読み取った状態をアドレス0x21のMCP23017のGPB0～GPB7に一括で書き込む
-        mcp[0x21 - MCP_BASE_ADDR].writeGPIO(1, portAState);
+        //mcp[0x21 - MCP_BASE_ADDR].writeGPIO(1, portAState);
     }
 }
