@@ -83,22 +83,19 @@ void blinkTask(void *pvParameters) {
     Serial.print("Interrupt State: ");
     Serial.println(interruptState);
 
-    // 割り込み状態に変化があった場合のみチェック
-    if (interruptState != lastInterruptState) {
-      lastInterruptState = interruptState; // 現在の割り込み状態を保存
-
-      if (interruptState == LOW) { // 割り込みがLOWの場合
-        // アドレス0x22hのMCP23017のGPA0～7をスキャンし、状態を保存
-        for (int pin = 0; pin < 8; pin++) {
-          currentState[pin] = mcp[2].digitalRead(pin);
-          // 入力状態のデバッグ出力
-          Serial.print("Input Pin ");
-          Serial.print(pin);
-          Serial.print(": ");
-          Serial.println(currentState[pin]);
-        }
-        isLowDetected = true; // 割り込みがあったのでフラグを設定
+    // 割り込みがLOWの場合のみチェック
+    if (interruptState == LOW) {
+      delay(100); // チャタリング防止のため10ミリ秒待機
+      // アドレス0x22hのMCP23017のGPA0～7をスキャンし、状態を保存
+      for (int pin = 0; pin < 8; pin++) {
+        currentState[pin] = mcp[2].digitalRead(pin);
+        // 入力状態のデバッグ出力
+        Serial.print("Input Pin ");
+        Serial.print(pin);
+        Serial.print(": ");
+        Serial.println(currentState[pin]);
       }
+      isLowDetected = true; // 割り込みがあったのでフラグを設定
     }
 
     if (isLowDetected) {
@@ -116,5 +113,6 @@ void blinkTask(void *pvParameters) {
     delay(100); // 100ミリ秒待機
   }
 }
+
 
 
