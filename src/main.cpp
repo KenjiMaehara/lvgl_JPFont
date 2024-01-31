@@ -61,39 +61,31 @@ void loop() {
 
 
 void blinkTask(void *pvParameters) {
-
   Serial.println("blinkTask start"); // タスク開始の通知
 
   for (;;) { // 無限ループ
-    // ここに点滅コードを入れる
-  // すべてのデバイスのすべての出力ピンをHIGHに設定（LED ON）
-    for (int addr = 0; addr < 5; addr++) {
-      for (int pin = 8; pin < 16; pin++) {
-        if (!(addr == 0 && pin == 11) && !(addr == 2 && pin >= 8 && pin <= 11)) {
-          mcp[addr].digitalWrite(pin, HIGH);
-        }
-      }
-      if (addr != 0 && addr != 2) {  // 0x20と0x22を除く
-        for (int pin = 0; pin < 8; pin++) {
-          mcp[addr].digitalWrite(pin, HIGH);
-        }
+    bool isLowDetected = false;
+    
+    // アドレス0x22hのMCP23017のGPA0～7をチェック
+    for (int pin = 0; pin < 8; pin++) {
+      if (mcp[2].digitalRead(pin) == LOW) {
+        isLowDetected = true;
+        break;
       }
     }
-    delay(500); // 500ミリ秒待機
 
-    // すべてのデバイスのすべての出力ピンをLOWに設定（LED OFF）
-    for (int addr = 0; addr < 5; addr++) {
+    if (isLowDetected) {
+      // LOWが検出された場合、アドレス0x21hのMCP23017のGPB0～7に接続されたLEDを点灯
       for (int pin = 8; pin < 16; pin++) {
-        if (!(addr == 0 && pin == 11) && !(addr == 2 && pin >= 8 && pin <= 11)) {
-          mcp[addr].digitalWrite(pin, LOW);
-        }
+        mcp[1].digitalWrite(pin, HIGH);
       }
-      if (addr != 0 && addr != 2) {  // 0x20と0x22を除く
-        for (int pin = 0; pin < 8; pin++) {
-          mcp[addr].digitalWrite(pin, LOW);
-        }
+    } else {
+      // LOWが検出されない場合、LEDを消灯
+      for (int pin = 8; pin < 16; pin++) {
+        mcp[1].digitalWrite(pin, LOW);
       }
     }
+
     delay(500); // 500ミリ秒待機
   }
 }
