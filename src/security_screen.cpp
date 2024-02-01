@@ -52,7 +52,7 @@ static void event_handler(lv_event_t * e) {
             lv_obj_set_style_bg_color(btn, lv_color_make(0, 0, 0), 0); // 黒色に設定
             ledOn = false; // LEDを消灯させる
         }
-            xSemaphoreGive(ledSemaphore); // セマフォを解放
+            //xSemaphoreGive(ledSemaphore); // セマフォを解放
     }
 }
 

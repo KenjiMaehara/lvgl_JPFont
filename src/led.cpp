@@ -32,20 +32,18 @@ void blinkLedTask(void *parameter) {
     Serial.println("blinkLedTask Start");
 
     while (true) {
-        if (xSemaphoreTake(ledSemaphore, portMAX_DELAY)) {
-          // セマフォを取得できたらLEDを点滅
-          if (ledOn) {
-              // 全てのLEDを点灯
-              for (int i = 0; i < 8; i++) {
-                  mcp[0x21 - MCP_BASE_ADDR].digitalWrite(i, HIGH);
-              }
-          } else {
-              // 全てのLEDを消灯
-              for (int i = 0; i < 8; i++) {
-                  mcp[0x21 - MCP_BASE_ADDR].digitalWrite(i, LOW);
-              }
+
+      if (ledOn) {
+          // 全てのLEDを点灯
+          for (int i = 0; i < 8; i++) {
+              mcp[0x21 - MCP_BASE_ADDR].digitalWrite(i, HIGH);
           }
-        }
+      } else {
+          // 全てのLEDを消灯
+          for (int i = 0; i < 8; i++) {
+              mcp[0x21 - MCP_BASE_ADDR].digitalWrite(i, LOW);
+          }
+      }
 
     }
 }
@@ -94,7 +92,7 @@ void led_setup() {
 
 
   // セマフォの作成
-  ledSemaphore = xSemaphoreCreateBinary();
+  //ledSemaphore = xSemaphoreCreateBinary();
   
 
   // LED点滅タスクを作成

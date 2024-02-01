@@ -50,7 +50,7 @@ extern void buzzer_setup();
 extern void led_setup();
 
 extern bool ledOn;
-extern SemaphoreHandle_t ledSemaphore; // セマフォを定義
+//extern SemaphoreHandle_t ledSemaphore; // セマフォを定義
 
 extern Adafruit_MCP23X17 mcp[5];
 #define MCP_BASE_ADDR 0x20
