@@ -32,6 +32,7 @@ void pinMonitorTask(void *pvParameters) {
   for (;;) {
     for (int i = 0; i < 8; i++) {
       int currentState = mcp[0x20 - MCP_BASE_ADDR].digitalRead(i);
+      delay(10);
       if (currentState != lastState[i]) {
         handlePinChange(i, currentState);
         lastState[i] = currentState;
@@ -49,7 +50,10 @@ void handlePinChange(int pin, int state) {
   if(pin == 7)
   {
       for (int i = 0; i < 8; i++) {
-        mcp[0x21 - MCP_BASE_ADDR].digitalWrite(i+8, mcp[0x22 - MCP_BASE_ADDR].digitalRead(i));
+        uint8_t data = mcp[0x22 - MCP_BASE_ADDR].digitalRead(i);
+        delay(10);
+        mcp[0x21 - MCP_BASE_ADDR].digitalWrite(i+8, data);
       }
   }
+  Serial.println("handlePinChange End");
 }
