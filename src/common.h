@@ -56,5 +56,8 @@ extern Adafruit_MCP23X17 mcp[5];
 #define MCP_BASE_ADDR 0x20
 extern void sensor_input_setup();
 
+extern int lastState[8];  // 以前の状態を格納する配列
+extern void pinMonitorTask(void *pvParameters);
+extern void handlePinChange(int pin, int state);
 
 #endif

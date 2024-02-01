@@ -33,6 +33,7 @@ void blinkLedTask(void *parameter) {
 
     while (true) {
 
+      //出力PIN設定
       if (ledOn) {
           // 全てのLEDを点灯
           for (int i = 0; i < 8; i++) {
@@ -43,6 +44,21 @@ void blinkLedTask(void *parameter) {
           for (int i = 0; i < 8; i++) {
               mcp[0x21 - MCP_BASE_ADDR].digitalWrite(i, LOW);
           }
+      }
+
+      //入力PIN状態の取得
+      for (int i = 0; i < 8; i++) {
+        int currentState = mcp[0x20 - MCP_BASE_ADDR].digitalRead(i);
+        if (currentState != lastState[i]) {
+          //handlePinChange(i, currentState);
+          lastState[i] = currentState;
+          if(i == 7)
+          {
+            for (int i = 0; i < 8; i++) {
+              mcp[0x21 - MCP_BASE_ADDR].digitalWrite(i+8, mcp[0x22 - MCP_BASE_ADDR].digitalRead(i));
+            }
+          }
+        }
       }
       vTaskDelay(pdMS_TO_TICKS(100));
     }
@@ -89,6 +105,13 @@ void led_setup() {
   for (int i = 0; i < 8; i++) {
       mcp[0x22 - MCP_BASE_ADDR].setupInterruptPin(i, CHANGE);  // 状態変化で割り込みを発生
   }
+
+  // GPA0からGPA7を入力として設定し、プルアップ抵抗を有効化
+  for (int i = 0; i < 8; i++) {
+
+    lastState[i] = mcp[0x20 - MCP_BASE_ADDR].digitalRead(i);
+  }
+
 
 
   // セマフォの作成
