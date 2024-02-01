@@ -71,7 +71,7 @@ void create_keypad_screen(lv_obj_t *scr) {
     // Set a larger font for the number label
     lv_obj_set_style_text_font(number_label, &lv_font_montserrat_22, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    add_navigation_buttons(screen2, screen3, screen1);
+    add_navigation_buttons(screen2, screen1, screen1);
     Serial.println("create_keypad_screen End");
 }
 

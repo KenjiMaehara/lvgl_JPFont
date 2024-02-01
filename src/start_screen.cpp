@@ -30,6 +30,7 @@ void screen_setup() {
     screen2 = lv_obj_create(NULL);
     create_keypad_screen(screen2);
 
+    #if 0
     screen3 = lv_obj_create(NULL);
     create_security_screen(screen3);
 
@@ -38,13 +39,17 @@ void screen_setup() {
 
     screen5 = lv_obj_create(NULL);
     create_wifi_screen(screen5);
+    #endif
 
     // すべてのスクリーンが生成された後にボタンにスクリーンを割り当てる
     add_navigation_buttons(screen1, screen2, screen5);
-    add_navigation_buttons(screen2, screen3, screen1);
+    add_navigation_buttons(screen2, screen1, screen1);
+
+    #if 0
     add_navigation_buttons(screen3, screen4, screen2);
     add_navigation_buttons(screen4, screen5, screen3);
     add_navigation_buttons(screen5, screen1, screen4);
+    #endif
 
     lv_scr_load(screen1);
 
