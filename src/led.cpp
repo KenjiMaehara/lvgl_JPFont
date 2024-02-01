@@ -44,7 +44,7 @@ void blinkLedTask(void *parameter) {
               mcp[0x21 - MCP_BASE_ADDR].digitalWrite(i, LOW);
           }
       }
-
+      vTaskDelay(pdMS_TO_TICKS(100));
     }
 }
 
