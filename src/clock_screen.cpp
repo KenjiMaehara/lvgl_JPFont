@@ -179,11 +179,13 @@ void create_clock_screen(lv_obj_t *scr) {
     // ラベルのフォントサイズを大きくする
     lv_obj_set_style_text_font(time_label, &lv_font_montserrat_48, 0);
 
+    #if 1
     // タイマーを作成して時刻を定期的に更新
     lv_timer_create(update_time, 1000, NULL);
 
     // 初期表示用に現在時刻を更新
     update_time(NULL);
+    #endif
 
     add_navigation_buttons(screen1, screen2, screen5);
 
