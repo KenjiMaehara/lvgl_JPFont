@@ -16,7 +16,7 @@ void setup() {
     sensor_input_setup();
     led_setup();
 
-    WiFi.begin(ssid, password);
+    //WiFi.begin(ssid, password);
 }
 
 
