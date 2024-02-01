@@ -38,6 +38,7 @@ void task_soundBuzzer(void * parameter) {
 
 
 void buzzer_beep() {
+    #if 0
     xTaskCreate(
         task_soundBuzzer,   // タスクで実行される関数
         "task_soundBuzzer", // タスク名
@@ -46,4 +47,5 @@ void buzzer_beep() {
         1,               // 優先順位
         NULL             // タスクハンドル
     );
+    #endif
 }
