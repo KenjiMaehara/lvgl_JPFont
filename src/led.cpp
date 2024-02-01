@@ -94,7 +94,7 @@ void led_setup() {
 
 
   // セマフォの作成
-  ledSemaphore = xSemaphoreCreateBinary();
+  //ledSemaphore = xSemaphoreCreateBinary();
   
 
   #if 0
