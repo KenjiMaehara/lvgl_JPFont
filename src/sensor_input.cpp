@@ -2,6 +2,7 @@
 #include <Adafruit_MCP23X17.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
+#include <freertos/semphr.h>
 #include "common.h"
 
 
@@ -31,10 +32,14 @@ void pinMonitorTask(void *pvParameters) {
   
   for (;;) {
     for (int i = 0; i < 8; i++) {
-      int currentState = mcp[0x20 - MCP_BASE_ADDR].digitalRead(i);
-      if (currentState != lastState[i]) {
-        handlePinChange(i, currentState);
-        lastState[i] = currentState;
+      if (xSemaphoreTake(i2cSemaphore, portMAX_DELAY)) {
+        int currentState = mcp[0x20 - MCP_BASE_ADDR].digitalRead(i);
+        xSemaphoreGive(i2cSemaphore); // セマフォの解放
+
+        if (currentState != lastState[i]) {
+          handlePinChange(i, currentState);
+          lastState[i] = currentState;
+        }
       }
     }
     vTaskDelay(pdMS_TO_TICKS(100));  // ポーリング間隔

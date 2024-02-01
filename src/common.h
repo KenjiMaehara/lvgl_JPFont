@@ -56,5 +56,6 @@ extern Adafruit_MCP23X17 mcp[5];
 #define MCP_BASE_ADDR 0x20
 extern void sensor_input_setup();
 
+extern SemaphoreHandle_t i2cSemaphore; // 共有I2Cバス用のセマフォを定義
 
 #endif

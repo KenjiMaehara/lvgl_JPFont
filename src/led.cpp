@@ -27,11 +27,14 @@ bool ledOn = false; // グローバル変数を定義
 #define EMG_INPUT_CH7 6
 #define EMG_INPUT_CH8 7
 
+SemaphoreHandle_t i2cSemaphore; // 共有I2Cバス用のセマフォを定義
+
 // LED点滅タスク
 void blinkLedTask(void *parameter) {
     Serial.println("blinkLedTask Start");
 
     while (true) {
+      if (xSemaphoreTake(i2cSemaphore, portMAX_DELAY)) {
         if (xSemaphoreTake(ledSemaphore, portMAX_DELAY)) {
           // セマフォを取得できたらLEDを点滅
           if (ledOn) {
@@ -46,7 +49,9 @@ void blinkLedTask(void *parameter) {
               }
           }
         }
-
+        xSemaphoreGive(i2cSemaphore);
+      }
+      vTaskDelay(100 / portTICK_PERIOD_MS);
     }
 }
 
@@ -95,6 +100,8 @@ void led_setup() {
 
   // セマフォの作成
   ledSemaphore = xSemaphoreCreateBinary();
+  
+  i2cSemaphore = xSemaphoreCreateMutex(); // セマフォの初期化
   
 
   // LED点滅タスクを作成

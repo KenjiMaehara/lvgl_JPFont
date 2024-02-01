@@ -2,6 +2,7 @@
 #include <lvgl.h>
 #include "common.h"
 #include <Wire.h>
+#include <freertos/semphr.h>
 
 // MCP23017のI2Cアドレスとレジスタ
 #define MCP23017_ADDRESS 0x20
@@ -19,10 +20,13 @@ void buzzer_setup() {
 
 // MCP23017のレジスタに値を書き込む関数
 void writeRegister(int device, byte address, byte value) {
-    Wire.beginTransmission(device);
-    Wire.write(address);
-    Wire.write(value);
-    Wire.endTransmission();
+    if (xSemaphoreTake(i2cSemaphore, portMAX_DELAY)) {
+        Wire.beginTransmission(device);
+        Wire.write(address);
+        Wire.write(value);
+        Wire.endTransmission();
+        xSemaphoreGive(i2cSemaphore);   // セマフォを解放
+    }
 }
 
 void soundBuzzer() {
