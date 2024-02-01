@@ -49,7 +49,7 @@ void blinkLedTask(void *parameter) {
       //入力PIN状態の取得
       for (int i = 0; i < 8; i++) {
         int currentState = mcp[0x20 - MCP_BASE_ADDR].digitalRead(i);
-        vTaskDelay(pdMS_TO_TICKS(10));  //チャタリング防止
+        delay(30); //チャタリング防止
         if (currentState != lastState[i]) {
           handlePinChange(i, currentState);
           lastState[i] = currentState;
