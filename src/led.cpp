@@ -35,7 +35,8 @@ void blinkLedTask(void *parameter) {
 
     while (true) {
       if (xSemaphoreTake(i2cSemaphore, portMAX_DELAY)) {
-        if (xSemaphoreTake(ledSemaphore, portMAX_DELAY)) {
+        //if (xSemaphoreTake(ledSemaphore, portMAX_DELAY)) 
+        {
           // セマフォを取得できたらLEDを点滅
           if (ledOn) {
               // 全てのLEDを点灯
@@ -102,7 +103,7 @@ void led_setup() {
   ledSemaphore = xSemaphoreCreateBinary();
   
   i2cSemaphore = xSemaphoreCreateMutex(); // セマフォの初期化
-  
+
 
   // LED点滅タスクを作成
   xTaskCreate(blinkLedTask, "Blink LED Task", 4096, NULL, 1, NULL);
