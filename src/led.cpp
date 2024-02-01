@@ -31,6 +31,9 @@ bool ledOn = false; // グローバル変数を定義
 void blinkLedTask(void *parameter) {
     Serial.println("blinkLedTask Start");
 
+    unsigned long previousMillis = 0; // 前回のデバッグメッセージを出力した時間
+    const long interval = 5000; // デバッグメッセージの間隔（ミリ秒）
+
     while (true) {
 
       //出力PIN設定
@@ -55,6 +58,17 @@ void blinkLedTask(void *parameter) {
           lastState[i] = currentState;
         }
       }
+
+      // 現在の時間を取得
+      unsigned long currentMillis = millis();
+      // 前回のデバッグメッセージ出力から10秒経過したか確認
+      if (currentMillis - previousMillis >= interval) {
+        // 最後のメッセージ出力時間を更新
+        previousMillis = currentMillis;
+        // デバッグメッセージを出力
+        Serial.println("blinkLedTask is alive");
+      }
+
       vTaskDelay(pdMS_TO_TICKS(100));
     }
 }
