@@ -12,14 +12,15 @@
 void writeRegister(int device, byte address, byte value);
 
 void buzzer_setup() {
-    Wire.begin();
-    writeRegister(MCP23017_ADDRESS, IODIRB, 0x00); // MCP23017のポートBを出力に設定
+    //Wire.begin();
+    //writeRegister(MCP23017_ADDRESS, IODIRB, 0x00); // MCP23017のポートBを出力に設定
     // ... 他のセットアップコード ...
 }
 
 
 // MCP23017のレジスタに値を書き込む関数
 void writeRegister(int device, byte address, byte value) {
+    #if 0
     if (xSemaphoreTake(i2cSemaphore, portMAX_DELAY)) {
         Wire.beginTransmission(device);
         Wire.write(address);
@@ -27,17 +28,22 @@ void writeRegister(int device, byte address, byte value) {
         Wire.endTransmission();
         xSemaphoreGive(i2cSemaphore);   // セマフォを解放
     }
+    #endif
 }
 
 void soundBuzzer() {
-    writeRegister(MCP23017_ADDRESS, GPIOB, 0x08); // ブザーをオンにする
+    //writeRegister(MCP23017_ADDRESS, GPIOB, 0x08); // ブザーをオンにする
+    mcp[0x20 - MCP_BASE_ADDR].digitalWrite(11, HIGH);
     delay(100); // 0.1秒待つ
+    mcp[0x20 - MCP_BASE_ADDR].digitalWrite(11, LOW);
     writeRegister(MCP23017_ADDRESS, GPIOB, 0x00); // ブザーをオフにする
 }
 
 void task_soundBuzzer(void * parameter) {
-    soundBuzzer();
-    vTaskDelete(NULL); // タスク終了
+    if (xSemaphoreTake(i2cSemaphore, portMAX_DELAY) {
+        soundBuzzer();
+        xSemaphoreGive(i2cSemaphore);   // セマフォを解放
+    }
 }
 
 
