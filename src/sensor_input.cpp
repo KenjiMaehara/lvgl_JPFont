@@ -39,7 +39,11 @@ void handlePinChange(int pin, int state) {
   if(pin == 7)
   {
       for (int i = 0; i < 8; i++) {
-        mcp[0x21 - MCP_BASE_ADDR].digitalWrite(i+8, mcp[0x22 - MCP_BASE_ADDR].digitalRead(i));
+        uint8_t data02 = mcp[0x22 - MCP_BASE_ADDR].digitalRead(i);
+        delay(10);  //チャタリング防止
+        mcp[0x21 - MCP_BASE_ADDR].digitalWrite(i+8, data02);
       }
+      delay(10); 
   }
+  Serial.println("handlePinChange End");
 }
