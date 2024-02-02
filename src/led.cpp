@@ -38,6 +38,7 @@ uint8_t lastState;  // 以前の状態を格納する配列
 // LED点滅タスク
 void blinkLedTask(void *parameter) {
     Serial.println("blinkLedTask Start");
+    vTaskDelay(pdMS_TO_TICKS(5000));  // 5秒待つ
 
     unsigned long previousMillis = 0; // 前回のデバッグメッセージを出力した時間
     const long interval = 5000; // デバッグメッセージの間隔（ミリ秒）
@@ -96,6 +97,8 @@ void blinkLedTask(void *parameter) {
 
 
 void led_setup() {
+
+  #if 1
   Wire.begin(); // ESP32のIO26(SDA)とIO25(SCL)を指定
   Wire.setClock(50000);
 
@@ -151,8 +154,11 @@ void led_setup() {
   // セマフォの作成
   //ledSemaphore = xSemaphoreCreateBinary();
   
+  
 
   // LED点滅タスクを作成
   xTaskCreate(blinkLedTask, "Blink LED Task", 8192, NULL, 1, NULL);
+
+  #endif
 }
 
