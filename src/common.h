@@ -52,7 +52,12 @@ extern void led_setup();
 extern bool ledOn;
 //extern SemaphoreHandle_t ledSemaphore; // セマフォを定義
 
-extern Adafruit_MCP23X17 mcp[5];
+extern Adafruit_MCP23X17 mcp_0x20;
+extern Adafruit_MCP23X17 mcp_0x21;
+extern Adafruit_MCP23X17 mcp_0x22;
+extern Adafruit_MCP23X17 mcp_0x23;
+extern Adafruit_MCP23X17 mcp_0x24;
+
 #define MCP_BASE_ADDR 0x20
 extern void sensor_input_setup();
 
