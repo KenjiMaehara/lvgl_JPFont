@@ -10,13 +10,13 @@ void setup() {
     //start_setup();
     //lvgl_screen_setup();
     //clock_setup();
-    task_setup();
+    //task_setup();
     //screen_setup();
     //buzzer_setup();
-    sensor_input_setup();
+    //sensor_input_setup();
     led_setup();
 
-    WiFi.begin(ssid, password);
+    //WiFi.begin(ssid, password);
 }
 
 
