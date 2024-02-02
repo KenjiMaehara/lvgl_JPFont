@@ -98,16 +98,18 @@ void blinkLedTask(void *parameter) {
 
 void led_setup() {
 
-  #if 1
+ 
   Wire.begin(); // ESP32のIO26(SDA)とIO25(SCL)を指定
   Wire.setClock(50000);
 
+  #if 0
   mcp_0x20.begin_I2C(0x20, &Wire); // MCP23017のI2Cアドレスを指定（必要に応じて変更）
-  
+
   // 入力に設定
   for (int i = 0; i < 8; i++) {
     mcp_0x20.pinMode(i, INPUT);
   }
+  
 
   // 出力に設定
   for (int i = 8; i < 16; i++) {
@@ -117,11 +119,13 @@ void led_setup() {
 
 
   mcp_0x21.begin_I2C(0x21, &Wire); // MCP23017のI2Cアドレスを指定（必要に応じて変更）
-  
+
   // LEDを出力に設定
   for (int i = 0; i < 16; i++) {
     mcp_0x21.pinMode(i, OUTPUT);
   }
+  #endif
+
 
   mcp_0x22.begin_I2C(0x22, &Wire);  // MCP23017のI2Cアドレスを0x22として初期化
 
@@ -129,6 +133,8 @@ void led_setup() {
   for (int i = 0; i < 16; i++) {
     mcp_0x22.pinMode(i, INPUT);
   }
+
+#if 0
 
   // GPAポートの割り込みを有効にする
   mcp_0x22.setupInterrupts(true, false, LOW);  // ミラーリング無し、オープンドレイン無し、アクティブロー
