@@ -5,7 +5,7 @@
 #include "common.h"
 
 
-int lastState[8];  // 以前の状態を格納する配列
+
 
 void pinMonitorTask(void *pvParameters);
 void handlePinChange(int pin, int state);
@@ -32,18 +32,24 @@ void pinMonitorTask(void *pvParameters) {
 }
 
 
-int value[8];
+uint8_t value;
 // ピンの変化を処理するハンドラ
 void handlePinChange(int pin, int state) {
   Serial.println("handlePinChange Start");
   if(pin == 7)
   {
+      value = mcp[0x22 - MCP_BASE_ADDR].readGPIOA();
+      // GPB0～7にvalueの値を出力
+      mcp[0x21 - MCP_BASE_ADDR].writeGPIOB(value);
+
+      #if 0
       for (int i = 0; i < 8; i++) {
         uint8_t data02 = mcp[0x22 - MCP_BASE_ADDR].digitalRead(i);
         delay(10);  //チャタリング防止
         mcp[0x21 - MCP_BASE_ADDR].digitalWrite(i+8, data02);
       }
-      delay(10); 
+      delay(10);
+      #endif 
   }
   Serial.println("handlePinChange End");
 }

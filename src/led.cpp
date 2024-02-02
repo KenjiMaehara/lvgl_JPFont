@@ -27,6 +27,8 @@ bool ledOn = false; // グローバル変数を定義
 #define EMG_INPUT_CH7 6
 #define EMG_INPUT_CH8 7
 
+uint8_t lastState;  // 以前の状態を格納する配列
+
 // LED点滅タスク
 void blinkLedTask(void *parameter) {
     Serial.println("blinkLedTask Start");
@@ -49,15 +51,26 @@ void blinkLedTask(void *parameter) {
           }
       }
 
-      //入力PIN状態の取得
+
+      // 入力PIN設定     
+      uint8_t currentState = mcp[0x20 - MCP_BASE_ADDR].readGPIOA();
+      Serial.print("Current State: 0b"); Serial.println(currentState, BIN); // 現在の状態をバイナリ形式で出力
+      delay(30); //チャタリング防止
+      // 各ビットの状態をチェックし、変更があった場合は処理する
       for (int i = 0; i < 8; i++) {
-        int currentState = mcp[0x20 - MCP_BASE_ADDR].digitalRead(i);
-        delay(30); //チャタリング防止
-        if (currentState != lastState[i]) {
-          handlePinChange(i, currentState);
-          lastState[i] = currentState;
+        bool currentBit = (currentState >> i ) & 1; // i番目のビットの状態を取得
+        if (currentBit != ((lastState >> i ) & 1)) {
+          Serial.print("Pin Change Detected on Pin: "); Serial.print(i);
+          Serial.print(" to "); Serial.println(currentBit);
+          handlePinChange(i, currentBit);
+          //lastState = (lastState & ~(1 << i)) | (currentBit << i); // lastStateを更新
         }
       }
+      Serial.print("Last State before update: 0b"); Serial.println(lastState, BIN); // 更新前のlastStateをバイナリ形式で出力
+      lastState = currentState;
+      Serial.print("Last State after update: 0b"); Serial.println(lastState, BIN); // 更新後のlastStateをバイナリ形式で出力
+
+      
 
       // 現在の時間を取得
       unsigned long currentMillis = millis();
@@ -116,9 +129,12 @@ void led_setup() {
   }
 
   // GPA0からGPA7を入力として設定し、プルアップ抵抗を有効化
-  for (int i = 0; i < 8; i++) {
+  //for (int i = 0; i < 8; i++) 
+  {
 
-    lastState[i] = mcp[0x20 - MCP_BASE_ADDR].digitalRead(i);
+    //lastState[i] = mcp[0x20 - MCP_BASE_ADDR].digitalRead(i);
+    //lastState = mcp[0x20 - MCP_BASE_ADDR].readGPIOA();
+    lastState = mcp[0x20 - MCP_BASE_ADDR].readGPIOA();
   }
 
 
@@ -128,6 +144,6 @@ void led_setup() {
   
 
   // LED点滅タスクを作成
-  xTaskCreate(blinkLedTask, "Blink LED Task", 4096, NULL, 1, NULL);
+  xTaskCreate(blinkLedTask, "Blink LED Task", 8192, NULL, 1, NULL);
 }
 
