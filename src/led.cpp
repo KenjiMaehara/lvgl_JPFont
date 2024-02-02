@@ -77,7 +77,7 @@ void blinkLedTask(void *parameter) {
 
 
 void led_setup() {
-  Wire.begin(26, 25); // ESP32のIO26(SDA)とIO25(SCL)を指定
+  Wire.begin(); // ESP32のIO26(SDA)とIO25(SCL)を指定
 
   mcp[0x20 - MCP_BASE_ADDR].begin_I2C(0x20, &Wire); // MCP23017のI2Cアドレスを指定（必要に応じて変更）
   
