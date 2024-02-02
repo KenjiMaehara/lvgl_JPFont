@@ -109,7 +109,7 @@ void btn_event_cb(lv_event_t *e) {
 
 
     if (next_screen != NULL) {
-        buzzer_beep();
+        //buzzer_beep();
         Serial.println("buzzer_beep_on");
         
         Serial.println("next_screen");

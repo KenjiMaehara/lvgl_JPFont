@@ -78,7 +78,7 @@ void create_keypad_screen(lv_obj_t *scr) {
 
 
 void keypad_btn_event_cb(lv_event_t *e) {
-    buzzer_beep();
+    //buzzer_beep();
     Serial.println("buzzer_beep_on");
 
     lv_obj_t *btn = lv_event_get_target(e);
