@@ -8,11 +8,11 @@
 
 void setup() {
     //start_setup();
-    lvgl_screen_setup();
+    //lvgl_screen_setup();
     //clock_setup();
     task_setup();
-    screen_setup();
-    buzzer_setup();
+    //screen_setup();
+    //buzzer_setup();
     sensor_input_setup();
     led_setup();
 
@@ -22,6 +22,6 @@ void setup() {
 
 
 void loop() {
-    lv_task_handler();
+    //lv_task_handler();
     delay(5);
 }
