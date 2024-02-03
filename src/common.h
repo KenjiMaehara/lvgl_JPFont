@@ -2,6 +2,8 @@
 #define COMMON_H
 
 #include <TFT_eSPI.h> // ILI9488ドライバを含むライブラリ
+#include <lvgl.h>
+#include <Adafruit_MCP23X17.h>
 // ここにextern宣言を追加
 //extern TFT_eSPI tft; // 例えば TFT_eSPI オブジェクトの宣言
 extern void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p);
@@ -49,5 +51,21 @@ extern void led_setup();
 
 extern bool ledOn;
 extern SemaphoreHandle_t ledSemaphore; // セマフォを定義
+
+//extern Adafruit_MCP23X17 mcp[5];
+extern Adafruit_MCP23X17 mcp_0x21;
+extern Adafruit_MCP23X17 mcp_0x22;
+#define MCP_BASE_ADDR 0x20
+extern void sensor_input_setup();
+//extern int value[8];
+
+// LEDの状態を格納するグローバル構造体
+struct LedState {
+    bool areaLeds[8];
+    bool emgLeds[8];
+    // 他のLED状態も必要に応じて追加
+};
+
+extern LedState gLedState;
 
 #endif
