@@ -57,6 +57,7 @@ extern Adafruit_MCP23X17 mcp_0x21;
 extern Adafruit_MCP23X17 mcp_0x22;
 #define MCP_BASE_ADDR 0x20
 extern void sensor_input_setup();
+extern int value[8];
 
 
 #endif

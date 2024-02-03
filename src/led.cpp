@@ -7,8 +7,8 @@
 #include <freertos/semphr.h>
 #include "common.h"
 
-Adafruit_MCP23X17 mcp_0x21;
-Adafruit_MCP23X17 mcp_0x22;
+//Adafruit_MCP23X17 mcp_0x21;
+//Adafruit_MCP23X17 mcp_0x22;
 //Adafruit_MCP23X17 mcp_local_input;
 //Adafruit_MCP23X17 mcp_emg_LED;
 
@@ -34,18 +34,32 @@ void blinkLedTask(void *parameter) {
 
     while (true) {
         if (xSemaphoreTake(ledSemaphore, portMAX_DELAY)) {
+          // MCP23017デバイスのインスタンスを動的に作成
+          Adafruit_MCP23X17* mcp_0x21 = new Adafruit_MCP23X17();
+
+          mcp_0x21->begin_I2C(0x21, &Wire);
+          for (int i = 0; i < 8; i++) {
+            mcp_0x21->pinMode(i, OUTPUT);
+          }
           // セマフォを取得できたらLEDを点滅
           if (ledOn) {
               // 全てのLEDを点灯
               for (int i = 0; i < 8; i++) {
-                  mcp_0x21.digitalWrite(i, HIGH);
+                  mcp_0x21->digitalWrite(i, HIGH);
               }
           } else {
               // 全てのLEDを消灯
               for (int i = 0; i < 8; i++) {
-                  mcp_0x21.digitalWrite(i, LOW);
+                  mcp_0x21->digitalWrite(i, LOW);
               }
           }
+
+          for (int i = 0; i < 8; i++) {
+            mcp_0x21->digitalWrite(i+8, value[i]);
+          }
+
+          // MCP23017デバイスのインスタンスを解放
+          delete mcp_0x21;
         }
 
     }
@@ -70,7 +84,7 @@ void led_setup() {
   for (int i = 8; i < 16; i++) {
     mcp[0x20 - MCP_BASE_ADDR].pinMode(i, OUTPUT);
   }
-  #endif
+
 
 
   mcp_0x21.begin_I2C(0x21, &Wire); // MCP23017のI2Cアドレスを指定（必要に応じて変更）
@@ -95,7 +109,7 @@ void led_setup() {
       mcp_0x22.setupInterruptPin(i, CHANGE);  // 状態変化で割り込みを発生
   }
 
-
+  #endif
   // セマフォの作成
   ledSemaphore = xSemaphoreCreateBinary();
   
