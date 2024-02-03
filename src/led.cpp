@@ -38,7 +38,7 @@ void blinkLedTask(void *parameter) {
           Adafruit_MCP23X17* mcp_0x21 = new Adafruit_MCP23X17();
 
           mcp_0x21->begin_I2C(0x21, &Wire);
-          for (int i = 0; i < 8; i++) {
+          for (int i = 0; i < 16; i++) {
             mcp_0x21->pinMode(i, OUTPUT);
           }
           // セマフォを取得できたらLEDを点滅
