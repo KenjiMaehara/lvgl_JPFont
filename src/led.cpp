@@ -113,6 +113,6 @@ void led_setup() {
   
 
   // LED点滅タスクを作成
-  xTaskCreate(blinkLedTask, "Blink LED Task", 4096, NULL, 1, NULL);
+  xTaskCreate(blinkLedTask, "Blink LED Task", 2048, NULL, 1, NULL);
 }
 
