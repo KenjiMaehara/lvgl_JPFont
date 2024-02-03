@@ -7,7 +7,8 @@
 #include <freertos/semphr.h>
 #include "common.h"
 
-Adafruit_MCP23X17 mcp[5];
+Adafruit_MCP23X17 mcp_0x21;
+Adafruit_MCP23X17 mcp_0x22;
 //Adafruit_MCP23X17 mcp_local_input;
 //Adafruit_MCP23X17 mcp_emg_LED;
 
@@ -37,12 +38,12 @@ void blinkLedTask(void *parameter) {
           if (ledOn) {
               // 全てのLEDを点灯
               for (int i = 0; i < 8; i++) {
-                  mcp[0x21 - MCP_BASE_ADDR].digitalWrite(i, HIGH);
+                  mcp_0x21.digitalWrite(i, HIGH);
               }
           } else {
               // 全てのLEDを消灯
               for (int i = 0; i < 8; i++) {
-                  mcp[0x21 - MCP_BASE_ADDR].digitalWrite(i, LOW);
+                  mcp_0x21.digitalWrite(i, LOW);
               }
           }
         }
@@ -56,6 +57,8 @@ void blinkLedTask(void *parameter) {
 void led_setup() {
   Wire.begin(26, 25); // ESP32のIO26(SDA)とIO25(SCL)を指定
 
+
+  #if 0
   mcp[0x20 - MCP_BASE_ADDR].begin_I2C(0x20, &Wire); // MCP23017のI2Cアドレスを指定（必要に応じて変更）
   
   // 入力に設定
@@ -67,29 +70,29 @@ void led_setup() {
   for (int i = 8; i < 16; i++) {
     mcp[0x20 - MCP_BASE_ADDR].pinMode(i, OUTPUT);
   }
+  #endif
 
 
-
-  mcp[0x21 - MCP_BASE_ADDR].begin_I2C(0x21, &Wire); // MCP23017のI2Cアドレスを指定（必要に応じて変更）
+  mcp_0x21.begin_I2C(0x21, &Wire); // MCP23017のI2Cアドレスを指定（必要に応じて変更）
   
   // LEDを出力に設定
   for (int i = 0; i < 16; i++) {
-    mcp[0x21 - MCP_BASE_ADDR].pinMode(i, OUTPUT);
+    mcp_0x21.pinMode(i, OUTPUT);
   }
 
-  mcp[0x22 - MCP_BASE_ADDR].begin_I2C(0x22, &Wire);  // MCP23017のI2Cアドレスを0x22として初期化
+  mcp_0x22.begin_I2C(0x22, &Wire);  // MCP23017のI2Cアドレスを0x22として初期化
 
   // GPA0からGPA7までを入力として設定
   for (int i = 0; i < 16; i++) {
-    mcp[0x22 - MCP_BASE_ADDR].pinMode(i, INPUT);
+    mcp_0x22.pinMode(i, INPUT);
   }
 
   // GPAポートの割り込みを有効にする
-  mcp[0x22 - MCP_BASE_ADDR].setupInterrupts(true, false, LOW);  // ミラーリング無し、オープンドレイン無し、アクティブロー
+  mcp_0x22.setupInterrupts(true, false, LOW);  // ミラーリング無し、オープンドレイン無し、アクティブロー
 
   // GPA0～GPA7の割り込みを有効にする
   for (int i = 0; i < 8; i++) {
-      mcp[0x22 - MCP_BASE_ADDR].setupInterruptPin(i, CHANGE);  // 状態変化で割り込みを発生
+      mcp_0x22.setupInterruptPin(i, CHANGE);  // 状態変化で割り込みを発生
   }
 
 

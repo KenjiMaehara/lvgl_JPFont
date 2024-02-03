@@ -16,7 +16,8 @@ void sensor_input_setup() {
   // GPA0からGPA7を入力として設定し、プルアップ抵抗を有効化
   for (int i = 0; i < 8; i++) {
 
-    lastState[i] = mcp[0x20 - MCP_BASE_ADDR].digitalRead(i);
+    //lastState[i] = mcp[0x20 - MCP_BASE_ADDR].digitalRead(i);
+    lastState[i] = mcp_0x22.digitalRead(i);
   }
 
   // ピン監視タスクの作成
@@ -31,7 +32,7 @@ void pinMonitorTask(void *pvParameters) {
   
   for (;;) {
     for (int i = 0; i < 8; i++) {
-      int currentState = mcp[0x20 - MCP_BASE_ADDR].digitalRead(i);
+      int currentState = mcp_0x22.digitalRead(i);
       if (currentState != lastState[i]) {
         handlePinChange(i, currentState);
         lastState[i] = currentState;
@@ -46,10 +47,10 @@ int value[8];
 // ピンの変化を処理するハンドラ
 void handlePinChange(int pin, int state) {
   Serial.println("handlePinChange Start");
-  if(pin == 7)
+  //if(pin == 7)
   {
       for (int i = 0; i < 8; i++) {
-        mcp[0x21 - MCP_BASE_ADDR].digitalWrite(i+8, mcp[0x22 - MCP_BASE_ADDR].digitalRead(i));
+        mcp_0x21.digitalWrite(i+8, mcp_0x22.digitalRead(i));
       }
   }
 }
