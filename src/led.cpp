@@ -7,16 +7,9 @@
 #include <freertos/semphr.h>
 #include "common.h"
 
-//Adafruit_MCP23X17 mcp_0x21;
-//Adafruit_MCP23X17 mcp_0x22;
-//Adafruit_MCP23X17 mcp_local_input;
-//Adafruit_MCP23X17 mcp_emg_LED;
+
 
 SemaphoreHandle_t ledSemaphore; // セマフォを定義
-
-// led.cpp
-//bool ledOn = false; // グローバル変数を定義
-
 
 
 #define EMG_INPUT_CH1 0

@@ -30,7 +30,6 @@ void sensor_input_setup() {
 }
 
 
-//int value[8];
 
 // ピンの状態を監視するタスク
 void pinMonitorTask(void *pvParameters) {
