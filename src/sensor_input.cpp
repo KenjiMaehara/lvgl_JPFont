@@ -36,7 +36,7 @@ uint8_t value;
 // ピンの変化を処理するハンドラ
 void handlePinChange(int pin, int state) {
   Serial.println("handlePinChange Start");
-  if(pin == 7)
+  //if(pin == 7)
   {
       value = mcp_0x22.readGPIOA();
       // GPB0～7にvalueの値を出力

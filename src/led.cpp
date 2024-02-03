@@ -7,11 +7,11 @@
 #include <freertos/semphr.h>
 #include "common.h"
 
-Adafruit_MCP23X17 mcp_0x20;
+//Adafruit_MCP23X17 mcp_0x20;
 Adafruit_MCP23X17 mcp_0x21;
 Adafruit_MCP23X17 mcp_0x22;
-Adafruit_MCP23X17 mcp_0x23;
-Adafruit_MCP23X17 mcp_0x24;
+//Adafruit_MCP23X17 mcp_0x23;
+//Adafruit_MCP23X17 mcp_0x24;
 
 
 //Adafruit_MCP23X17 mcp_local_input;
@@ -60,7 +60,7 @@ void blinkLedTask(void *parameter) {
 
 
       // 入力PIN設定     
-      uint8_t currentState = mcp_0x20.readGPIOA();
+      uint8_t currentState = mcp_0x22.readGPIOA();
       Serial.print("Current State: 0b"); Serial.println(currentState, BIN); // 現在の状態をバイナリ形式で出力
       delay(30); //チャタリング防止
       // 各ビットの状態をチェックし、変更があった場合は処理する
@@ -116,7 +116,7 @@ void led_setup() {
     mcp_0x20.pinMode(i, OUTPUT);
   }
 
-
+  #endif
 
   mcp_0x21.begin_I2C(0x21, &Wire); // MCP23017のI2Cアドレスを指定（必要に応じて変更）
 
@@ -124,7 +124,7 @@ void led_setup() {
   for (int i = 0; i < 16; i++) {
     mcp_0x21.pinMode(i, OUTPUT);
   }
-  #endif
+
 
 
   mcp_0x22.begin_I2C(0x22, &Wire);  // MCP23017のI2Cアドレスを0x22として初期化
@@ -160,11 +160,11 @@ void led_setup() {
   // セマフォの作成
   //ledSemaphore = xSemaphoreCreateBinary();
   
-  
+  #endif
 
   // LED点滅タスクを作成
   xTaskCreate(blinkLedTask, "Blink LED Task", 8192, NULL, 1, NULL);
 
-  #endif
+
 }
 
