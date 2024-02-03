@@ -30,7 +30,7 @@ void sensor_input_setup() {
 }
 
 
-int value[8];
+//int value[8];
 
 // ピンの状態を監視するタスク
 void pinMonitorTask(void *pvParameters) {
@@ -58,7 +58,7 @@ void pinMonitorTask(void *pvParameters) {
       if (pin_change == true) {
         Serial.println("pin_change true!!!!!");
         for (int i = 0; i < 8; i++) {
-            value[i] = last_pinValue[i];
+            gLedState.emgLeds[i] = last_pinValue[i];
         }
         xSemaphoreGive(ledSemaphore); // セマフォを解放
         pin_change=false;

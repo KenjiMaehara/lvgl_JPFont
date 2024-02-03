@@ -15,7 +15,7 @@
 SemaphoreHandle_t ledSemaphore; // セマフォを定義
 
 // led.cpp
-bool ledOn = false; // グローバル変数を定義
+//bool ledOn = false; // グローバル変数を定義
 
 
 
@@ -46,21 +46,14 @@ void blinkLedTask(void *parameter) {
           for (int i = 0; i < 16; i++) {
             mcp_0x21->pinMode(i, OUTPUT);
           }
-          // セマフォを取得できたらLEDを点滅
-          if (ledOn) {
-              // 全てのLEDを点灯
-              for (int i = 0; i < 8; i++) {
-                  mcp_0x21->digitalWrite(i, HIGH);
-              }
-          } else {
-              // 全てのLEDを消灯
-              for (int i = 0; i < 8; i++) {
-                  mcp_0x21->digitalWrite(i, LOW);
-              }
+          // セマフォを取得できたらAREA_LEDを状態に応じて点灯/消灯
+          for (int i = 0; i < 8; i++) {
+              mcp_0x21->digitalWrite(i, gLedState.areaLeds[i]);
           }
 
+          // 入力に応じてEMG_LEDを点灯/消灯
           for (int i = 0; i < 8; i++) {
-            mcp_0x21->digitalWrite(i+8, value[i]);
+            mcp_0x21->digitalWrite(i+8, gLedState.emgLeds[i]);
           }
 
           // MCP23017デバイスのインスタンスを解放
