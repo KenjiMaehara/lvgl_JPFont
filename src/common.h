@@ -59,5 +59,13 @@ extern Adafruit_MCP23X17 mcp_0x22;
 extern void sensor_input_setup();
 extern int value[8];
 
+// LEDの状態を格納するグローバル構造体
+struct LedState {
+    bool areaLeds[8];
+    bool emgLeds[8];
+    // 他のLED状態も必要に応じて追加
+};
+
+extern LedState ledState;
 
 #endif

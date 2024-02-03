@@ -28,9 +28,14 @@ bool ledOn = false; // グローバル変数を定義
 #define EMG_INPUT_CH7 6
 #define EMG_INPUT_CH8 7
 
+
+LedState gLedState;
+
 // LED点滅タスク
 void blinkLedTask(void *parameter) {
     Serial.println("blinkLedTask Start");
+
+  //ledState.areaLeds[0] = false;
 
     while (true) {
         if (xSemaphoreTake(ledSemaphore, portMAX_DELAY)) {
