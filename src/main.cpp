@@ -15,6 +15,7 @@ void setup() {
     buzzer_setup();
     sensor_input_setup();
     led_setup();
+    readRFID_setup();
 
     WiFi.begin(ssid, password);
 }
