@@ -41,7 +41,7 @@ void task_connectToWiFi(void * parameter) {
             Serial.println("Connected to WiFi");
             displayWiFiInfo(label_ssid, label_ip); // WiFi情報の表示更新
             vTaskDelay(10000 / portTICK_PERIOD_MS); // 10秒ごとにチェック
-        } else if (WiFi.status() != WL_CONNECTED && isScanningWiFi == true) {
+        } else if (WiFi.status() != WL_CONNECTED && isScanningWiFi == false) {
             // 接続が失われた場合の再接続処理
             Serial.println("Reconnecting to WiFi...");
             WiFi.disconnect();
