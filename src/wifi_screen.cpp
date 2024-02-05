@@ -147,33 +147,33 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
         if (n > maxNetworks) {
             n = maxNetworks; // ネットワークの数を制限
         }
-        Serial.println("scanAndDisplayWiFiNetworks_______test_______1");
+        //Serial.println("scanAndDisplayWiFiNetworks_______test_______1");
         // 動的メモリ割り当て
         WiFiNetwork* networks = new WiFiNetwork[n];
-        Serial.println("scanAndDisplayWiFiNetworks_______test_______2");
+        //Serial.println("scanAndDisplayWiFiNetworks_______test_______2");
         if (networks == nullptr) {
             lv_label_set_text(wifi_list_label, "Memory allocation failed");
             return;
         }
-        Serial.println("scanAndDisplayWiFiNetworks_______test_______3");
+        //Serial.println("scanAndDisplayWiFiNetworks_______test_______3");
         // ネットワークの情報を保存
         for (int i = 0; i < n; ++i) {
             networks[i].SSID = WiFi.SSID(i);
             networks[i].RSSI = WiFi.RSSI(i);
         }
-        Serial.println("scanAndDisplayWiFiNetworks_______test_______4");
+        //Serial.println("scanAndDisplayWiFiNetworks_______test_______4");
         // ネットワークをRSSIでソート
         std::sort(networks, networks + n, [](const WiFiNetwork &a, const WiFiNetwork &b) {
             return a.RSSI > b.RSSI;
         });
-        Serial.println("scanAndDisplayWiFiNetworks_______test_______5");
+        //Serial.println("scanAndDisplayWiFiNetworks_______test_______5");
         // ソートされたリストを表示
         String wifi_list_str = "Nearby WiFi Networks:\\n";
         for (int i = 0; i < n; ++i) {
             wifi_list_str += String(i + 1) + ": " + networks[i].SSID + " (RSSI: " + networks[i].RSSI + ")\\n";
         }
         lv_label_set_text(wifi_list_label, wifi_list_str.c_str());
-        Serial.println("scanAndDisplayWiFiNetworks_______test_______6");
+        //Serial.println("scanAndDisplayWiFiNetworks_______test_______6");
         // 割り当てられたメモリを解放
         delete[] networks;
     }
