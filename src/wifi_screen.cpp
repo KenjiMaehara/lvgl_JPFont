@@ -67,10 +67,14 @@ void displayWiFiInfo(lv_obj_t *label_ssid, lv_obj_t *label_ip) {
     }
 }
 
+bool gWifiScan = false; 
+
 // タイマーコールバック関数
 void onTimer(TimerHandle_t xTimer) {
+    if(gWifiScan == false) return;
     scanAndDisplayWiFiNetworks(wifi_list_label); // wifi_list_labelは適切に定義する
 }
+
 
 
 

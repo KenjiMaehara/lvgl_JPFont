@@ -68,6 +68,7 @@ struct LedState {
 
 extern LedState gLedState;
 
+extern bool gWifiScan;
 
 void readRFID_setup();
 
