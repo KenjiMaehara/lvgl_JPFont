@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <Wire.h>
-#include <D:\mywork\lvgl_JPFont\.pio\libdeps\esp32dev\SC16IS750\SC16IS750.h> // SC16IS750ライブラリをインクルード
+#include <SC16IS750.h> // SC16IS750ライブラリをインクルード
 //#include <UnoWiFiDevEd.h>
 
 #define SC16IS750_ADDRESS 0x48 // デバイスのI2Cアドレス
@@ -31,8 +31,8 @@ void EXT_board_setup() {
 
   // 新しいタスクを作成
   xTaskCreate(
-    sendHelloWorldTask, // タスク関数
-    "Send Hello World Task", // タスク名
+    EXT_boardTask, // タスク関数
+    "EXT_boardTask", // タスク名
     10000, // スタックサイズ
     NULL, // タスク入力パラメータ
     1, // タスクの優先度
