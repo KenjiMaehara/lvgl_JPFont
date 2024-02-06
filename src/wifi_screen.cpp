@@ -128,6 +128,7 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
         // WiFiが接続されている場合はスキャンを中止
         lv_label_set_text(wifi_list_label, "WiFi is connected, cannot scan");
         Serial.println("WiFi is connected, cannot scan");
+        WiFi.disconnect(true);  // 強制的に切断
         isScanningWiFi = false;
         return;
     }
