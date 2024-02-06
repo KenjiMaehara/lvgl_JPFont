@@ -77,7 +77,8 @@ void onTimer(TimerHandle_t xTimer) {
 }
 
 
-
+// グローバル変数としてタイマーハンドルを定義
+TimerHandle_t timer = NULL;
 
 void create_wifi_screen(lv_obj_t *scr) {
 
@@ -99,7 +100,7 @@ void create_wifi_screen(lv_obj_t *scr) {
     lv_obj_align(wifi_list_label, LV_ALIGN_CENTER, 0, 60); // 位置の調整
 
     // タイマーの設定（10秒ごとに onTimer を呼び出す）
-    TimerHandle_t timer = xTimerCreate("WifiScanTimer", pdMS_TO_TICKS(10000), pdTRUE, (void*)0, onTimer);
+    timer = xTimerCreate("WifiScanTimer", pdMS_TO_TICKS(10000), pdTRUE, (void*)0, onTimer);
     xTimerStart(timer, 0);
 
     add_navigation_buttons(screen5, screen1, screen4);
@@ -205,4 +206,8 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
     }
     WiFi.scanDelete(); // スキャン結果をクリア
     isScanningWiFi = false; // スキャン終了
+    // タイマーを停止するコード
+    if (timer != NULL) {
+        xTimerStop(timer, 0);
+    }
 }
