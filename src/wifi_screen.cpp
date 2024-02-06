@@ -191,8 +191,9 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
         delay(1000);
         String wifi_list_str = "Nearby WiFi Networks:\\n";
         for (int i = 0; i < n; ++i) {
-            wifi_list_str += String(i + 1) + ": " + networks[i].SSID + " (RSSI: " + networks[i].RSSI + ")\\n";
+            wifi_list_str = String(i + 1) + ": " + networks[i].SSID + " (RSSI: " + networks[i].RSSI + ")";
             lv_list_add_btn(wifi_list, LV_SYMBOL_WIFI, wifi_list_str.c_str());
+            Serial.println(wifi_list_str); // ここで各ネットワーク情報をシリアル出力
         }
         lv_label_set_text(wifi_list_label, wifi_list_str.c_str());
         Serial.println("scanAndDisplayWiFiNetworks_______test_______9");
