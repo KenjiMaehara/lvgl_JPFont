@@ -172,9 +172,18 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
         });
         //Serial.println("scanAndDisplayWiFiNetworks_______test_______5");
         // ソートされたリストを表示
+
+        // リストオブジェクトの作成（create_wifi_screen関数内）
+        lv_obj_t *wifi_list = lv_list_create(lv_scr_act());
+        lv_obj_set_size(wifi_list, 200, 200); // リストのサイズを設定
+        lv_obj_align(wifi_list, LV_ALIGN_CENTER, 0, 0); // リストの位置を調整
+
+
+
         String wifi_list_str = "Nearby WiFi Networks:\\n";
         for (int i = 0; i < n; ++i) {
             wifi_list_str += String(i + 1) + ": " + networks[i].SSID + " (RSSI: " + networks[i].RSSI + ")\\n";
+            lv_list_add_btn(wifi_list, LV_SYMBOL_WIFI, wifi_list_str.c_str());
         }
         lv_label_set_text(wifi_list_label, wifi_list_str.c_str());
         //Serial.println("scanAndDisplayWiFiNetworks_______test_______6");
