@@ -120,7 +120,7 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
     // WiFiモジュールをステーションモードに設定
     WiFi.mode(WIFI_STA);
     delay(1000);  // WiFiモジュールのオフ処理のためのディレイ
-      Serial.println("scanAndDisplayWiFiNetworks_______test_______1");
+    Serial.println("scanAndDisplayWiFiNetworks_______test_______1");
 
     isScanningWiFi = true;  // スキャン開始
 
@@ -131,18 +131,19 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
         isScanningWiFi = false;
         return;
     }
-      Serial.println("scanAndDisplayWiFiNetworks_______test_______2");
+    Serial.println("scanAndDisplayWiFiNetworks_______test_______2");
 
     const int maxNetworks = 10; // 表示する最大ネットワーク数
     int n = WiFi.scanNetworks();
     Serial.print("Found WiFi networks: ");
     Serial.println(n); // スキャン結果のネットワーク数を表示
 
-      Serial.println("scanAndDisplayWiFiNetworks_______test_______3");
+    Serial.println("scanAndDisplayWiFiNetworks_______test_______3");
 
     // nが負の場合のエラー処理
     if (n <= 0) {
         lv_label_set_text(wifi_list_label, "Failed to scan networks or no networks found");
+        Serial.println("Failed to scan networks or no networks found");
         return;
     }
 
@@ -152,6 +153,7 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
 
     if (n == 0) {
         lv_label_set_text(wifi_list_label, "No networks found");
+        Serial.println("No networks found");
     } else {
         if (n > maxNetworks) {
             n = maxNetworks; // ネットワークの数を制限
@@ -162,6 +164,7 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
         Serial.println("scanAndDisplayWiFiNetworks_______test_______5");
         if (networks == nullptr) {
             lv_label_set_text(wifi_list_label, "Memory allocation failed");
+            Serial.println("Memory allocation failed");
             return;
         }
         Serial.println("scanAndDisplayWiFiNetworks_______test_______6");
