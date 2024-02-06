@@ -98,7 +98,7 @@ void create_wifi_screen(lv_obj_t *scr) {
     lv_obj_align(wifi_list_label, LV_ALIGN_CENTER, 0, 60); // 位置の調整
 
     // タイマーの設定（10秒ごとに onTimer を呼び出す）
-    TimerHandle_t timer = xTimerCreate("WifiScanTimer", pdMS_TO_TICKS(30000), pdTRUE, (void*)0, onTimer);
+    TimerHandle_t timer = xTimerCreate("WifiScanTimer", pdMS_TO_TICKS(10000), pdTRUE, (void*)0, onTimer);
     xTimerStart(timer, 0);
 
     add_navigation_buttons(screen5, screen1, screen4);
@@ -154,26 +154,26 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
         if (n > maxNetworks) {
             n = maxNetworks; // ネットワークの数を制限
         }
-        //Serial.println("scanAndDisplayWiFiNetworks_______test_______1");
+        Serial.println("scanAndDisplayWiFiNetworks_______test_______1");
         // 動的メモリ割り当て
         WiFiNetwork* networks = new WiFiNetwork[n];
-        //Serial.println("scanAndDisplayWiFiNetworks_______test_______2");
+        Serial.println("scanAndDisplayWiFiNetworks_______test_______2");
         if (networks == nullptr) {
             lv_list_add_btn(wifi_list_label, LV_SYMBOL_WIFI, "Memory allocation failed");
             return;
         }
-        //Serial.println("scanAndDisplayWiFiNetworks_______test_______3");
+        Serial.println("scanAndDisplayWiFiNetworks_______test_______3");
         // ネットワークの情報を保存
         for (int i = 0; i < n; ++i) {
             networks[i].SSID = WiFi.SSID(i);
             networks[i].RSSI = WiFi.RSSI(i);
         }
-        //Serial.println("scanAndDisplayWiFiNetworks_______test_______4");
+        Serial.println("scanAndDisplayWiFiNetworks_______test_______4");
         // ネットワークをRSSIでソート
         std::sort(networks, networks + n, [](const WiFiNetwork &a, const WiFiNetwork &b) {
             return a.RSSI > b.RSSI;
         });
-        //Serial.println("scanAndDisplayWiFiNetworks_______test_______5");
+        Serial.println("scanAndDisplayWiFiNetworks_______test_______5");
         // ソートされたリストを表示
 
         // リストオブジェクトの作成（create_wifi_screen関数内）
@@ -189,7 +189,7 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
             lv_list_add_btn(wifi_list_label, LV_SYMBOL_WIFI, item_text.c_str());
         }
         //lv_list_add_btn(wifi_list_label, LV_SYMBOL_WIFI,wifi_list_str.c_str());
-        //Serial.println("scanAndDisplayWiFiNetworks_______test_______6");
+        Serial.println("scanAndDisplayWiFiNetworks_______test_______6");
         // 割り当てられたメモリを解放
         delete[] networks;
     }
