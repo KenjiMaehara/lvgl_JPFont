@@ -175,7 +175,8 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
 
         // リストオブジェクトの作成（create_wifi_screen関数内）
         lv_obj_t *wifi_list = lv_list_create(lv_scr_act());
-        lv_obj_set_size(wifi_list, 200, 200); // リストのサイズを設定
+        //lv_obj_set_size(wifi_list, 200, 200); // リストのサイズを設定
+        lv_obj_set_size(wifi_list, LV_PCT(70), LV_PCT(60));
         lv_obj_align(wifi_list, LV_ALIGN_CENTER, 0, 0); // リストの位置を調整
 
 
