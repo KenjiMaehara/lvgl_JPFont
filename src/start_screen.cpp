@@ -96,8 +96,16 @@ void btn_event_cb(lv_event_t *e) {
     #endif
 
 
+
     lv_obj_t *next_screen = (lv_obj_t *)lv_obj_get_user_data(btn);
     //lv_obj_t *next_screen = (lv_obj_t *)lv_event_get_target(e);
+
+    if (next_screen == screen5) {
+        gWifiScan = true;   // Wi-Fi画面へ遷移する場合
+    } else {
+        gWifiScan = false;  // それ以外の場合
+        //isScanningWiFi = false;  // スキャンを停止
+    }
 
     // デバッグ情報の出力
     if (next_screen != NULL) {
