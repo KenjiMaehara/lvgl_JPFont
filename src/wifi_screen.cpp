@@ -98,7 +98,7 @@ void create_wifi_screen(lv_obj_t *scr) {
     lv_obj_align(wifi_list_label, LV_ALIGN_CENTER, 0, 60); // 位置の調整
 
     // タイマーの設定（10秒ごとに onTimer を呼び出す）
-    TimerHandle_t timer = xTimerCreate("WifiScanTimer", pdMS_TO_TICKS(10000), pdTRUE, (void*)0, onTimer);
+    TimerHandle_t timer = xTimerCreate("WifiScanTimer", pdMS_TO_TICKS(30000), pdTRUE, (void*)0, onTimer);
     xTimerStart(timer, 0);
 
     add_navigation_buttons(screen5, screen1, screen4);
@@ -127,7 +127,7 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
 
     if (WiFi.status() != WL_DISCONNECTED) {
         // WiFiが接続されている場合はスキャンを中止
-        lv_list_add_btn(wifi_list_label, LV_SYMBOL_WIFI, "WiFi is connected, cannot scan");
+        //lv_list_add_btn(wifi_list_label, LV_SYMBOL_WIFI, "WiFi is connected, cannot scan");
         Serial.println("WiFi is connected, cannot scan");
         isScanningWiFi = false;
         return;
@@ -184,9 +184,11 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
         String wifi_list_str = "Nearby WiFi Networks:\\n";
         for (int i = 0; i < n; ++i) {
             //wifi_list_str += String(i + 1) + ": " + networks[i].SSID + " (RSSI: " + networks[i].RSSI + ")\\n";
-            lv_list_add_btn(wifi_list_label, LV_SYMBOL_WIFI, wifi_list_str.c_str());
+            //lv_list_add_btn(wifi_list_label, LV_SYMBOL_WIFI, wifi_list_str.c_str());
+            String item_text = String(i + 1) + ": " + networks[i].SSID + " (RSSI: " + networks[i].RSSI + ")";
+            lv_list_add_btn(wifi_list_label, LV_SYMBOL_WIFI, item_text.c_str());
         }
-        lv_list_add_btn(wifi_list_label, LV_SYMBOL_WIFI,wifi_list_str.c_str());
+        //lv_list_add_btn(wifi_list_label, LV_SYMBOL_WIFI,wifi_list_str.c_str());
         //Serial.println("scanAndDisplayWiFiNetworks_______test_______6");
         // 割り当てられたメモリを解放
         delete[] networks;
