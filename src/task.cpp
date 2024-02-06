@@ -16,7 +16,7 @@ void task_setup() {
     "task_ConnectToWiFi", // タスク名
     10000,           // スタックサイズ
     NULL,            // パラメータ
-    1,               // 優先順位
+    3,               // 優先順位
     NULL             // タスクハンドル
   );
 
