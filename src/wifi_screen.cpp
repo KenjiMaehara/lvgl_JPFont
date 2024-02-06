@@ -112,9 +112,16 @@ struct WiFiNetwork {
     int32_t RSSI;
 };
 
+int gScanSuccessful = -1;
+
 void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
 
     Serial.println("scanAndDisplayWiFiNetworks_______Start_______");
+
+    if(gScanSuccessful != -1) {
+        Serial.println("scanAndDisplayWiFiNetworks_______End_______");
+        return;
+    }
 
     WiFi.disconnect(true);  // 強制的に切断
     delay(1000);  // 切断処理のための短いディレイ    
@@ -205,4 +212,5 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
     }
     WiFi.scanDelete(); // スキャン結果をクリア
     isScanningWiFi = false; // スキャン終了
+    gScanSuccessful++;
 }
