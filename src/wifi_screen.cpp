@@ -113,6 +113,9 @@ struct WiFiNetwork {
 
 void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
 
+    lv_obj_set_size(wifi_list_label, 200, 200); // リストのサイズを設定
+    lv_obj_align(wifi_list_label, LV_ALIGN_CENTER, 0, 0); // リストの位置を調整
+
     WiFi.disconnect(true);  // 強制的に切断
     delay(1000);  // 切断処理のための短いディレイ    
     // WiFiモジュールをステーションモードに設定
@@ -124,7 +127,7 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
 
     if (WiFi.status() != WL_DISCONNECTED) {
         // WiFiが接続されている場合はスキャンを中止
-        lv_label_set_text(wifi_list_label, "WiFi is connected, cannot scan");
+        lv_list_add_btn(wifi_list_label, LV_SYMBOL_WIFI, "WiFi is connected, cannot scan");
         Serial.println("WiFi is connected, cannot scan");
         isScanningWiFi = false;
         return;
@@ -137,7 +140,7 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
 
     // nが負の場合のエラー処理
     if (n <= 0) {
-        lv_label_set_text(wifi_list_label, "Failed to scan networks or no networks found");
+        lv_list_add_btn(wifi_list_label, LV_SYMBOL_WIFI, "Failed to scan networks or no networks found");
         return;
     }
 
@@ -146,7 +149,7 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
     }
 
     if (n == 0) {
-        lv_label_set_text(wifi_list_label, "No networks found");
+        lv_list_add_btn(wifi_list_label, LV_SYMBOL_WIFI, "No networks found");
     } else {
         if (n > maxNetworks) {
             n = maxNetworks; // ネットワークの数を制限
@@ -156,7 +159,7 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
         WiFiNetwork* networks = new WiFiNetwork[n];
         //Serial.println("scanAndDisplayWiFiNetworks_______test_______2");
         if (networks == nullptr) {
-            lv_label_set_text(wifi_list_label, "Memory allocation failed");
+            lv_list_add_btn(wifi_list_label, LV_SYMBOL_WIFI, "Memory allocation failed");
             return;
         }
         //Serial.println("scanAndDisplayWiFiNetworks_______test_______3");
@@ -172,11 +175,18 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
         });
         //Serial.println("scanAndDisplayWiFiNetworks_______test_______5");
         // ソートされたリストを表示
+
+        // リストオブジェクトの作成（create_wifi_screen関数内）
+        //lv_obj_t *wifi_list = lv_list_create(scr, NULL);
+
+
+
         String wifi_list_str = "Nearby WiFi Networks:\\n";
         for (int i = 0; i < n; ++i) {
-            wifi_list_str += String(i + 1) + ": " + networks[i].SSID + " (RSSI: " + networks[i].RSSI + ")\\n";
+            //wifi_list_str += String(i + 1) + ": " + networks[i].SSID + " (RSSI: " + networks[i].RSSI + ")\\n";
+            lv_list_add_btn(wifi_list_label, LV_SYMBOL_WIFI, wifi_list_str.c_str());
         }
-        lv_label_set_text(wifi_list_label, wifi_list_str.c_str());
+        lv_list_add_btn(wifi_list_label, LV_SYMBOL_WIFI,wifi_list_str.c_str());
         //Serial.println("scanAndDisplayWiFiNetworks_______test_______6");
         // 割り当てられたメモリを解放
         delete[] networks;
