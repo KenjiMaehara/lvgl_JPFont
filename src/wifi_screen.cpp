@@ -45,6 +45,7 @@ void task_connectToWiFi(void * parameter) {
             // 接続が失われた場合の再接続処理
             Serial.println("Reconnecting to WiFi...");
             WiFi.disconnect();
+            vTaskDelay(1000 / portTICK_PERIOD_MS); // 5秒ごとに再接続試行
             WiFi.begin(ssid, password);
             vTaskDelay(5000 / portTICK_PERIOD_MS); // 5秒ごとに再接続試行
         }
@@ -111,9 +112,16 @@ struct WiFiNetwork {
     int32_t RSSI;
 };
 
+int gScanSuccessful = -1;
+
 void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
 
     Serial.println("scanAndDisplayWiFiNetworks_______Start_______");
+
+    if(gScanSuccessful != -1) {
+        Serial.println("scanAndDisplayWiFiNetworks_______End_______");
+        return;
+    }
 
     WiFi.disconnect(true);  // 強制的に切断
     delay(1000);  // 切断処理のための短いディレイ    
@@ -129,7 +137,8 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
         lv_label_set_text(wifi_list_label, "WiFi is connected, cannot scan");
         Serial.println("WiFi is connected, cannot scan");
         WiFi.disconnect(true);  // 強制的に切断
-        isScanningWiFi = false;
+        delay(1000);  // 切断処理のための短いディレイ 
+        //isScanningWiFi = false;
         return;
     }
     Serial.println("scanAndDisplayWiFiNetworks_______test_______2");
@@ -203,4 +212,5 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
     }
     WiFi.scanDelete(); // スキャン結果をクリア
     isScanningWiFi = false; // スキャン終了
+    gScanSuccessful++;
 }
