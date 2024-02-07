@@ -73,5 +73,6 @@ extern bool gWifiScan;
 void readRFID_setup();
 
 extern int gScanSuccessful;
+extern volatile bool isScanningWiFi;
 
 #endif

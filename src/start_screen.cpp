@@ -102,6 +102,7 @@ void btn_event_cb(lv_event_t *e) {
 
     if (next_screen == screen5) {
         gWifiScan = true;   // Wi-Fi画面へ遷移する場合
+        isScanningWiFi = true;  // スキャンを開始
     } else {
         gWifiScan = false;  // それ以外の場合
         //gScanSuccessful = -1;  // スキャンの成功フラグをリセット

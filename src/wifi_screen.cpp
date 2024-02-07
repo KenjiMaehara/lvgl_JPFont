@@ -21,6 +21,8 @@ lv_obj_t* wifi_list_label;
 lv_obj_t* label_ssid;
 lv_obj_t* label_ip;
 
+lv_obj_t *wifi_list;
+
 // グローバル変数としてフラグを定義
 volatile bool isScanningWiFi = false;
 
@@ -31,7 +33,7 @@ void task_connectToWiFi(void * parameter) {
     for (;;) {
         if (isScanningWiFi) {
             // WiFiスキャン中は何もしない
-            vTaskDelay(5000 / portTICK_PERIOD_MS); // 一時停止
+            vTaskDelay(1000 / portTICK_PERIOD_MS); // 一時停止
             Serial.println("wifi_scanning...");
             displayWiFiInfo(label_ssid, label_ip); // WiFi情報の表示更新
             scanAndDisplayWiFiNetworks(wifi_list_label); // wifi_list_labelは適切に定義する
@@ -43,14 +45,14 @@ void task_connectToWiFi(void * parameter) {
             // ここに接続済み時の処理を記述
             Serial.println("Connected to WiFi");
             //displayWiFiInfo(label_ssid, label_ip); // WiFi情報の表示更新
-            vTaskDelay(5000 / portTICK_PERIOD_MS); // 10秒ごとにチェック
+            vTaskDelay(1000 / portTICK_PERIOD_MS); // 10秒ごとにチェック
         } else if (WiFi.status() != WL_CONNECTED && isScanningWiFi == false) {
             // 接続が失われた場合の再接続処理
             Serial.println("Reconnecting to WiFi...");
             WiFi.disconnect();
             vTaskDelay(1000 / portTICK_PERIOD_MS); // 5秒ごとに再接続試行
             WiFi.begin(ssid, password);
-            vTaskDelay(5000 / portTICK_PERIOD_MS); // 5秒ごとに再接続試行
+            vTaskDelay(1000 / portTICK_PERIOD_MS); // 5秒ごとに再接続試行
         }
     }
 }
@@ -102,7 +104,16 @@ void create_wifi_screen(lv_obj_t *scr) {
 
     // WiFiリストラベルの作成
     wifi_list_label = lv_label_create(scr);
+
+    lv_obj_align(label_ip, LV_ALIGN_CENTER, 0, 0);
+
     lv_obj_align(wifi_list_label, LV_ALIGN_CENTER, 0, 60); // 位置の調整
+
+    // リストオブジェクトの作成（create_wifi_screen関数内）
+    wifi_list = lv_list_create(scr);
+    //lv_obj_set_size(wifi_list, 200, 200); // リストのサイズを設定
+    lv_obj_set_size(wifi_list, LV_PCT(70), LV_PCT(60));
+    lv_obj_align(wifi_list, LV_ALIGN_CENTER, 0, 0); // リストの位置を調整
 
     // タイマーの設定（10秒ごとに onTimer を呼び出す）
     timer = xTimerCreate("WifiScanTimer", pdMS_TO_TICKS(10000), pdTRUE, (void*)0, onTimer);
@@ -193,6 +204,7 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
         Serial.println("scanAndDisplayWiFiNetworks_______test_______8");
         // ソートされたリストを表示
 
+        #if 0
         // リストオブジェクトの作成（create_wifi_screen関数内）
         lv_obj_t *wifi_list = lv_list_create(lv_scr_act());
         Serial.println("scanAndDisplayWiFiNetworks_______test_______9");
@@ -200,8 +212,10 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
         lv_obj_set_size(wifi_list, LV_PCT(70), LV_PCT(60));
         lv_obj_align(wifi_list, LV_ALIGN_CENTER, 0, 0); // リストの位置を調整
         Serial.println("scanAndDisplayWiFiNetworks_______test_______10");
+        #endif
 
         //delay(1000);
+        lv_obj_clean(wifi_list); // 以前のエントリをクリア
         String wifi_list_str;
         for (int i = 0; i < n; ++i) {
             wifi_list_str = String(i + 1) + ": " + networks[i].SSID + " (RSSI: " + networks[i].RSSI + ")";
