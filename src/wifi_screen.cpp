@@ -74,7 +74,7 @@ bool gWifiScan = false;
 
 // タイマーコールバック関数
 void onTimer(TimerHandle_t xTimer) {
-    if(gWifiScan == false) return;
+    if(gWifiScan == false || isScanningWiFi == true) return;
 
     isScanningWiFi = true;  // スキャン開始
 
@@ -194,10 +194,11 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
 
         // リストオブジェクトの作成（create_wifi_screen関数内）
         lv_obj_t *wifi_list = lv_list_create(lv_scr_act());
+        Serial.println("scanAndDisplayWiFiNetworks_______test_______9");
         //lv_obj_set_size(wifi_list, 200, 200); // リストのサイズを設定
         lv_obj_set_size(wifi_list, LV_PCT(70), LV_PCT(60));
         lv_obj_align(wifi_list, LV_ALIGN_CENTER, 0, 0); // リストの位置を調整
-
+        Serial.println("scanAndDisplayWiFiNetworks_______test_______10");
 
         delay(1000);
         String wifi_list_str = "Nearby WiFi Networks:\\n";
@@ -206,12 +207,15 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
             lv_list_add_btn(wifi_list, LV_SYMBOL_WIFI, wifi_list_str.c_str());
             Serial.println(wifi_list_str); // ここで各ネットワーク情報をシリアル出力
         }
+        Serial.println("scanAndDisplayWiFiNetworks_______test_______11");
         lv_label_set_text(wifi_list_label, wifi_list_str.c_str());
-        Serial.println("scanAndDisplayWiFiNetworks_______test_______9");
+        Serial.println("scanAndDisplayWiFiNetworks_______test_______12");
         // 割り当てられたメモリを解放
         delete[] networks;
+        Serial.println("scanAndDisplayWiFiNetworks_______test_______13");
     }
     WiFi.scanDelete(); // スキャン結果をクリア
+    Serial.println("scanAndDisplayWiFiNetworks_______test_______14");
     //isScanningWiFi = false; // スキャン終了
     #if 0
     // タイマーを停止するコード
