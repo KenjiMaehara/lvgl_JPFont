@@ -36,7 +36,7 @@ extern lv_obj_t *screen2;
 extern lv_obj_t *screen3;
 extern lv_obj_t *screen4;
 extern lv_obj_t *screen5;
-
+extern lv_obj_t *screen6;
 
 
 
@@ -74,5 +74,8 @@ void readRFID_setup();
 
 extern int gScanSuccessful;
 extern volatile bool isScanningWiFi;
+
+extern void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label);
+extern void create_wifiScan_screen(lv_obj_t *scr);
 
 #endif
