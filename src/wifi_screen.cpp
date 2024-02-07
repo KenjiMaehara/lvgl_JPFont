@@ -33,6 +33,7 @@ void task_connectToWiFi(void * parameter) {
             // WiFiスキャン中は何もしない
             vTaskDelay(5000 / portTICK_PERIOD_MS); // 一時停止
             Serial.println("wifi_scanning...");
+            displayWiFiInfo(label_ssid, label_ip); // WiFi情報の表示更新
             scanAndDisplayWiFiNetworks(wifi_list_label); // wifi_list_labelは適切に定義する
             isScanningWiFi = false; // スキャン終了
             continue;
@@ -41,7 +42,7 @@ void task_connectToWiFi(void * parameter) {
         if (WiFi.status() == WL_CONNECTED) {
             // ここに接続済み時の処理を記述
             Serial.println("Connected to WiFi");
-            displayWiFiInfo(label_ssid, label_ip); // WiFi情報の表示更新
+            //displayWiFiInfo(label_ssid, label_ip); // WiFi情報の表示更新
             vTaskDelay(5000 / portTICK_PERIOD_MS); // 10秒ごとにチェック
         } else if (WiFi.status() != WL_CONNECTED && isScanningWiFi == false) {
             // 接続が失われた場合の再接続処理
@@ -200,13 +201,14 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
         lv_obj_align(wifi_list, LV_ALIGN_CENTER, 0, 0); // リストの位置を調整
         Serial.println("scanAndDisplayWiFiNetworks_______test_______10");
 
-        delay(1000);
-        String wifi_list_str = "Nearby WiFi Networks:\\n";
+        //delay(1000);
+        String wifi_list_str;
         for (int i = 0; i < n; ++i) {
             wifi_list_str = String(i + 1) + ": " + networks[i].SSID + " (RSSI: " + networks[i].RSSI + ")";
-            lv_list_add_btn(wifi_list, LV_SYMBOL_WIFI, wifi_list_str.c_str());
+            lv_list_add_btn(wifi_list, LV_SYMBOL_WIFI, wifi_list_str.c_str()); // ここで各ネットワーク情報をリストに追加
             Serial.println(wifi_list_str); // ここで各ネットワーク情報をシリアル出力
         }
+
         Serial.println("scanAndDisplayWiFiNetworks_______test_______11");
         lv_label_set_text(wifi_list_label, wifi_list_str.c_str());
         Serial.println("scanAndDisplayWiFiNetworks_______test_______12");
