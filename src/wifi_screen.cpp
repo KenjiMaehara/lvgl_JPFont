@@ -33,6 +33,8 @@ void task_connectToWiFi(void * parameter) {
             // WiFiスキャン中は何もしない
             vTaskDelay(5000 / portTICK_PERIOD_MS); // 一時停止
             Serial.println("wifi_scanning...");
+            scanAndDisplayWiFiNetworks(wifi_list_label); // wifi_list_labelは適切に定義する
+            isScanningWiFi = false; // スキャン終了
             continue;
         }  
 
@@ -73,7 +75,9 @@ bool gWifiScan = false;
 // タイマーコールバック関数
 void onTimer(TimerHandle_t xTimer) {
     if(gWifiScan == false) return;
-    scanAndDisplayWiFiNetworks(wifi_list_label); // wifi_list_labelは適切に定義する
+
+    isScanningWiFi = true;  // スキャン開始
+
 }
 
 
@@ -113,16 +117,12 @@ struct WiFiNetwork {
     int32_t RSSI;
 };
 
-int gScanSuccessful = -1;
+
 
 void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
 
     Serial.println("scanAndDisplayWiFiNetworks_______Start_______");
 
-    if(gScanSuccessful != -1) {
-        Serial.println("scanAndDisplayWiFiNetworks_______End_______");
-        return;
-    }
 
     WiFi.disconnect(true);  // 強制的に切断
     delay(1000);  // 切断処理のための短いディレイ    
@@ -131,7 +131,7 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
     delay(1000);  // WiFiモジュールのオフ処理のためのディレイ
     Serial.println("scanAndDisplayWiFiNetworks_______test_______1");
 
-    isScanningWiFi = true;  // スキャン開始
+    //isScanningWiFi = true;  // スキャン開始
 
     if (WiFi.status() != WL_DISCONNECTED) {
         // WiFiが接続されている場合はスキャンを中止
@@ -212,9 +212,11 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
         delete[] networks;
     }
     WiFi.scanDelete(); // スキャン結果をクリア
-    isScanningWiFi = false; // スキャン終了
+    //isScanningWiFi = false; // スキャン終了
+    #if 0
     // タイマーを停止するコード
     if (timer != NULL) {
         xTimerStop(timer, 0);
     }
+    #endif
 }
