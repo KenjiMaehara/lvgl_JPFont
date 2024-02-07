@@ -19,6 +19,7 @@ lv_obj_t *screen3;
 lv_obj_t *screen4;
 lv_obj_t *screen5;
 lv_obj_t *screen6;
+lv_obj_t *screen7;
 
 
 void screen_setup() {
@@ -43,14 +44,17 @@ void screen_setup() {
     screen6 = lv_obj_create(NULL);
     create_wifiScan_screen(screen6);
 
+    screen7 = lv_obj_create(NULL);
+    create_qr_wifi_screen(screen7);
 
     // すべてのスクリーンが生成された後にボタンにスクリーンを割り当てる
-    add_navigation_buttons(screen1, screen2, screen6);
+    add_navigation_buttons(screen1, screen2, screen7);
     add_navigation_buttons(screen2, screen3, screen1);
     add_navigation_buttons(screen3, screen4, screen2);
     add_navigation_buttons(screen4, screen5, screen3);
     add_navigation_buttons(screen5, screen6, screen4);
-    add_navigation_buttons(screen6, screen1, screen5);
+    add_navigation_buttons(screen6, screen7, screen5);
+    add_navigation_buttons(screen7, screen1, screen6);
 
     lv_scr_load(screen1);
 
