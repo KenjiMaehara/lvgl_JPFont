@@ -215,6 +215,7 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
         #endif
 
         //delay(1000);
+        lv_obj_clean(wifi_list); // 以前のエントリをクリア
         String wifi_list_str;
         for (int i = 0; i < n; ++i) {
             wifi_list_str = String(i + 1) + ": " + networks[i].SSID + " (RSSI: " + networks[i].RSSI + ")";
