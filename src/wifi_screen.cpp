@@ -33,7 +33,7 @@ void task_connectToWiFi(void * parameter) {
     for (;;) {
         if (isScanningWiFi) {
             // WiFiスキャン中は何もしない
-            vTaskDelay(5000 / portTICK_PERIOD_MS); // 一時停止
+            vTaskDelay(1000 / portTICK_PERIOD_MS); // 一時停止
             Serial.println("wifi_scanning...");
             displayWiFiInfo(label_ssid, label_ip); // WiFi情報の表示更新
             scanAndDisplayWiFiNetworks(wifi_list_label); // wifi_list_labelは適切に定義する
@@ -45,14 +45,14 @@ void task_connectToWiFi(void * parameter) {
             // ここに接続済み時の処理を記述
             Serial.println("Connected to WiFi");
             //displayWiFiInfo(label_ssid, label_ip); // WiFi情報の表示更新
-            vTaskDelay(5000 / portTICK_PERIOD_MS); // 10秒ごとにチェック
+            vTaskDelay(1000 / portTICK_PERIOD_MS); // 10秒ごとにチェック
         } else if (WiFi.status() != WL_CONNECTED && isScanningWiFi == false) {
             // 接続が失われた場合の再接続処理
             Serial.println("Reconnecting to WiFi...");
             WiFi.disconnect();
             vTaskDelay(1000 / portTICK_PERIOD_MS); // 5秒ごとに再接続試行
             WiFi.begin(ssid, password);
-            vTaskDelay(5000 / portTICK_PERIOD_MS); // 5秒ごとに再接続試行
+            vTaskDelay(1000 / portTICK_PERIOD_MS); // 5秒ごとに再接続試行
         }
     }
 }
