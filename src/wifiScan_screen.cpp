@@ -69,7 +69,6 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
 
     if (WiFi.status() != WL_DISCONNECTED) {
         // WiFiが接続されている場合はスキャンを中止
-        lv_label_set_text(wifi_list_label, "WiFi is connected, cannot scan");
         Serial.println("WiFi is connected, cannot scan");
         WiFi.disconnect(true);  // 強制的に切断
         delay(1000);  // 切断処理のための短いディレイ 
@@ -87,7 +86,6 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
 
     // nが負の場合のエラー処理
     if (n <= 0) {
-        lv_label_set_text(wifi_list_label, "Failed to scan networks or no networks found");
         Serial.println("Failed to scan networks or no networks found");
         return;
     }
@@ -97,7 +95,6 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
     }
 
     if (n == 0) {
-        lv_label_set_text(wifi_list_label, "No networks found");
         Serial.println("No networks found");
     } else {
         if (n > maxNetworks) {
@@ -108,7 +105,6 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
         WiFiNetwork* networks = new WiFiNetwork[n];
         Serial.println("scanAndDisplayWiFiNetworks_______test_______5");
         if (networks == nullptr) {
-            lv_label_set_text(wifi_list_label, "Memory allocation failed");
             Serial.println("Memory allocation failed");
             return;
         }
@@ -126,17 +122,6 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
         Serial.println("scanAndDisplayWiFiNetworks_______test_______8");
         // ソートされたリストを表示
 
-        #if 0
-        // リストオブジェクトの作成（create_wifi_screen関数内）
-        lv_obj_t *wifi_list = lv_list_create(lv_scr_act());
-        Serial.println("scanAndDisplayWiFiNetworks_______test_______9");
-        //lv_obj_set_size(wifi_list, 200, 200); // リストのサイズを設定
-        lv_obj_set_size(wifi_list, LV_PCT(70), LV_PCT(60));
-        lv_obj_align(wifi_list, LV_ALIGN_CENTER, 0, 0); // リストの位置を調整
-        Serial.println("scanAndDisplayWiFiNetworks_______test_______10");
-        #endif
-
-        //delay(1000);
         lv_obj_clean(wifi_list); // 以前のエントリをクリア
         String wifi_list_str;
         for (int i = 0; i < n; ++i) {
@@ -145,15 +130,13 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
             Serial.println(wifi_list_str); // ここで各ネットワーク情報をシリアル出力
         }
 
-        Serial.println("scanAndDisplayWiFiNetworks_______test_______11");
-        lv_label_set_text(wifi_list_label, wifi_list_str.c_str());
-        Serial.println("scanAndDisplayWiFiNetworks_______test_______12");
+        Serial.println("scanAndDisplayWiFiNetworks_______test_______9");
         // 割り当てられたメモリを解放
         delete[] networks;
-        Serial.println("scanAndDisplayWiFiNetworks_______test_______13");
+        Serial.println("scanAndDisplayWiFiNetworks_______test_______10");
     }
     WiFi.scanDelete(); // スキャン結果をクリア
-    Serial.println("scanAndDisplayWiFiNetworks_______test_______14");
+    Serial.println("scanAndDisplayWiFiNetworks_______test_______11");
     //isScanningWiFi = false; // スキャン終了
 
 }
