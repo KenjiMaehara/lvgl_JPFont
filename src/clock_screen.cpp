@@ -185,7 +185,7 @@ void create_clock_screen(lv_obj_t *scr) {
     // 初期表示用に現在時刻を更新
     update_time(NULL);
 
-    add_navigation_buttons(screen1, screen2, screen5);
+    add_navigation_buttons(screen1, screen2, screen6);
 
     Serial.println("create_clock_screen End");
 }
