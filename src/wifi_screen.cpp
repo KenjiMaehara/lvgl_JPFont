@@ -145,7 +145,7 @@ void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label) {
     }
     Serial.println("scanAndDisplayWiFiNetworks_______test_______2");
 
-    const int maxNetworks = 5; // 表示する最大ネットワーク数
+    const int maxNetworks = 10; // 表示する最大ネットワーク数
     int n = WiFi.scanNetworks();
     Serial.print("Found WiFi networks: ");
     Serial.println(n); // スキャン結果のネットワーク数を表示
