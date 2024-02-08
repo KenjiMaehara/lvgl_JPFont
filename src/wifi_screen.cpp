@@ -5,8 +5,8 @@
 #include "common.h"
 
 
-const char* ssid = "20230616me_IPv6";
-const char* password = "asdf0616";
+//const char* ssid = "20230616me_IPv6";
+//const char* password = "asdf0616";
 
 
 void displayWiFiInfo(lv_obj_t *label_ssid, lv_obj_t *label_ip);
@@ -21,6 +21,13 @@ void task_connectToWiFi(void * parameter) {
 
     // 無限ループでWiFiのステータスを監視
     for (;;) {
+
+        if(gApModeOn) {
+            vTaskDelay(1000 / portTICK_PERIOD_MS); // 一時停止
+            continue;
+        }
+
+
         if (isScanningWiFi) {
             // WiFiスキャン中は何もしない
             vTaskDelay(1000 / portTICK_PERIOD_MS); // 一時停止
@@ -41,7 +48,11 @@ void task_connectToWiFi(void * parameter) {
             Serial.println("Reconnecting to WiFi...");
             WiFi.disconnect();
             vTaskDelay(1000 / portTICK_PERIOD_MS); // 5秒ごとに再接続試行
-            WiFi.begin(ssid, password);
+            preferences.begin("wifi", false); // Preferencesを開始
+            String ssid = preferences.getString("ssid"); // 保存されたSSIDを読み出し
+            String password = preferences.getString("password"); // 保存されたパスワードを読み出し
+            WiFi.begin(ssid.c_str(), password.c_str()); // WiFi接続を開始
+            //WiFi.begin(ssid, password);
             vTaskDelay(1000 / portTICK_PERIOD_MS); // 5秒ごとに再接続試行
         }
     }

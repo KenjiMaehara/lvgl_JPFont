@@ -42,7 +42,7 @@ void create_wifiScan_screen(lv_obj_t *scr) {
     timer = xTimerCreate("WifiScanTimer", pdMS_TO_TICKS(10000), pdTRUE, (void*)0, onTimer);
     xTimerStart(timer, 0);
 
-    add_navigation_buttons(screen6, screen1, screen5);
+    add_navigation_buttons(screen6, screen7, screen5);
 
     Serial.println("create_wifi_screen End");
 }

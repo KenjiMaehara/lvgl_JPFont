@@ -4,6 +4,7 @@
 #include <TFT_eSPI.h> // ILI9488ドライバを含むライブラリ
 #include <lvgl.h>
 #include <Adafruit_MCP23X17.h>
+#include <Preferences.h>
 // ここにextern宣言を追加
 //extern TFT_eSPI tft; // 例えば TFT_eSPI オブジェクトの宣言
 extern void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p);
@@ -37,6 +38,7 @@ extern lv_obj_t *screen3;
 extern lv_obj_t *screen4;
 extern lv_obj_t *screen5;
 extern lv_obj_t *screen6;
+extern lv_obj_t *screen7;
 
 
 
@@ -77,5 +79,11 @@ extern volatile bool isScanningWiFi;
 
 extern void scanAndDisplayWiFiNetworks(lv_obj_t *wifi_list_label);
 extern void create_wifiScan_screen(lv_obj_t *scr);
+
+extern bool gApModeOn;
+
+extern void create_apmode_screen(lv_obj_t *scr);
+
+extern Preferences preferences;
 
 #endif
