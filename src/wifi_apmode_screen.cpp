@@ -101,7 +101,10 @@ bool gApModeOn = false;
 
 // ボタンのイベントハンドラ
 static void ap_mode_toggle_handler(lv_event_t *e) {
-    // APモードのオン/オフを切り替える処理
+
+    buzzer_beep();
+    Serial.println("buzzer_beep_on");
+    gApModeOn = !gApModeOn;
 
     if (gApModeOn) {
         gApModeOn = true;
