@@ -16,8 +16,8 @@ void displayQRCode(const uint8_t *qrcode);
 
 void create_qr_wifi_screen(lv_obj_t *scr) {
 
-  ssid = "ESP32-Access-Point";
-  password = "123456789";
+  ssid = "mel";
+  password = "1234me";
 
   // WiFi APモードの設定
   WiFi.softAP(ssid, password);
@@ -26,7 +26,7 @@ void create_qr_wifi_screen(lv_obj_t *scr) {
   Serial.println(WiFi.softAPIP());
 
   // QRコードのデータを生成（SSIDとパスワードを含む）
-  const char *qrData = "WIFI:T:WPA;S:ESP32-Access-Point;P:123456789;;";
+  const char *qrData = "WIFI:T:WPA;S:mel;P:1234me;;";
   uint8_t qrcode[qrcodegen_BUFFER_LEN_MAX];
   uint8_t tempBuffer[qrcodegen_BUFFER_LEN_MAX];
   bool ok = qrcodegen_encodeText(qrData, tempBuffer, qrcode, qrcodegen_Ecc_LOW,
