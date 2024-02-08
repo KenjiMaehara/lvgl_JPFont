@@ -25,7 +25,10 @@ void wifi_apmode() {
   String ssid = preferences.getString("ssid", "ESP32-AP"); // デフォルト値は "ESP32-AP"
   String password = preferences.getString("password", "12345678"); // デフォルト値は "12345678"
 
-  WiFi.softAP(ssid.c_str(), password.c_str());
+  WiFi.softAP("ESP32-AP", "12345678");
+  Serial.println("AP Mode Enabled. SSID: ESP32-AP, Password: 12345678");
+
+  //WiFi.softAP(ssid.c_str(), password.c_str());
   Serial.println("Access Point Started");
   Serial.print("IP Address: ");
   Serial.println(WiFi.softAPIP());
@@ -120,8 +123,6 @@ static void ap_mode_toggle_handler(lv_event_t *e) {
         WiFi.disconnect(true);  // 強制的に切断
         delay(1000);  // 切断処理のための短いディレイ   
         // APモードをオンにする
-        WiFi.softAP("ESP32-AP", "12345678");
-        Serial.println("AP Mode Enabled. SSID: ESP32-AP, Password: 12345678");
         wifi_apmode();
         
     } else {
