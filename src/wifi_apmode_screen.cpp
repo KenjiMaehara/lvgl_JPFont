@@ -17,7 +17,7 @@ static void ap_mode_toggle_handler(lv_event_t *e);
 void handleClientTask(void *parameters);
 
 void wifi_apmode() {
-  Serial.begin(115200);
+  //Serial.begin(115200);
 
   // APモードでWiFiを設定
   WiFi.softAP(ssid, password);
@@ -108,6 +108,8 @@ static void ap_mode_toggle_handler(lv_event_t *e) {
 
     if (gApModeOn) {
         gApModeOn = true;
+        WiFi.disconnect(true);  // 強制的に切断
+        delay(1000);  // 切断処理のための短いディレイ   
         // APモードをオンにする
         WiFi.softAP("ESP32-AP", "12345678");
         Serial.println("AP Mode Enabled. SSID: ESP32-AP, Password: 12345678");
@@ -124,8 +126,11 @@ static void ap_mode_toggle_handler(lv_event_t *e) {
 
 
 void handleClientTask(void *parameters) {
+
+  Serial.println("handleClientTask start");
+
   for (;;) {
     server.handleClient();
-    delay(1); // CPUリソースを適切に利用
+    delay(10); // CPUリソースを適切に利用
   }
 }
