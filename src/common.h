@@ -81,4 +81,8 @@ extern void create_wifiScan_screen(lv_obj_t *scr);
 
 extern void create_qr_wifi_screen(lv_obj_t *scr);
 
+
+extern const char* ssid;
+extern const char* password;
+
 #endif

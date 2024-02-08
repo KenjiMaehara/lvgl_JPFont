@@ -2,10 +2,11 @@
 #include <WebServer.h>
 #include <lvgl.h>
 #include <qrcodegen.h> // QRコード生成ライブラリをインクルード（適切なライブラリに置き換えてください）
+#include "common.h"
 
 // WiFi AP設定
-const char *ssid = "ESP32-Access-Point";
-const char *password = "123456789";
+//const char *ssid = "ESP32-Access-Point";
+//const char *password = "123456789";
 
 // Webサーバーのインスタンスを作成
 WebServer server(80);
@@ -82,6 +83,4 @@ void displayQRCode(const uint8_t *qrcode) {
       }
     }
   }
-
-  add_navigation_buttons(screen7, screen1, screen6);
 }
