@@ -21,6 +21,13 @@ void task_connectToWiFi(void * parameter) {
 
     // 無限ループでWiFiのステータスを監視
     for (;;) {
+
+        if(gApModeOn) {
+            vTaskDelay(1000 / portTICK_PERIOD_MS); // 一時停止
+            continue;
+        }
+
+
         if (isScanningWiFi) {
             // WiFiスキャン中は何もしない
             vTaskDelay(1000 / portTICK_PERIOD_MS); // 一時停止

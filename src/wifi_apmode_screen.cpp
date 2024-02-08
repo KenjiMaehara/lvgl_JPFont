@@ -83,6 +83,7 @@ void create_apmode_screen(lv_obj_t *scr) {
     lv_obj_t *label = lv_label_create(ap_mode_btn);
     lv_label_set_text(label, "AP Mode");
 
+    add_navigation_buttons(screen7, screen1, screen6);
     // タスクの作成と実行
     xTaskCreate(
       handleClientTask, /* タスク関数 */
@@ -96,20 +97,25 @@ void create_apmode_screen(lv_obj_t *scr) {
     Serial.println("create_wifi_screen End");
 }
 
+bool gApModeOn = false;
+
 // ボタンのイベントハンドラ
 static void ap_mode_toggle_handler(lv_event_t *e) {
     // APモードのオン/オフを切り替える処理
-    static bool apModeOn = false;
-    if (!apModeOn) {
+
+    if (gApModeOn) {
+        gApModeOn = true;
         // APモードをオンにする
         WiFi.softAP("ESP32-AP", "12345678");
         Serial.println("AP Mode Enabled. SSID: ESP32-AP, Password: 12345678");
-        apModeOn = true;
+        wifi_apmode();
+        
     } else {
+        gApModeOn = false;
         // APモードをオフにする
         WiFi.softAPdisconnect(true);
         Serial.println("AP Mode Disabled");
-        apModeOn = false;
+        
     }
 }
 
