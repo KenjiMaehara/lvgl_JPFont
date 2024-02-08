@@ -20,6 +20,9 @@ void wifi_apmode() {
   //Serial.begin(115200);
 
   // APモードでWiFiを設定
+  ssid = "ESP32-AP"; 
+  password = "12345678";
+
   WiFi.softAP(ssid, password);
   Serial.println("Access Point Started");
   Serial.print("IP Address: ");
@@ -66,6 +69,7 @@ void setupWiFi(String ssid, String password) {
   Serial.println("WiFi connected!");
   Serial.print("IP Address: ");
   Serial.println(WiFi.localIP());
+  gApModeOn = false;
   // ここで必要な処理を行う
 }
 
