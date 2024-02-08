@@ -17,7 +17,12 @@ void setup() {
     led_setup();
     readRFID_setup();
 
-    WiFi.begin(ssid, password);
+    preferences.begin("wifi", false); // Preferencesを開始
+    String ssid = preferences.getString("ssid"); // 保存されたSSIDを読み出し
+    String password = preferences.getString("password"); // 保存されたパスワードを読み出し
+
+    //WiFi.begin(ssid, password);
+    WiFi.begin(ssid.c_str(), password.c_str()); // WiFi接続を開始
 }
 
 

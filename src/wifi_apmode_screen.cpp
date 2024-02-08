@@ -3,6 +3,7 @@
 #include <WebServer.h>
 #include <lvgl.h>
 #include <TFT_eSPI.h> // ILI9488ドライバを含むライブラリ
+#include <Preferences.h>
 #include "common.h"
 
 
@@ -16,14 +17,15 @@ void setupWiFi(String ssid, String password);
 static void ap_mode_toggle_handler(lv_event_t *e);
 void handleClientTask(void *parameters);
 
+Preferences preferences;
+
 void wifi_apmode() {
-  //Serial.begin(115200);
 
-  // APモードでWiFiを設定
-  ssid = "ESP32-AP"; 
-  password = "12345678";
+  preferences.begin("wifi", false); // "wifi"は名前空間です
+  String ssid = preferences.getString("ssid", "ESP32-AP"); // デフォルト値は "ESP32-AP"
+  String password = preferences.getString("password", "12345678"); // デフォルト値は "12345678"
 
-  WiFi.softAP(ssid, password);
+  WiFi.softAP(ssid.c_str(), password.c_str());
   Serial.println("Access Point Started");
   Serial.print("IP Address: ");
   Serial.println(WiFi.softAPIP());
@@ -38,6 +40,9 @@ void wifi_apmode() {
   server.on("/setup", HTTP_POST, []() {
     String ssid = server.arg("ssid");
     String password = server.arg("password");
+    preferences.putString("ssid", ssid);
+    preferences.putString("password", password);
+
     server.sendHeader("Connection", "close");
     server.send(200, "text/html", "<h1>Setup complete.</h1><p>Device will now restart.</p>");
     setupWiFi(ssid, password);
