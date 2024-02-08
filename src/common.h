@@ -16,6 +16,10 @@ extern void clock_setup();
 extern void start_setup();
 extern void task_setup();
 extern void ntpUpdateTask(void *pvParameters);
+extern void readRFIDTask(void *parameter); 
+extern void blinkLedTask(void *parameter);
+extern void pinMonitorTask(void *pvParameters);
+extern void handleClientTask(void *parameters);
 extern void lvgl_screen_setup();
 
 extern void screen_setup();

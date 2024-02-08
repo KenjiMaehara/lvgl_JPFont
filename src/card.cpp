@@ -26,13 +26,5 @@ void readRFID_setup() {
   // UART1の初期化、IO16をRX、IO17をTXとして使用
   RFIDSerial.begin(baudRate, SERIAL_8N1, RXPin, TXPin);
 
-  // RFIDデータ読み取りタスクの作成
-  xTaskCreate(
-    readRFIDTask, /* タスク関数 */
-    "ReadRFIDTask", /* タスク名 */
-    1024 * 2, /* スタックサイズ */
-    NULL, /* タスクパラメータ */
-    1, /* タスク優先度 */
-    NULL /* タスクハンドル */
-  );
+
 }

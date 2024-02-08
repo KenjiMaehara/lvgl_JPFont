@@ -20,4 +20,46 @@ void task_setup() {
     NULL             // タスクハンドル
   );
 
+
+  // RFIDデータ読み取りタスクの作成
+  xTaskCreate(
+    readRFIDTask, /* タスク関数 */
+    "ReadRFIDTask", /* タスク名 */
+    1024 * 2, /* スタックサイズ */
+    NULL, /* タスクパラメータ */
+    1, /* タスク優先度 */
+    NULL /* タスクハンドル */
+  );
+
+
+  // LED点滅タスクを作成
+  xTaskCreate(
+    blinkLedTask, 
+    "Blink LED Task",
+    2048, 
+    NULL, 
+    1, 
+    NULL
+  );
+
+  // ピン監視タスクの作成
+  xTaskCreate(
+    pinMonitorTask, 
+    "Pin Monitor", 
+    10000, 
+    NULL, 
+    1, 
+    NULL
+  );
+
+  // タスクの作成と実行
+  xTaskCreate(
+    handleClientTask, /* タスク関数 */
+    "HandleClientTask", /* タスク名 */
+    10000, /* スタックサイズ */
+    NULL, /* タスクパラメータ */
+    1, /* タスク優先度 */
+    NULL /* タスクハンドル */
+  );
+
 }

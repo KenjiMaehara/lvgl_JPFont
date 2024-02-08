@@ -96,15 +96,6 @@ void create_apmode_screen(lv_obj_t *scr) {
     lv_label_set_text(label, "AP Mode");
 
     add_navigation_buttons(screen7, screen1, screen6);
-    // タスクの作成と実行
-    xTaskCreate(
-      handleClientTask, /* タスク関数 */
-      "HandleClientTask", /* タスク名 */
-      10000, /* スタックサイズ */
-      NULL, /* タスクパラメータ */
-      1, /* タスク優先度 */
-      NULL /* タスクハンドル */
-    );
     
     Serial.println("create_wifi_screen End");
 }

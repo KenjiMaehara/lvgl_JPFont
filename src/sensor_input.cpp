@@ -25,8 +25,7 @@ void sensor_input_setup() {
   }
   delete mcp_0x22;
 
-  // ピン監視タスクの作成
-  xTaskCreate(pinMonitorTask, "Pin Monitor", 10000, NULL, 1, NULL);
+
 }
 
 
