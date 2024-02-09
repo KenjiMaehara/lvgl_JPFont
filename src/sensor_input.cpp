@@ -71,7 +71,7 @@ void pinMonitorTask(void *pvParameters) {
     } else {
       Serial.println("MCP23017 connection failed");
     }
-    vTaskDelay(pdMS_TO_TICKS(100));  // ポーリング間隔
+    vTaskDelay(pdMS_TO_TICKS(500));  // ポーリング間隔
   }
 }
 
