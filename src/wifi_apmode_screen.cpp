@@ -97,6 +97,7 @@ void create_apmode_screen(lv_obj_t *scr) {
 
     lv_obj_t *label = lv_label_create(ap_mode_btn);
     lv_label_set_text(label, "Switch to AP Mode");
+    lv_obj_set_style_text_font(lv_obj_get_child(ap_mode_btn, 0), &lv_font_montserrat_16, 0); // フォントサイズ変更
     lv_obj_center(label);
 
     add_navigation_buttons(screen7, screen1, screen6);
@@ -131,6 +132,7 @@ static void ap_mode_toggle_handler(lv_event_t *e) {
         lv_obj_set_style_bg_color(btn, lv_color_hex(0xFFFF00), LV_PART_MAIN); // 黄色に変更
         lv_obj_set_style_text_color(btn, lv_color_black(), LV_PART_MAIN); // テキスト色を黒に設定
         lv_label_set_text(lv_obj_get_child(btn, 0), "Now in AP Mode\nConnect to SSID: ESP32-AP");
+        lv_obj_set_style_text_font(lv_obj_get_child(btn, 0), &lv_font_montserrat_16, 0); // フォントサイズ変更
         
         gApModeOn = true;
         WiFi.disconnect(true);  // 強制的に切断
@@ -143,6 +145,7 @@ static void ap_mode_toggle_handler(lv_event_t *e) {
         lv_obj_set_style_bg_color(btn, lv_color_hex(0x0000FF), LV_PART_MAIN); // 青色に戻す
         lv_obj_set_style_text_color(btn, lv_color_white(), LV_PART_MAIN); // テキスト色を白に設定
         lv_label_set_text(lv_obj_get_child(btn, 0), "Switch to AP Mode");
+        lv_obj_set_style_text_font(lv_obj_get_child(btn, 0), &lv_font_montserrat_16, 0); // フォントサイズ変更
         gApModeOn = false;
         // APモードをオフにする
         WiFi.softAPdisconnect(true);
