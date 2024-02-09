@@ -10,6 +10,7 @@
 
 void task_setup() {
 
+  #ifdef ENABLE_WIFI_TASK
   // WiFi接続タスクの作成
   xTaskCreate(
     task_connectToWiFi,   // タスクで実行される関数
@@ -19,5 +20,5 @@ void task_setup() {
     3,               // 優先順位
     NULL             // タスクハンドル
   );
-
+  #endif
 }

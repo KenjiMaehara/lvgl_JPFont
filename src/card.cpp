@@ -10,6 +10,8 @@ const int TXPin = 17; // TXピンを17番に設定
 const int baudRate = 9600; // ボーレート設定
 
 void readRFIDTask(void *parameter) {
+
+  Serial.println("-------------readRFIDTask Start--------------");
   // RFIDからデータを読み取るタスク
   while (1) {
     if (RFIDSerial.available()) {
@@ -26,6 +28,7 @@ void readRFID_setup() {
   // UART1の初期化、IO16をRX、IO17をTXとして使用
   RFIDSerial.begin(baudRate, SERIAL_8N1, RXPin, TXPin);
 
+  #ifdef ENABLE_RFID_TASK
   // RFIDデータ読み取りタスクの作成
   xTaskCreate(
     readRFIDTask, /* タスク関数 */
@@ -35,4 +38,5 @@ void readRFID_setup() {
     1, /* タスク優先度 */
     NULL /* タスクハンドル */
   );
+  #endif
 }
