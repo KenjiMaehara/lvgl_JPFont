@@ -129,6 +129,7 @@ static void ap_mode_toggle_handler(lv_event_t *e) {
     if (gApModeOn) {
         // 色を黄色に変更し、テキストを更新
         lv_obj_set_style_bg_color(btn, lv_color_hex(0xFFFF00), LV_PART_MAIN); // 黄色に変更
+        lv_obj_set_style_text_color(btn, lv_color_black(), LV_PART_MAIN); // テキスト色を黒に設定
         lv_label_set_text(lv_obj_get_child(btn, 0), "Now in AP Mode\nConnect to SSID: ESP32-AP");
         
         gApModeOn = true;
@@ -140,6 +141,7 @@ static void ap_mode_toggle_handler(lv_event_t *e) {
     } else {
         // 元の色とテキストに戻す
         lv_obj_set_style_bg_color(btn, lv_color_hex(0x0000FF), LV_PART_MAIN); // 青色に戻す
+        lv_obj_set_style_text_color(btn, lv_color_white(), LV_PART_MAIN); // テキスト色を白に設定
         lv_label_set_text(lv_obj_get_child(btn, 0), "Switch to AP Mode");
         gApModeOn = false;
         // APモードをオフにする
