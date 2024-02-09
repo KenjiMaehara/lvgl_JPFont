@@ -89,11 +89,15 @@ void create_apmode_screen(lv_obj_t *scr) {
 
     // APモード切り替えボタンの作成
     lv_obj_t *ap_mode_btn = lv_btn_create(scr);
-    lv_obj_set_pos(ap_mode_btn, 10, 10); // ボタンの位置を設定
-    lv_obj_set_size(ap_mode_btn, 100, 50); // ボタンのサイズを設定
+    //lv_obj_set_pos(ap_mode_btn, 10, 10); // ボタンの位置を設定
+    //lv_obj_set_size(ap_mode_btn, 100, 50); // ボタンのサイズを設定
+    lv_obj_set_size(ap_mode_btn, 300, 100); // ボタンサイズ設定
+    lv_obj_center(ap_mode_btn); // ボタンを中央に配置
     lv_obj_add_event_cb(ap_mode_btn, ap_mode_toggle_handler, LV_EVENT_CLICKED, NULL);
+
     lv_obj_t *label = lv_label_create(ap_mode_btn);
-    lv_label_set_text(label, "AP Mode");
+    lv_label_set_text(label, "Switch to AP Mode");
+    lv_obj_center(label);
 
     add_navigation_buttons(screen7, screen1, screen6);
     #ifdef ENABLE_APMODE_TASK
@@ -116,11 +120,17 @@ bool gApModeOn = false;
 // ボタンのイベントハンドラ
 static void ap_mode_toggle_handler(lv_event_t *e) {
 
+    lv_obj_t * btn = lv_event_get_target(e);
+
     buzzer_beep();
     Serial.println("buzzer_beep_on");
     gApModeOn = !gApModeOn;
 
     if (gApModeOn) {
+        // 色を黄色に変更し、テキストを更新
+        lv_obj_set_style_bg_color(btn, lv_color_hex(0xFFFF00), LV_PART_MAIN); // 黄色に変更
+        lv_label_set_text(lv_obj_get_child(btn, 0), "Now in AP Mode\nConnect to SSID: ESP32-AP");
+        
         gApModeOn = true;
         WiFi.disconnect(true);  // 強制的に切断
         delay(1000);  // 切断処理のための短いディレイ   
@@ -128,6 +138,9 @@ static void ap_mode_toggle_handler(lv_event_t *e) {
         wifi_apmode();
         
     } else {
+        // 元の色とテキストに戻す
+        lv_obj_set_style_bg_color(btn, lv_color_hex(0x0000FF), LV_PART_MAIN); // 青色に戻す
+        lv_label_set_text(lv_obj_get_child(btn, 0), "Switch to AP Mode");
         gApModeOn = false;
         // APモードをオフにする
         WiFi.softAPdisconnect(true);
