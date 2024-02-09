@@ -26,7 +26,7 @@ LedState gLedState;
 
 // LED点滅タスク
 void blinkLedTask(void *parameter) {
-    Serial.println("blinkLedTask Start");
+    Serial.println("--------------blinkLedTask Start--------------");
 
   //ledState.areaLeds[0] = false;
 
@@ -66,8 +66,9 @@ void led_setup() {
   // セマフォの作成
   ledSemaphore = xSemaphoreCreateBinary();
   
-
+  #ifdef ENABLE_LED_TASK
   // LED点滅タスクを作成
   xTaskCreate(blinkLedTask, "Blink LED Task", 2048, NULL, 1, NULL);
+  #endif
 }
 

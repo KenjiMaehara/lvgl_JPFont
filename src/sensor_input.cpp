@@ -25,8 +25,10 @@ void sensor_input_setup() {
   }
   delete mcp_0x22;
 
+  #ifdef ENABLE_SENSOR_INPUT_TASK
   // ピン監視タスクの作成
   xTaskCreate(pinMonitorTask, "Pin Monitor", 10000, NULL, 1, NULL);
+  #endif
 }
 
 
@@ -34,7 +36,7 @@ void sensor_input_setup() {
 // ピンの状態を監視するタスク
 void pinMonitorTask(void *pvParameters) {
 
-  Serial.println("pinMonitorTask Start");
+  Serial.println("-------------pinMonitorTask Start-------------");
   bool pin_change = false;
 
   for (;;) {

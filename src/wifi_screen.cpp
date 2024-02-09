@@ -18,6 +18,7 @@ lv_obj_t *wifi_list_label;
 
 void task_connectToWiFi(void * parameter) {
     //WiFi.begin(ssid, password);
+    Serial.println("-------task_connectToWiFi start-------");
 
     // 無限ループでWiFiのステータスを監視
     for (;;) {
