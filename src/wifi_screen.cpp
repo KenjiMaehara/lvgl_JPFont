@@ -43,18 +43,19 @@ void task_connectToWiFi(void * parameter) {
             // ここに接続済み時の処理を記述
             Serial.println("Connected to WiFi");
             //displayWiFiInfo(label_ssid, label_ip); // WiFi情報の表示更新
-            vTaskDelay(1000 / portTICK_PERIOD_MS); // 10秒ごとにチェック
+            vTaskDelay(10000 / portTICK_PERIOD_MS); // 10秒ごとにチェック
         } else if (WiFi.status() != WL_CONNECTED && isScanningWiFi == false) {
             // 接続が失われた場合の再接続処理
             Serial.println("Reconnecting to WiFi...");
             WiFi.disconnect();
-            vTaskDelay(1000 / portTICK_PERIOD_MS); // 5秒ごとに再接続試行
+            vTaskDelay(5000 / portTICK_PERIOD_MS); // 5秒後に再接続試行
+            WiFi.mode(WIFI_STA); // WiFiモードをSTAに設定
             preferences.begin("wifi", false); // Preferencesを開始
             String ssid = preferences.getString("ssid"); // 保存されたSSIDを読み出し
             String password = preferences.getString("password"); // 保存されたパスワードを読み出し
             WiFi.begin(ssid.c_str(), password.c_str()); // WiFi接続を開始
             //WiFi.begin(ssid, password);
-            vTaskDelay(1000 / portTICK_PERIOD_MS); // 5秒ごとに再接続試行
+            vTaskDelay(10000 / portTICK_PERIOD_MS); // 10秒ごとに再接続試行
         }
     }
 }
