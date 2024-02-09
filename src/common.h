@@ -89,7 +89,7 @@ extern Preferences preferences;
 
 
 
-//#define ENABLE_WIFI_TASK
+#define ENABLE_WIFI_TASK
 //#define ENABLE_RFID_TASK
 //#define ENABLE_BUZZER_TASK
 //#define ENABLE_LED_TASK
