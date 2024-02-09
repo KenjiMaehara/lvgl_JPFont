@@ -90,11 +90,11 @@ extern Preferences preferences;
 
 
 #define ENABLE_WIFI_TASK
-//#define ENABLE_RFID_TASK
-//#define ENABLE_BUZZER_TASK
+#define ENABLE_RFID_TASK
+#define ENABLE_BUZZER_TASK
 #define ENABLE_LED_TASK
-#define ENABLE_SENSOR_INPUT_TASK
-//#define ENABLE_APMODE_TASK
+//#define ENABLE_SENSOR_INPUT_TASK
+#define ENABLE_APMODE_TASK
 
 
 #endif
