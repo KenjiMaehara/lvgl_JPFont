@@ -28,43 +28,47 @@ void readRFIDTask(void *parameter) {
   Serial.println("-------------readRFIDTask Start--------------");
   // RFIDからデータを読み取るタスク
   while (1) {
-    if (RFIDSerial.available()) {
-      String id = RFIDSerial.readStringUntil('\n');
-      int dataLength = id.length(); // 読み取ったデータの長さを取得
+    read_length = RFIDSerial.available();
+    if (read_length > 0) {
+      //String id = RFIDSerial.readStringUntil('\n');
+      //int dataLength = id.length(); // 読み取ったデータの長さを取得
+      //read_length = RFIDSerial.available();
 
-      Serial.print("RFID ID: ");
-      Serial.println(id);
-      Serial.print("Data Length: ");
-      Serial.println(dataLength);
+
+      //Serial.print("RFID ID: ");
+      //Serial.println(id);
+
 
       // 受信データがMAX_CARD_LENGTH（38バイト）以上かどうかの判定
-      if(dataLength <= MAX_CARD_LENGTH) {
-        Serial.println("受信データはMAX_CARD_LENGTHバイト以上です。");
-      } else {
-        Serial.println("受信データはMAX_CARD_LENGTHバイト未満です。");
-      }
+      if(read_length <= MAX_CARD_LENGTH) {
 
-      RFIDSerial.readBytes(read_buf,read_length);
+        RFIDSerial.readBytes(read_buf,read_length);
 
-      if(read_buf[0] == CARD_START
-          && ( ( read_length == 38 && read_buf[38 -1] == CARD_FELICA)
-              || ( read_length == 12 && read_buf[12 -1] == CARD_14443A)
-              || ( read_length == 26 && read_buf[26 -1] == CARD_14443B)
-              || ( read_length == 22 && read_buf[22 -1] == CARD_15693)
-              )    
-        )                    
-      {
-        if( read_length == 38 && read_buf[38 -1] == CARD_FELICA) {
-          Serial.println("FeliCaカード");
-        } else if( read_length == 12 && read_buf[12 -1] == CARD_14443A) {
-          Serial.println("Mifareカード");
-        } else if( read_length == 26 && read_buf[26 -1] == CARD_14443B) {
-          Serial.println("Mifareカード");
-        } else if( read_length == 22 && read_buf[22 -1] == CARD_15693) {
-          Serial.println("ISO15693カード");
+        //Serial.print("RFID ID: ");
+        //Serial.println(read_buf);
+        Serial.print("read_length: ");
+        Serial.println(read_length);
+
+        if(read_buf[0] == CARD_START
+            && ( ( read_length == 38 && read_buf[38 -1] == CARD_FELICA)
+                || ( read_length == 12 && read_buf[12 -1] == CARD_14443A)
+                || ( read_length == 26 && read_buf[26 -1] == CARD_14443B)
+                || ( read_length == 22 && read_buf[22 -1] == CARD_15693)
+                )    
+          )                    
+        {
+          if( read_length == 38 && read_buf[38 -1] == CARD_FELICA) {
+            Serial.println("FeliCaカード");
+          } else if( read_length == 12 && read_buf[12 -1] == CARD_14443A) {
+            Serial.println("Mifareカード");
+          } else if( read_length == 26 && read_buf[26 -1] == CARD_14443B) {
+            Serial.println("Mifareカード");
+          } else if( read_length == 22 && read_buf[22 -1] == CARD_15693) {
+            Serial.println("ISO15693カード");
+          }
+        } else {
+          Serial.println("不明なカード");
         }
-      } else {
-        Serial.println("不明なカード");
       }
     }
 
