@@ -7,6 +7,7 @@
 void onCardRead(card_data_t *card);
 
 lv_obj_t *label;
+lv_obj_t *typeLabel; // カードタイプ表示用の新しいラベル
 
 void create_cardTest_screen(lv_obj_t *scr) {
 
@@ -15,8 +16,12 @@ void create_cardTest_screen(lv_obj_t *scr) {
     // カードデータ表示用のラベルを作成
     label = lv_label_create(scr); // ラベルオブジェクトを作成
     lv_label_set_text(label, "カードデータがここに表示されます"); // ラベルに初期テキストを設定
-    lv_obj_align(label, LV_ALIGN_CENTER, 0, 0); // ラベルを画面の中心に配置
+    lv_obj_align(label, LV_ALIGN_CENTER, 0, -20); // 少し上に配置
 
+    // カードタイプ表示用の新しいラベルを作成
+    typeLabel = lv_label_create(scr);
+    lv_label_set_text(typeLabel, "カードタイプ: 未識別");
+    lv_obj_align(typeLabel, LV_ALIGN_CENTER, 0, 20); // カードデータラベルの少し下に配置
 
     // カード読み取りコールバックを設定
     card_set_cb(onCardRead);
@@ -40,5 +45,20 @@ void onCardRead(card_data_t *card) {
     strLen += 3;
   }
   lv_label_set_text(label, dataStr); // LVGLラベルにカードデータを設定
+
+
+  // カードデータの長さからカードの種類を識別
+  const char* cardTypeName = "type unknown";
+  switch(card->data_length) {
+      case 24: cardTypeName = "14443B"; break;
+      case 36: cardTypeName = "FeliCa"; break;
+      case 10: cardTypeName = "MIFARE(Type A)"; break;
+      case 20: cardTypeName = "15693"; break;
+      // 他の長さに対するケースも同様に追加
+      default: break;
+  }  
+  // カードタイプラベルにテキストを設定
+  lv_label_set_text(typeLabel, cardTypeName);
+
   lv_task_handler(); // LVGLタスクハンドラを呼び出して画面を更新
 }
