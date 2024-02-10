@@ -59,8 +59,9 @@ void readRFIDTask(void *parameter) {
 
         RFIDSerial.readBytes(read_buf,read_length);
 
+ 
         //Serial.print("RFID ID: ");
-        //Serial.println(read_buf);
+        //Serial.println(id);
         Serial.print("read_length: ");
         Serial.println(read_length);
 
@@ -82,10 +83,11 @@ void readRFIDTask(void *parameter) {
             Serial.println("ISO15693カード");
           }
         } else {
+          delay(100);
           //Serial.println("不明なカード");
           // dummy read
-          for(int i=0; i < read_length ; i++)
-          RFIDSerial.read();
+          //for(int i=0; i < read_length ; i++)
+          //RFIDSerial.read();
         }
       }
     }
