@@ -97,9 +97,11 @@ extern Preferences preferences;
 #define ENABLE_LED_TASK
 #define ENABLE_SENSOR_INPUT_TASK
 #define ENABLE_APMODE_TASK
+#define ENABLE_SEND_TASK
 
 
 extern void device_setup();
 extern TwoWire I2Cone;
+extern TwoWire I2Ctwo;
 
 #endif

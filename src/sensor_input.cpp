@@ -16,7 +16,7 @@ void sensor_input_setup() {
   // MCP23017デバイスのインスタンスを動的に作成
   Adafruit_MCP23X17* mcp_0x22 = new Adafruit_MCP23X17();
   
-  mcp_0x22->begin_I2C(0x22, &Wire);
+  mcp_0x22->begin_I2C(0x22, &I2Ctwo);
   // GPA0からGPA7を入力として設定し、プルアップ抵抗を有効化
   for (int i = 0; i < 8; i++) {
 
@@ -43,7 +43,7 @@ void pinMonitorTask(void *pvParameters) {
     // MCP23017デバイスのインスタンスを動的に作成
     Adafruit_MCP23X17* mcp_0x22 = new Adafruit_MCP23X17();
     
-    if (mcp_0x22->begin_I2C(0x22, &Wire)) { // アドレス0x22のMCP23017を初期化
+    if (mcp_0x22->begin_I2C(0x22, &I2Ctwo)) { // アドレス0x22のMCP23017を初期化
       //Serial.println("MCP23017 connection successful");
 
       for (int i = 0; i < 8; i++) {

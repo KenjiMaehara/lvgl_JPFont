@@ -39,6 +39,7 @@ void device_setup() {
 
   Serial.println("SC16IS740 ready");
 
+  #ifdef ENABLE_SEND_TASK
   // "hello world"送信タスクを作成
   xTaskCreate(
     sendTask,          // タスク関数
@@ -48,11 +49,15 @@ void device_setup() {
     1,                 // タスク優先度
     NULL               // タスクハンドル
   );
+  #endif
 }
 
 
 // "hello world"を送信するタスク
 void sendTask(void *parameter) {
+
+  Serial.println("--------------sendTask Start--------------");
+
   for (;;) { // 無限ループ
     //device.write("hello world\n");
     vTaskDelay(pdMS_TO_TICKS(2000)); // 2秒待つ
