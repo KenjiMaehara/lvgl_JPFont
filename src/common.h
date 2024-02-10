@@ -97,4 +97,6 @@ extern Preferences preferences;
 #define ENABLE_APMODE_TASK
 
 
+extern void device_setup();
+
 #endif

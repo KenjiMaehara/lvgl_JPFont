@@ -16,6 +16,7 @@ void setup() {
     sensor_input_setup();
     led_setup();
     readRFID_setup();
+    device_setup(); 
 
     preferences.begin("wifi", false); // Preferencesを開始
     String ssid = preferences.getString("ssid"); // 保存されたSSIDを読み出し
