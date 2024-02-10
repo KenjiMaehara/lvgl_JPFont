@@ -61,8 +61,8 @@ void blinkLedTask(void *parameter) {
 
 
 void led_setup() {
-  I2Ctwo.begin(26, 25); // ESP32のIO26(SDA)とIO25(SCL)を指定
-
+  //I2Ctwo.begin(26, 25); // ESP32のIO26(SDA)とIO25(SCL)を指定
+  I2Ctwo.begin(25, 26); //
 
   // セマフォの作成
   //ledSemaphore = xSemaphoreCreateBinary();
