@@ -35,7 +35,7 @@ void blinkLedTask(void *parameter) {
           // MCP23017デバイスのインスタンスを動的に作成
           Adafruit_MCP23X17* mcp_0x21 = new Adafruit_MCP23X17();
 
-          mcp_0x21->begin_I2C(0x21, &Wire);
+          mcp_0x21->begin_I2C(0x21, &I2Ctwo);
           for (int i = 0; i < 16; i++) {
             mcp_0x21->pinMode(i, OUTPUT);
           }
