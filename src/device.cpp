@@ -18,12 +18,18 @@ void device_setup() {
   // I2C通信を開始
   Wire.begin(21,22);
 
+  #if 0
+  // SC16IS740デバイスの初期化
+  if (!device.begin_UART(9600)) {
+    Serial.println("Device not found");
+    while (1); // デバイスが見つからない場合はここで停止
+  }
+  #endif
+  
+  // SC16IS740デバイスの初期化。戻り値のチェックは不要な場合。
+  device.begin_UART(9600);
+  Serial.println("SC16IS740 ready");
 
-// SC16IS740デバイスの初期化
-if (!device.available()) {
-  Serial.println("Device not found");
-  while (1); // デバイスが見つからない場合はここで停止
-}
 
   // UART設定: 9600 baud, 8N1
   device.updateBaudRate(9600); // 仮のメソッド名、正しいメソッド名に置き換える必要があります。
@@ -46,7 +52,7 @@ if (!device.available()) {
 // "hello world"を送信するタスク
 void sendTask(void *parameter) {
   for (;;) { // 無限ループ
-    device.write("hello world\n");
+    //device.write("hello world\n");
     vTaskDelay(pdMS_TO_TICKS(2000)); // 2秒待つ
   }
 }
