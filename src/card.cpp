@@ -53,7 +53,8 @@ void readRFIDTask(void *parameter) {
       //Serial.print("RFID ID: ");
       //Serial.println(id);
 
-
+      Serial.print("read_length: ");
+      Serial.println(read_length);
       // 受信データがMAX_CARD_LENGTH（38バイト）以上かどうかの判定
       if(read_length <= MAX_CARD_LENGTH) {
 
@@ -62,8 +63,7 @@ void readRFIDTask(void *parameter) {
  
         //Serial.print("RFID ID: ");
         //Serial.println(id);
-        Serial.print("read_length: ");
-        Serial.println(read_length);
+
 
         if(read_buf[0] == CARD_START
             && ( ( read_length == 38 && read_buf[38 -1] == CARD_FELICA)
@@ -89,6 +89,9 @@ void readRFIDTask(void *parameter) {
           //for(int i=0; i < read_length ; i++)
           //RFIDSerial.read();
         }
+      } else {
+        // read_lengthが異常値の場合、バッファをクリア
+        while(RFIDSerial.available()) RFIDSerial.read();
       }
     }
 
