@@ -1,6 +1,8 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#include <Arduino.h>
+#include <Wire.h>
 #include <TFT_eSPI.h> // ILI9488ドライバを含むライブラリ
 #include <lvgl.h>
 #include <Adafruit_MCP23X17.h>
@@ -98,5 +100,6 @@ extern Preferences preferences;
 
 
 extern void device_setup();
+extern TwoWire I2Cone;
 
 #endif

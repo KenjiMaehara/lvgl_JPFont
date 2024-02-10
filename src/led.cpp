@@ -7,7 +7,7 @@
 #include <freertos/semphr.h>
 #include "common.h"
 
-
+TwoWire I2Ctwo = TwoWire(1);
 
 SemaphoreHandle_t ledSemaphore; // セマフォを定義
 
@@ -60,7 +60,7 @@ void blinkLedTask(void *parameter) {
 
 
 void led_setup() {
-  Wire.begin(26, 25); // ESP32のIO26(SDA)とIO25(SCL)を指定
+  I2Ctwo.begin(26, 25); // ESP32のIO26(SDA)とIO25(SCL)を指定
 
 
   // セマフォの作成

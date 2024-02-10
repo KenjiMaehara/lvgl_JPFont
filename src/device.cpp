@@ -1,6 +1,8 @@
 #include <Wire.h>
 #include <SC16IS7X0.h>
 
+TwoWire I2Cone = TwoWire(0);
+
 // SC16IS740のI2Cアドレスを定義
 #define SC16IS740_ADDRESS 0x49
 
@@ -16,7 +18,7 @@ void device_setup() {
   while (!Serial); // シリアルポートが開くのを待つ
 
   // I2C通信を開始
-  Wire.begin(21,22);
+  I2Cone.begin(21,22);
 
   #if 0
   // SC16IS740デバイスの初期化
@@ -25,7 +27,7 @@ void device_setup() {
     while (1); // デバイスが見つからない場合はここで停止
   }
   #endif
-  
+
   // SC16IS740デバイスの初期化。戻り値のチェックは不要な場合。
   device.begin_UART(9600);
   Serial.println("SC16IS740 ready");

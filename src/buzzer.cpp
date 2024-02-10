@@ -11,7 +11,7 @@
 void writeRegister(int device, byte address, byte value);
 
 void buzzer_setup() {
-    Wire.begin();
+    //I2Cone.begin();
     writeRegister(MCP23017_ADDRESS, IODIRB, 0x00); // MCP23017のポートBを出力に設定
     // ... 他のセットアップコード ...
 }
@@ -19,10 +19,10 @@ void buzzer_setup() {
 
 // MCP23017のレジスタに値を書き込む関数
 void writeRegister(int device, byte address, byte value) {
-    Wire.beginTransmission(device);
-    Wire.write(address);
-    Wire.write(value);
-    Wire.endTransmission();
+    I2Cone.beginTransmission(device);
+    I2Cone.write(address);
+    I2Cone.write(value);
+    I2Cone.endTransmission();
 }
 
 void soundBuzzer() {
