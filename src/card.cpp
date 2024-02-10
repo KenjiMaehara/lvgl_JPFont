@@ -78,7 +78,7 @@ void readRFIDTask(void *parameter) {
           } else if( read_length == 12 && read_buf[12 -1] == CARD_14443A) {
             Serial.println("Mifareカード");
           } else if( read_length == 26 && read_buf[26 -1] == CARD_14443B) {
-            Serial.println("Mifareカード");
+            Serial.println("CARD_14443B");
           } else if( read_length == 22 && read_buf[22 -1] == CARD_15693) {
             Serial.println("ISO15693カード");
           }
