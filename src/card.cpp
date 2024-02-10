@@ -2,6 +2,16 @@
 #include <Arduino.h>
 #include "common.h"
 
+#define   MAX_CARD_LENGTH 38
+
+/**********************
+ *      TYPEDEFS
+ **********************/
+struct card_data_t{
+    uint8_t type;
+    uint8_t data[MAX_CARD_LENGTH];
+    int     data_length;
+} ;
 
 #define MAX_CARD_LENGTH 38 // 最大カードデータ長を定義
 
@@ -25,8 +35,13 @@ const int baudRate = 9600; // ボーレート設定
 
 void readRFIDTask(void *parameter) {
 
+  card_data_t card;
+
   Serial.println("-------------readRFIDTask Start--------------");
   // RFIDからデータを読み取るタスク
+
+  memset(&card,0,sizeof(card_data_t));  // カードデータの初期化
+
   while (1) {
     read_length = RFIDSerial.available();
     if (read_length > 0) {
@@ -67,7 +82,10 @@ void readRFIDTask(void *parameter) {
             Serial.println("ISO15693カード");
           }
         } else {
-          Serial.println("不明なカード");
+          //Serial.println("不明なカード");
+          // dummy read
+          for(int i=0; i < read_length ; i++)
+          RFIDSerial.read();
         }
       }
     }
