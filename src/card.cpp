@@ -16,8 +16,12 @@ void readRFIDTask(void *parameter) {
   while (1) {
     if (RFIDSerial.available()) {
       String id = RFIDSerial.readStringUntil('\n');
+      int dataLength = id.length(); // 読み取ったデータの長さを取得
+
       Serial.print("RFID ID: ");
       Serial.println(id);
+      Serial.print("Data Length: ");
+      Serial.println(dataLength);
     }
     vTaskDelay(10 / portTICK_PERIOD_MS); // タスクのディレイ
   }
