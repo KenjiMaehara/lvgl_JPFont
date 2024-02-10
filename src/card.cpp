@@ -5,18 +5,10 @@
 
 #define   MAX_CARD_LENGTH 38
 
-/**********************
- *      TYPEDEFS
- **********************/
-struct card_data_t{
-    uint8_t type;
-    uint8_t data[MAX_CARD_LENGTH];
-    int     data_length;
-} ;
 
-typedef void (*card_read_cb_t)(struct card_data_t * card);
+//card_read_cb_t  card_callback;
 
-#define MAX_CARD_LENGTH 38 // 最大カードデータ長を定義
+
 
 #define		CARD_125KHZ		0xfd
 #define		CARD_FELICA		0xfc
@@ -27,7 +19,17 @@ typedef void (*card_read_cb_t)(struct card_data_t * card);
 
 void card_set_cb(card_read_cb_t card_cb);
 
-card_read_cb_t  card_callback;
+//typedef void (*card_read_cb_t)(struct card_data_t * card);
+void (*card_callback)(struct card_data_t * card) = NULL;
+
+
+
+void card_set_cb(card_read_cb_t card_cb)
+{
+    card_callback = card_cb;
+}
+
+
 
 HardwareSerial RFIDSerial(1); // UART1を使用
 

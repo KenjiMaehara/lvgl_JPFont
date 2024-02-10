@@ -39,6 +39,7 @@ extern lv_obj_t *screen4;
 extern lv_obj_t *screen5;
 extern lv_obj_t *screen6;
 extern lv_obj_t *screen7;
+extern lv_obj_t *screen8;
 
 
 
@@ -95,6 +96,32 @@ extern Preferences preferences;
 #define ENABLE_LED_TASK
 #define ENABLE_SENSOR_INPUT_TASK
 #define ENABLE_APMODE_TASK
+
+#define MAX_CARD_LENGTH 38 // 最大カードデータ長を定義
+
+/**********************
+ *      TYPEDEFS
+ **********************/
+struct card_data_t{
+    uint8_t type;
+    uint8_t data[MAX_CARD_LENGTH];
+    int     data_length;
+} ;
+
+extern void (*card_callback)(struct card_data_t * card);
+
+
+
+typedef void (*card_read_cb_t)(struct card_data_t * card);
+//card_read_cb_t  card_callback;
+
+
+
+
+extern void create_cardTest_screen(lv_obj_t *scr);
+
+
+void card_set_cb(card_read_cb_t card_cb);
 
 
 #endif
