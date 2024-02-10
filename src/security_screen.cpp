@@ -60,7 +60,7 @@ static void event_handler(lv_event_t * e) {
             }
             
         }
-            xSemaphoreGive(ledSemaphore); // セマフォを解放
+            //xSemaphoreGive(ledSemaphore); // セマフォを解放
     }
 }
 

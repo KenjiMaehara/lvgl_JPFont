@@ -2,6 +2,7 @@
 #include <SC16IS7X0.h>
 
 TwoWire I2Cone = TwoWire(0);
+SemaphoreHandle_t i2cSemaphore = xSemaphoreCreateMutex();
 
 // SC16IS740のI2Cアドレスを定義
 #define SC16IS740_ADDRESS 0x49
@@ -59,7 +60,10 @@ void sendTask(void *parameter) {
   Serial.println("--------------sendTask Start--------------");
 
   for (;;) { // 無限ループ
-    //device.write("hello world\n");
+    if (xSemaphoreTake(i2cSemaphore, portMAX_DELAY) == pdTRUE) {
+      //device.write("hello world\n");
+      xSemaphoreGive(i2cSemaphore);
+    }
     vTaskDelay(pdMS_TO_TICKS(2000)); // 2秒待つ
   }
 }

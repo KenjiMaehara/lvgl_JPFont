@@ -40,36 +40,40 @@ void pinMonitorTask(void *pvParameters) {
   bool pin_change = false;
 
   for (;;) {
-    // MCP23017デバイスのインスタンスを動的に作成
-    Adafruit_MCP23X17* mcp_0x22 = new Adafruit_MCP23X17();
-    
-    if (mcp_0x22->begin_I2C(0x22, &I2Ctwo)) { // アドレス0x22のMCP23017を初期化
-      //Serial.println("MCP23017 connection successful");
 
-      for (int i = 0; i < 8; i++) {
-        mcp_0x22->pinMode(i, INPUT);
+    if (xSemaphoreTake(i2cSemaphore, portMAX_DELAY) == pdTRUE) {
+      // MCP23017デバイスのインスタンスを動的に作成
+      Adafruit_MCP23X17* mcp_0x22 = new Adafruit_MCP23X17();
 
-        int pinValue = mcp_0x22->digitalRead(i);
-        if (pinValue != last_pinValue[i]) {
-          pin_change = true;
-          last_pinValue[i] = pinValue;
-        }
-      }
+      if (mcp_0x22->begin_I2C(0x22, &I2Ctwo)) { // アドレス0x22のMCP23017を初期化
+        //Serial.println("MCP23017 connection successful");
 
-      if (pin_change == true) {
-        Serial.println("pin_change true!!!!!");
         for (int i = 0; i < 8; i++) {
-            gLedState.emgLeds[i] = last_pinValue[i];
+          mcp_0x22->pinMode(i, INPUT);
+
+          int pinValue = mcp_0x22->digitalRead(i);
+          if (pinValue != last_pinValue[i]) {
+            pin_change = true;
+            last_pinValue[i] = pinValue;
+          }
         }
-        xSemaphoreGive(ledSemaphore); // セマフォを解放
-        pin_change=false;
+
+        if (pin_change == true) {
+          Serial.println("pin_change true!!!!!");
+          for (int i = 0; i < 8; i++) {
+              gLedState.emgLeds[i] = last_pinValue[i];
+          }
+          //xSemaphoreGive(ledSemaphore); // セマフォを解放
+          pin_change=false;
 
 
-      } 
-      // MCP23017デバイスのインスタンスを解放
-      delete mcp_0x22;
-    } else {
-      Serial.println("MCP23017 connection failed");
+        } 
+        // MCP23017デバイスのインスタンスを解放
+        delete mcp_0x22;
+      } else {
+        Serial.println("MCP23017 connection failed");
+      }
+      xSemaphoreGive(i2cSemaphore);
     }
     vTaskDelay(pdMS_TO_TICKS(500));  // ポーリング間隔
   }

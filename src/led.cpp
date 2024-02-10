@@ -9,7 +9,7 @@
 
 TwoWire I2Ctwo = TwoWire(1);
 
-SemaphoreHandle_t ledSemaphore; // セマフォを定義
+//SemaphoreHandle_t ledSemaphore; // セマフォを定義
 
 
 #define EMG_INPUT_CH1 0
@@ -31,7 +31,7 @@ void blinkLedTask(void *parameter) {
   //ledState.areaLeds[0] = false;
 
     while (true) {
-        if (xSemaphoreTake(ledSemaphore, portMAX_DELAY)) {
+        if (xSemaphoreTake(i2cSemaphore, portMAX_DELAY) == pdTRUE) {
           // MCP23017デバイスのインスタンスを動的に作成
           Adafruit_MCP23X17* mcp_0x21 = new Adafruit_MCP23X17();
 
@@ -51,6 +51,7 @@ void blinkLedTask(void *parameter) {
 
           // MCP23017デバイスのインスタンスを解放
           delete mcp_0x21;
+          xSemaphoreGive(i2cSemaphore);
         }
 
     }
@@ -64,7 +65,7 @@ void led_setup() {
 
 
   // セマフォの作成
-  ledSemaphore = xSemaphoreCreateBinary();
+  //ledSemaphore = xSemaphoreCreateBinary();
   
   #ifdef ENABLE_LED_TASK
   // LED点滅タスクを作成

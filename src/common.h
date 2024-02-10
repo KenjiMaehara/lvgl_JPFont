@@ -54,7 +54,7 @@ extern void buzzer_setup();
 extern void led_setup();
 
 extern bool ledOn;
-extern SemaphoreHandle_t ledSemaphore; // セマフォを定義
+//extern SemaphoreHandle_t ledSemaphore; // セマフォを定義
 
 //extern Adafruit_MCP23X17 mcp[5];
 extern Adafruit_MCP23X17 mcp_0x21;
@@ -103,5 +103,6 @@ extern Preferences preferences;
 extern void device_setup();
 extern TwoWire I2Cone;
 extern TwoWire I2Ctwo;
+extern SemaphoreHandle_t i2cSemaphore;
 
 #endif
