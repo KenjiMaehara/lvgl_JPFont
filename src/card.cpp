@@ -2,6 +2,7 @@
 #include <Arduino.h>
 #include "common.h"
 
+
 #define   MAX_CARD_LENGTH 38
 
 /**********************
@@ -13,6 +14,8 @@ struct card_data_t{
     int     data_length;
 } ;
 
+typedef void (*card_read_cb_t)(struct card_data_t * card);
+
 #define MAX_CARD_LENGTH 38 // 最大カードデータ長を定義
 
 #define		CARD_125KHZ		0xfd
@@ -22,9 +25,9 @@ struct card_data_t{
 #define		CARD_15693		0xf8
 #define		CARD_START		0xfe
 
-size_t read_length;
-uint8_t read_buf[MAX_CARD_LENGTH];
+void card_set_cb(card_read_cb_t card_cb);
 
+card_read_cb_t  card_callback;
 
 HardwareSerial RFIDSerial(1); // UART1を使用
 
@@ -35,7 +38,11 @@ const int baudRate = 9600; // ボーレート設定
 
 void readRFIDTask(void *parameter) {
 
+  size_t read_length;
+  uint8_t read_buf[MAX_CARD_LENGTH];
   card_data_t card;
+  int   verify_cnt = 0;
+  int   loop_cnt = 0;
 
   Serial.println("-------------readRFIDTask Start--------------");
   // RFIDからデータを読み取るタスク
@@ -93,12 +100,29 @@ void readRFIDTask(void *parameter) {
             Serial.print("Card Data: ");
             Serial.println(cardDataStr);
 
+            int data_length = read_length - 2;
+                    
+            if(memcmp(&read_buf[1],card.data,data_length) !=0 || data_length != card.data_length)
+            {
+                memcpy(card.data,&read_buf[1],data_length);
+                card.data_length = data_length;
+                verify_cnt = 0;
+            }
+            else
+            {
+               verify_cnt++;
+                if(verify_cnt == 2)
+                {
+                    card_callback(&card);
+                    //Serial.printf("card %s\n",card.data);
+                }
+            }
+
+
         } else {
-          delay(100);
-          //Serial.println("不明なカード");
-          // dummy read
-          //for(int i=0; i < read_length ; i++)
-          //RFIDSerial.read();
+          /* card start error */
+          memset(read_buf,0,MAX_CARD_LENGTH);    
+          verify_cnt = 0;
         }
       } else {
 
@@ -109,8 +133,23 @@ void readRFIDTask(void *parameter) {
         //while(RFIDSerial.available()) RFIDSerial.read();
       }
     }
+    else
+    {
+      delay(100);
+      if(verify_cnt > 0 )
+      {
+              loop_cnt++;
+          if(loop_cnt  > 15) 
+          {
+              memset(&card,0,sizeof(card_data_t));
+              verify_cnt = 0;
+              loop_cnt = 0;
+              printf("cada data clear\n");
+          }
+      }
+    }
 
-    vTaskDelay(10 / portTICK_PERIOD_MS); // タスクのディレイ
+    //vTaskDelay(10 / portTICK_PERIOD_MS); // タスクのディレイ
   }
 }
 
