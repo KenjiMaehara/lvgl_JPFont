@@ -35,7 +35,7 @@ if (!device.available()) {
   xTaskCreate(
     sendTask,          // タスク関数
     "Send Hello Task", // タスク名
-    2048,              // スタックサイズ
+    2048 * 4,              // スタックサイズ
     NULL,              // タスクパラメータ
     1,                 // タスク優先度
     NULL               // タスクハンドル
