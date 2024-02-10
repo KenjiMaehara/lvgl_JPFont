@@ -30,6 +30,9 @@ void create_cardTest_screen(lv_obj_t *scr) {
 
 // カード読み取りコールバック関数
 void onCardRead(card_data_t *card) {
+
+  Serial.println("-------------onCardRead Start--------------");
+
   char dataStr[256]; // データを文字列に変換するためのバッファ
   size_t strLen = 0;
   for (size_t i = 0; i < card->data_length && strLen < sizeof(dataStr) - 3; i++) {
