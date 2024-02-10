@@ -106,7 +106,7 @@ void readRFID_setup() {
   xTaskCreate(
     readRFIDTask, /* タスク関数 */
     "ReadRFIDTask", /* タスク名 */
-    1024 * 2, /* スタックサイズ */
+    1024 * 4, /* スタックサイズ */
     NULL, /* タスクパラメータ */
     1, /* タスク優先度 */
     NULL /* タスクハンドル */
