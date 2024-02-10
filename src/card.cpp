@@ -101,8 +101,12 @@ void readRFIDTask(void *parameter) {
           //RFIDSerial.read();
         }
       } else {
+
+        // dummy read
+        for(int i=0; i < read_length ; i++)
+          RFIDSerial.read();
         // read_lengthが異常値の場合、バッファをクリア
-        while(RFIDSerial.available()) RFIDSerial.read();
+        //while(RFIDSerial.available()) RFIDSerial.read();
       }
     }
 
