@@ -82,6 +82,17 @@ void readRFIDTask(void *parameter) {
           } else if( read_length == 22 && read_buf[22 -1] == CARD_15693) {
             Serial.println("ISO15693カード");
           }
+        
+            // カードデータを16進数文字列に変換
+            String cardDataStr = "";
+            for(int i = 0; i < read_length; i++) {
+              char hexBuf[3];
+              sprintf(hexBuf, "%02X", read_buf[i]);
+              cardDataStr += String(hexBuf);
+            }
+            Serial.print("Card Data: ");
+            Serial.println(cardDataStr);
+
         } else {
           delay(100);
           //Serial.println("不明なカード");
