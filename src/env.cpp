@@ -1,7 +1,9 @@
 #include <Arduino.h>
 #include <SPI.h>
-#include <SD.h>
+//#include <SD.h>
 #include <env.h>
+#include <Preferences.h>
+#include "common.h"
 
 const uint16_t mStrInitNameS_01[] = {0x76d7,0x96e3,0x0000}; /* 盗難 */
 const uint16_t mStrInitNameS_02[] = {0x706b,0x707d,0x0000}; /* 火災 */
@@ -42,6 +44,8 @@ void env_default(env_t * env);
 env_t   Env;
 env_hdr_t hdrEnv;
 
+
+#if 0
 static const uint8_t crc8_table[256] =
 {
      0,  94, 188, 226,  97,  63, 221, 131, 194, 156, 126,  32, 163, 253,  31,  65,
@@ -76,6 +80,23 @@ uint8_t crc8( uint8_t *data , long size )
     
     return crc;
 } 
+#endif
+
+
+uint8_t crc8(const uint8_t *data, size_t size) {
+  uint8_t crc = 0xFF; // 初期値
+  for (size_t i = 0; i < size; i++) {
+    crc ^= data[i]; // データバイトでCRCをXOR
+    for (uint8_t j = 0; j < 8; j++) { // 各ビットについて
+      if (crc & 0x80) { // 最上位ビットが1かどうかをチェック
+        crc = (crc << 1) ^ 0x07; // 1の場合は左にシフトしてポリノミアルでXOR
+      } else {
+        crc <<= 1; // 0の場合は左にシフトのみ
+      }
+    }
+  }
+  return crc; // 計算されたCRC値
+}
 
 
 void env_update_dev()
@@ -86,6 +107,7 @@ void env_update_dev()
 }
 
 
+#if 0
 void env_save(env_t * src,env_hdr_t * hdr)
 {
     int err= 0;
@@ -102,8 +124,28 @@ void env_save(env_t * src,env_hdr_t * hdr)
     envFile.write((uint8_t * )src,sizeof(env_t));
     envFile.close();
 }
+#endif
+
+void env_save(env_t *src, env_hdr_t *hdr) {
+  // 構造体サイズの合計を計算
+  uint32_t size = sizeof(env_t) + sizeof(env_hdr_t);
+  uint8_t envData[size]; // 構造体を格納するバイト配列
+
+  // CRC値を計算してヘッダーに設定
+  hdr->crc = crc8((uint8_t *)src, sizeof(env_t));
+
+  // ヘッダーと構造体の内容をバイト配列にコピー
+  memcpy(envData, hdr, sizeof(env_hdr_t));
+  memcpy(envData + sizeof(env_hdr_t), src, sizeof(env_t));
+
+  // Preferencesに保存
+  preferences.begin("my-app", false); // Preferencesを開始
+  preferences.putBytes("env", envData, size); // バイト配列を保存
+  preferences.end(); // Preferencesを終了
+}
 
 
+#if 0
 void env_init(void)
 {
 
@@ -149,6 +191,44 @@ void env_init(void)
 
     Serial.println("Env initialization done.");
 }
+#endif
+
+
+void env_init(void) {
+  preferences.begin("my-app", true); // 読み取り専用でPreferencesを開始
+
+  size_t envSize = sizeof(env_t) + sizeof(env_hdr_t);
+  uint8_t envData[envSize]; // 構造体とヘッダーを格納するためのバイト配列
+
+  if (preferences.getBytesLength("env") != envSize) {
+    Serial.println("env.bin doesn't exist or size mismatch.");
+    hdrEnv.identify[0] = 0x19;
+    hdrEnv.identify[1] = 0xf1;
+    hdrEnv.identify[2] = 0xca;
+    env_default(&Env);
+    env_save(&Env, &hdrEnv); // 既に示したenv_save関数を使用
+  } else {
+    // Preferencesからデータを読み出し
+    preferences.getBytes("env", envData, envSize);
+
+    // バイト配列から構造体とヘッダーにデシリアライズ
+    memcpy(&hdrEnv, envData, sizeof(env_hdr_t));
+    memcpy(&Env, envData + sizeof(env_hdr_t), sizeof(env_t));
+
+    if (hdrEnv.identify[0] != 0x19 || hdrEnv.identify[1] != 0xf1 || hdrEnv.identify[2] != 0xca) {
+      Serial.println("Header mismatch, setting default values.");
+      hdrEnv.identify[0] = 0x19;
+      hdrEnv.identify[1] = 0xf1;
+      hdrEnv.identify[2] = 0xca;
+      env_default(&Env);
+      env_save(&Env, &hdrEnv); // 既に示したenv_save関数を使用
+    }
+  }
+
+  preferences.end(); // Preferencesを終了
+  Serial.println("Env initialization done.");
+}
+
 
 
 
@@ -199,6 +279,8 @@ void set_default_msg(int ch,a_msg_t * msg)
 	msg->chk_key_err[5]   = 0;                      
 }
 
+
+#if 1
 void env_default(env_t * env)
 {
     int i;
@@ -509,4 +591,8 @@ void env_default(env_t * env)
 		dev->Schdule.mel4[1]='0';
 	}
 }
+#endif
+
+
+
 
