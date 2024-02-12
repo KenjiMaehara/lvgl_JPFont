@@ -127,21 +127,22 @@ void env_save(env_t * src,env_hdr_t * hdr)
 #endif
 
 void env_save(env_t *src, env_hdr_t *hdr) {
-  // 構造体サイズの合計を計算
-  uint32_t size = sizeof(env_t) + sizeof(env_hdr_t);
-  uint8_t envData[size]; // 構造体を格納するバイト配列
+    // データのシリアライズ
+    size_t srcSize = sizeof(env_t);
+    size_t hdrSize = sizeof(env_hdr_t);
+    uint8_t* envData = new uint8_t[srcSize + hdrSize]; // 動的にメモリ割り当て
 
-  // CRC値を計算してヘッダーに設定
-  hdr->crc = crc8((uint8_t *)src, sizeof(env_t));
+    // CRC計算とヘッダーの設定
+    hdr->crc = crc8((uint8_t*)src, srcSize);
+    memcpy(envData, hdr, hdrSize);
+    memcpy(envData + hdrSize, src, srcSize);
 
-  // ヘッダーと構造体の内容をバイト配列にコピー
-  memcpy(envData, hdr, sizeof(env_hdr_t));
-  memcpy(envData + sizeof(env_hdr_t), src, sizeof(env_t));
+    // Preferencesに保存
+    preferences.begin("my-app", false);
+    preferences.putBytes("env", envData, srcSize + hdrSize);
+    preferences.end();
 
-  // Preferencesに保存
-  preferences.begin("my-app", false); // Preferencesを開始
-  preferences.putBytes("env", envData, size); // バイト配列を保存
-  preferences.end(); // Preferencesを終了
+    delete[] envData; // 動的に割り当てたメモリの解放
 }
 
 
