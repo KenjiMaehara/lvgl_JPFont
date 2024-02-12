@@ -145,6 +145,33 @@ void env_save(env_t *src, env_hdr_t *hdr) {
 }
 
 
+bool env_load(env_t *dst, env_hdr_t *hdr) {
+  // 構造体サイズの合計を計算
+  uint32_t size = sizeof(env_t) + sizeof(env_hdr_t);
+  uint8_t envData[size]; // データを格納するバイト配列
+
+  // Preferencesからデータを読み出し
+  preferences.begin("my-app", true); // 読み取り専用でPreferencesを開始
+  if (preferences.getBytesLength("env") != size) {
+    preferences.end(); // サイズが一致しない場合、失敗
+    return false;
+  }
+  preferences.getBytes("env", envData, size);
+  preferences.end(); // Preferencesを終了
+
+  // ヘッダー情報をコピー
+  memcpy(hdr, envData, sizeof(env_hdr_t));
+  // CRCチェック
+  uint8_t crc = crc8(envData + sizeof(env_hdr_t), sizeof(env_t));
+  if (crc != hdr->crc) {
+    return false; // CRCが一致しない場合、失敗
+  }
+
+  // 構造体データをコピー
+  memcpy(dst, envData + sizeof(env_hdr_t), sizeof(env_t));
+  return true; // 成功
+}
+
 #if 0
 void env_init(void)
 {
@@ -197,18 +224,27 @@ void env_init(void)
 void env_init(void) {
 
   Serial.println("-------------env_init-------------start  1");
-  preferences.begin("my-app", true); // 読み取り専用でPreferencesを開始
+  //env_save(&Env, &hdrEnv); 
+  env_load(&Env, &hdrEnv);
+
+  Serial.println("-------------env_init-------------start  1");
+  preferences.begin("my-app", false); // 書き込み可能モードで開始
 
   Serial.println("-------------env_init-------------  2");
 
   size_t envSize = sizeof(env_t) + sizeof(env_hdr_t);
   uint8_t envData[envSize]; // 構造体とヘッダーを格納するためのバイト配列
+  //envSize = sizeof(envData); // EnvDataは環境設定の構造体
 
   Serial.println("-------------env_init-------------  3");
 
   if (preferences.getBytesLength("env") != envSize) {
-    
+
     Serial.println("-------------env_init-------------  4");
+
+    *envData = {}; // EnvData構造体の初期化
+    
+    Serial.println("-------------env_init-------------  5");
     
     Serial.println("env.bin doesn't exist or size mismatch.");
     hdrEnv.identify[0] = 0x19;
@@ -218,7 +254,7 @@ void env_init(void) {
     env_save(&Env, &hdrEnv); // 既に示したenv_save関数を使用
   } else {
 
-    Serial.println("-------------env_init-------------  5");
+    Serial.println("-------------env_init-------------  6");
 
     // Preferencesからデータを読み出し
     preferences.getBytes("env", envData, envSize);
