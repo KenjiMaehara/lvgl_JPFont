@@ -29,29 +29,35 @@ LedState gLedState;
 void blinkLedTask(void *parameter) {
     Serial.println("--------------blinkLedTask Start--------------");
 
-  //ledState.areaLeds[0] = false;
+    //ledState.areaLeds[0] = false;
+    byte error, address;
+    int nDevices;
+
 
     while (true) {
         if (xSemaphoreTake(i2cSemaphore, portMAX_DELAY) == pdTRUE) {
-          // MCP23017デバイスのインスタンスを動的に作成
-          Adafruit_MCP23X17* mcp_0x21 = new Adafruit_MCP23X17();
+          
+          Serial.println("Scanning...");
+          nDevices = 0;
+          for(address = 1; address < 127; address++ ) {
+            I2Ctwo.beginTransmission(address);
+            error = I2Ctwo.endTransmission();
 
-          mcp_0x21->begin_I2C(0x21, &I2Ctwo);
-          for (int i = 0; i < 16; i++) {
-            mcp_0x21->pinMode(i, OUTPUT);
-          }
-          // セマフォを取得できたらAREA_LEDを状態に応じて点灯/消灯
-          for (int i = 0; i < 8; i++) {
-              mcp_0x21->digitalWrite(i, gLedState.areaLeds[i]);
-          }
+            if (error == 0) {
+              Serial.print("I2C device found at address 0x");
+              if (address < 16) Serial.print("0");
+              Serial.print(address, HEX);
+              Serial.println("  !");
 
-          // 入力に応じてEMG_LEDを点灯/消灯
-          for (int i = 0; i < 8; i++) {
-            mcp_0x21->digitalWrite(i+8, gLedState.emgLeds[i]);
+              nDevices++;
+            }
+            else if (error == 4) {
+              Serial.print("Unknown error at address 0x");
+              if (address < 16) Serial.print("0");
+              Serial.println(address, HEX);
+            }    
           }
-
-          // MCP23017デバイスのインスタンスを解放
-          delete mcp_0x21;
+          vTaskDelay(pdMS_TO_TICKS(2000)); // 2秒待つ
           xSemaphoreGive(i2cSemaphore);
         }
 
