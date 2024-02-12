@@ -224,56 +224,14 @@ void env_init(void)
 void env_init(void) {
 
   Serial.println("-------------env_init-------------start  1");
-  //env_save(&Env, &hdrEnv); 
-  env_load(&Env, &hdrEnv);
-
-  Serial.println("-------------env_init-------------start  1");
-  preferences.begin("my-app", false); // 書き込み可能モードで開始
-
+  env_default(&Env);
   Serial.println("-------------env_init-------------  2");
-
-  size_t envSize = sizeof(env_t) + sizeof(env_hdr_t);
-  uint8_t envData[envSize]; // 構造体とヘッダーを格納するためのバイト配列
-  //envSize = sizeof(envData); // EnvDataは環境設定の構造体
-
+  env_save(&Env, &hdrEnv); 
   Serial.println("-------------env_init-------------  3");
+  env_load(&Env, &hdrEnv);
+  Serial.println("-------------env_init-------------  4");
 
-  if (preferences.getBytesLength("env") != envSize) {
 
-    Serial.println("-------------env_init-------------  4");
-
-    *envData = {}; // EnvData構造体の初期化
-    
-    Serial.println("-------------env_init-------------  5");
-    
-    Serial.println("env.bin doesn't exist or size mismatch.");
-    hdrEnv.identify[0] = 0x19;
-    hdrEnv.identify[1] = 0xf1;
-    hdrEnv.identify[2] = 0xca;
-    env_default(&Env);
-    env_save(&Env, &hdrEnv); // 既に示したenv_save関数を使用
-  } else {
-
-    Serial.println("-------------env_init-------------  6");
-
-    // Preferencesからデータを読み出し
-    preferences.getBytes("env", envData, envSize);
-
-    // バイト配列から構造体とヘッダーにデシリアライズ
-    memcpy(&hdrEnv, envData, sizeof(env_hdr_t));
-    memcpy(&Env, envData + sizeof(env_hdr_t), sizeof(env_t));
-
-    if (hdrEnv.identify[0] != 0x19 || hdrEnv.identify[1] != 0xf1 || hdrEnv.identify[2] != 0xca) {
-      Serial.println("Header mismatch, setting default values.");
-      hdrEnv.identify[0] = 0x19;
-      hdrEnv.identify[1] = 0xf1;
-      hdrEnv.identify[2] = 0xca;
-      env_default(&Env);
-      env_save(&Env, &hdrEnv); // 既に示したenv_save関数を使用
-    }
-  }
-
-  preferences.end(); // Preferencesを終了
   Serial.println("Env initialization done.");
 }
 
