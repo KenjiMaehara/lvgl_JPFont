@@ -10,6 +10,7 @@
 TwoWire I2Ctwo = TwoWire(1);
 
 //SemaphoreHandle_t ledSemaphore; // セマフォを定義
+SemaphoreHandle_t i2cSemaphore = xSemaphoreCreateMutex();
 
 
 #define EMG_INPUT_CH1 0

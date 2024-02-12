@@ -3,7 +3,7 @@
 #include "common.h"
 
 TwoWire I2Cone = TwoWire(0);
-SemaphoreHandle_t i2cSemaphore = xSemaphoreCreateMutex();
+//SemaphoreHandle_t i2cSemaphore = xSemaphoreCreateMutex();
 
 // SC16IS740のI2Cアドレスを定義
 #define SC16IS740_ADDRESS 0x49
@@ -20,8 +20,8 @@ void device_setup() {
   while (!Serial); // シリアルポートが開くのを待つ
 
   // I2C通信を開始
-  //I2Cone.begin(21,22);
-  I2Cone.begin(26,25);
+  I2Cone.begin(21,22);
+  //I2Cone.begin(26,25);
 
   #if 0
   // SC16IS740デバイスの初期化
@@ -61,11 +61,44 @@ void sendTask(void *parameter) {
 
   Serial.println("--------------sendTask Start--------------");
 
+  byte error, address;
+  int nDevices;
+
+
   for (;;) { // 無限ループ
+
+    #if 1
     if (xSemaphoreTake(i2cSemaphore, portMAX_DELAY) == pdTRUE) {
       //device.write("hello world\n");
+
+      Serial.println("Scanning...");
+      nDevices = 0;
+      for(address = 1; address < 127; address++ ) {
+        I2Cone.beginTransmission(address);
+        error = I2Cone.endTransmission();
+
+        if (error == 0) {
+          Serial.print("I2C device found at address 0x");
+          if (address < 16) Serial.print("0");
+          Serial.print(address, HEX);
+          Serial.println("  !");
+
+          nDevices++;
+        }
+        else if (error == 4) {
+          Serial.print("Unknown error at address 0x");
+          if (address < 16) Serial.print("0");
+          Serial.println(address, HEX);
+        }    
+
+        
+      }
+
+      vTaskDelay(pdMS_TO_TICKS(2000)); // 2秒待つ
       xSemaphoreGive(i2cSemaphore);
     }
-    vTaskDelay(pdMS_TO_TICKS(2000)); // 2秒待つ
+    #endif
+
+
   }
 }
