@@ -5,6 +5,7 @@
 #include <TFT_eSPI.h> // ILI9488ドライバを含むライブラリ
 #include "common.h"
 #include <WiFi.h> // WiFiライブラリをインクルード
+#include <env.h>
 
 void setup() {
     //start_setup();
@@ -23,6 +24,9 @@ void setup() {
 
     //WiFi.begin(ssid, password);
     WiFi.begin(ssid.c_str(), password.c_str()); // WiFi接続を開始
+
+    env_init();
+
 }
 
 

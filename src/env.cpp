@@ -195,12 +195,21 @@ void env_init(void)
 
 
 void env_init(void) {
+
+  Serial.println("-------------env_init-------------start  1");
   preferences.begin("my-app", true); // 読み取り専用でPreferencesを開始
+
+  Serial.println("-------------env_init-------------  2");
 
   size_t envSize = sizeof(env_t) + sizeof(env_hdr_t);
   uint8_t envData[envSize]; // 構造体とヘッダーを格納するためのバイト配列
 
+  Serial.println("-------------env_init-------------  3");
+
   if (preferences.getBytesLength("env") != envSize) {
+    
+    Serial.println("-------------env_init-------------  4");
+    
     Serial.println("env.bin doesn't exist or size mismatch.");
     hdrEnv.identify[0] = 0x19;
     hdrEnv.identify[1] = 0xf1;
@@ -208,6 +217,9 @@ void env_init(void) {
     env_default(&Env);
     env_save(&Env, &hdrEnv); // 既に示したenv_save関数を使用
   } else {
+
+    Serial.println("-------------env_init-------------  5");
+
     // Preferencesからデータを読み出し
     preferences.getBytes("env", envData, envSize);
 
