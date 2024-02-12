@@ -57,11 +57,12 @@ void blinkLedTask(void *parameter) {
 }
 
 
-
+void I2C_scan();
 
 void led_setup() {
   Wire.begin(26, 25); // ESP32のIO26(SDA)とIO25(SCL)を指定
 
+  I2C_scan();
 
   // セマフォの作成
   ledSemaphore = xSemaphoreCreateBinary();
@@ -72,3 +73,38 @@ void led_setup() {
   #endif
 }
 
+
+
+void I2C_scan() {
+  Wire.begin(26, 25); // SDAを26ピン、SCLを25ピンとしてI2C通信を開始
+  Serial.begin(115200); // シリアル通信を開始
+  while (!Serial); // シリアルポートが開くまで待機
+  Serial.println("\nI2Cデバイススキャン開始...");
+
+  byte error, address;
+  int nDevices = 0;
+  for(address = 1; address < 127; address++ ) {
+    // I2Cデバイスの存在をチェック
+    Wire.beginTransmission(address);
+    error = Wire.endTransmission();
+
+    if (error == 0) {
+      Serial.print("I2Cデバイスが見つかりました。アドレス: 0x");
+      if (address<16) 
+        Serial.print("0");
+      Serial.println(address, HEX);
+      nDevices++;
+    }
+    else if (error==4) {
+      Serial.print("不明なエラーがアドレス 0x");
+      if (address<16) 
+        Serial.print("0");
+      Serial.println(address, HEX);
+    }    
+  }
+  if (nDevices == 0)
+    Serial.println("デバイスが見つかりませんでした。");
+  else
+    Serial.println("デバイススキャン完了。");
+
+}
