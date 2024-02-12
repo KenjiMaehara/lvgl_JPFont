@@ -1,5 +1,6 @@
 #include <Wire.h>
 #include <SC16IS7X0.h>
+#include "common.h"
 
 TwoWire I2Cone = TwoWire(0);
 SemaphoreHandle_t i2cSemaphore = xSemaphoreCreateMutex();
@@ -19,7 +20,8 @@ void device_setup() {
   while (!Serial); // シリアルポートが開くのを待つ
 
   // I2C通信を開始
-  I2Cone.begin(21,22);
+  //I2Cone.begin(21,22);
+  I2Cone.begin(26,25);
 
   #if 0
   // SC16IS740デバイスの初期化

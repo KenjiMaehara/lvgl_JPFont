@@ -19,10 +19,10 @@ void buzzer_setup() {
 
 // MCP23017のレジスタに値を書き込む関数
 void writeRegister(int device, byte address, byte value) {
-    I2Cone.beginTransmission(device);
-    I2Cone.write(address);
-    I2Cone.write(value);
-    I2Cone.endTransmission();
+    I2Ctwo.beginTransmission(device);
+    I2Ctwo.write(address);
+    I2Ctwo.write(value);
+    I2Ctwo.endTransmission();
 }
 
 void soundBuzzer() {
