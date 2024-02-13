@@ -3,9 +3,9 @@
 #include <WebServer.h>
 #include <lvgl.h>
 #include <TFT_eSPI.h> // ILI9488ドライバを含むライブラリ
-#include <Preferences.h>
+//#include <Preferences.h>
 #include "common.h"
-
+#include <SPIFFS.h>
 
 //const char* ssid = "ESP32-AP";
 //const char* password = "123456789";
@@ -17,13 +17,15 @@ void setupWiFi(String ssid, String password);
 static void ap_mode_toggle_handler(lv_event_t *e);
 void handleClientTask(void *parameters);
 
-Preferences preferences;
+//Preferences preferences;
 
 void wifi_apmode() {
 
+  #if 0
   preferences.begin("wifi", false); // "wifi"は名前空間です
   String ssid = preferences.getString("ssid", "ESP32-AP"); // デフォルト値は "ESP32-AP"
   String password = preferences.getString("password", "12345678"); // デフォルト値は "12345678"
+  #endif
 
   WiFi.softAP("ESP32-AP", "12345678");
   Serial.println("AP Mode Enabled. SSID: ESP32-AP, Password: 12345678");
@@ -43,9 +45,52 @@ void wifi_apmode() {
   server.on("/setup", HTTP_POST, []() {
     String ssid = server.arg("ssid");
     String password = server.arg("password");
+    
+    #if 0
     preferences.putString("ssid", ssid);
     preferences.putString("password", password);
+    #endif
 
+    // SPIFFSを初期化
+    if(!SPIFFS.begin(true)){
+      Serial.println("SPIFFSのマウントに失敗しました");
+      return;
+    }
+  
+    // SSIDとパスワードをSPIFFSに保存するコード
+    File file = SPIFFS.open("/wifi_config.txt", FILE_WRITE);
+    if(!file){
+      Serial.println("ファイルを開く際にエラーが発生しました");
+      return;
+    }
+
+    // ここでSSIDとパスワードの変数が定義されていると仮定します
+    String ssid = "yourSSID"; // 実際のSSIDに置き換えてください
+    String password = "yourPassword"; // 実際のパスワードに置き換えてください
+  
+    file.println(ssid);
+    file.println(password);
+    file.close();    
+    Serial.println("SSIDとパスワードを保存しました");
+
+    // 設定を読み込む場合
+    file = SPIFFS.open("/wifi_config.txt", FILE_READ);
+    if(!file){
+      Serial.println("ファイルを読み込む際にエラーが発生しました");
+      return;
+    }
+  
+    ssid = file.readStringUntil('\n');
+    password = file.readStringUntil('\n');
+    file.close();
+  
+    // ここで読み込んだSSIDとパスワードを使って何かをする
+    Serial.println("SSID: " + ssid);
+    Serial.println("Password: " + password);
+  
+    // SPIFFSの使用が終わったら終了する
+    SPIFFS.end();
+  
     server.sendHeader("Connection", "close");
     server.send(200, "text/html", "<h1>Setup complete.</h1><p>Device will now restart.</p>");
     setupWiFi(ssid, password);

@@ -3,6 +3,7 @@
 #include <TFT_eSPI.h> // ILI9488ドライバを含むライブラリ
 #include <WiFi.h>
 #include "common.h"
+#include <SPIFFS.h>
 
 
 //const char* ssid = "20230616me_IPv6";
@@ -10,6 +11,7 @@
 
 
 void displayWiFiInfo(lv_obj_t *label_ssid, lv_obj_t *label_ip);
+void readWifiConfigFromSPIFFS(String &ssid, String &password);
 
 lv_obj_t *label_ssid;
 lv_obj_t *label_ip;
@@ -50,15 +52,47 @@ void task_connectToWiFi(void * parameter) {
             WiFi.disconnect();
             vTaskDelay(5000 / portTICK_PERIOD_MS); // 5秒後に再接続試行
             WiFi.mode(WIFI_STA); // WiFiモードをSTAに設定
+
+            #if 0
             preferences.begin("wifi", false); // Preferencesを開始
             String ssid = preferences.getString("ssid"); // 保存されたSSIDを読み出し
             String password = preferences.getString("password"); // 保存されたパスワードを読み出し
+            #endif
+
+            String ssid, password;
+            readWifiConfigFromSPIFFS(ssid, password); // SPIFFSからSSIDとパスワードを読み込む
+
+
             WiFi.begin(ssid.c_str(), password.c_str()); // WiFi接続を開始
             //WiFi.begin(ssid, password);
             vTaskDelay(10000 / portTICK_PERIOD_MS); // 10秒ごとに再接続試行
         }
     }
 }
+
+
+
+// SPIFFSからWiFi設定を読み込む関数
+void readWifiConfigFromSPIFFS(String &ssid, String &password) {
+    if(!SPIFFS.begin(true)){
+        Serial.println("SPIFFSのマウントに失敗しました");
+        return;
+    }
+
+    File file = SPIFFS.open("/wifi_config.txt", FILE_READ);
+    if(!file){
+        Serial.println("設定ファイルを開けませんでした");
+        return;
+    }
+
+    ssid = file.readStringUntil('\n').c_str();
+    ssid.trim(); // 改行文字を削除
+    password = file.readStringUntil('\n').c_str();
+    password.trim(); // 改行文字を削除
+    file.close();
+    SPIFFS.end();
+}
+
 
 
 // WiFi接続のステータスを確認し、接続が完了している場合にSSIDとIPアドレスを表示する関数
