@@ -1,7 +1,9 @@
 #include <Arduino.h>
-#include <SPI.h>
-#include <SD.h>
+//#include <SPI.h>
+//#include <SD.h>
 #include <env.h>
+#include <FS.h>
+#include <SPIFFS.h>
 
 const uint16_t mStrInitNameS_01[] = {0x76d7,0x96e3,0x0000}; /* 盗難 */
 const uint16_t mStrInitNameS_02[] = {0x706b,0x707d,0x0000}; /* 火災 */
@@ -88,6 +90,7 @@ void env_update_dev()
 
 void env_save(env_t * src,env_hdr_t * hdr)
 {
+    #if 0
     int err= 0;
     uint8_t  crc;
     uint32_t size = sizeof(env_t) + sizeof(env_hdr_t);
@@ -101,11 +104,36 @@ void env_save(env_t * src,env_hdr_t * hdr)
     envFile.write((uint8_t * )hdr,sizeof(env_hdr_t));
     envFile.write((uint8_t * )src,sizeof(env_t));
     envFile.close();
+    #endif
+
+    // SPIFFSの初期化
+    if (!SPIFFS.begin(true)) {
+      Serial.println("An Error has occurred while mounting SPIFFS");
+      return;
+    }
+
+    // ファイルを開く
+    File file = SPIFFS.open("/env_data", FILE_WRITE);
+    if (!file) {
+      Serial.println("Failed to open file for writing");
+      return;
+
+      // ヘッダーをファイルに書き込む
+      file.write((uint8_t *)hdr, sizeof(env_hdr_t));
+  
+      // 環境設定データをファイルに書き込む
+      file.write((uint8_t *)src, sizeof(env_t));
+  
+      // ファイルを閉じる
+      file.close();
+      Serial.println("Environment data saved to SPIFFS");
+    }
 }
 
 
 void env_init(void)
 {
+    #if 0
 
     if (!SD.begin(4)) 
     {
@@ -148,6 +176,45 @@ void env_init(void)
     }
 
     Serial.println("Env initialization done.");
+    #endif
+
+    // SPIFFSの初期化
+    if (!SPIFFS.begin(true)) {
+      Serial.println("An Error has occurred while mounting SPIFFS");
+      return;
+    }
+
+    // ファイルを開く
+    File file = SPIFFS.open("/env_data", FILE_READ);
+    if (!file) {
+      Serial.println("Failed to open file for reading");
+      return;
+    }
+
+    // ヘッダーを読み出し
+    env_hdr_t hdr;
+    if (file.read((uint8_t *)&hdr, sizeof(env_hdr_t)) != sizeof(env_hdr_t)) {
+      Serial.println("Failed to read header");
+      file.close();
+      return;
+    }
+
+    // 環境設定データを読み出し
+    env_t env;
+    if (file.read((uint8_t *)&env, sizeof(env_t)) != sizeof(env_t)) {
+      Serial.println("Failed to read environment data");
+      file.close();
+      return;
+    }
+
+    // ファイルを閉じる
+    file.close();
+
+    // 読み出したデータを使用する（例：グローバル変数にコピー）
+    // ここで必要な処理を行う
+
+    Serial.println("Environment data loaded from SPIFFS");
+
 }
 
 
