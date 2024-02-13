@@ -88,74 +88,93 @@ void env_update_dev()
 }
 
 
-void env_save(env_t * src,env_hdr_t * hdr)
-{
-    // SPIFFSの初期化
-    if (!SPIFFS.begin(true)) {
-      Serial.println("An Error has occurred while mounting SPIFFS");
-      return;
-    }
+void env_save(env_t *src, env_hdr_t *hdr) {
+  if (!SPIFFS.begin(true)) {
+    Serial.println("Failed to mount SPIFFS");
+    return;
+  }
 
-    // ファイルを開く
-    File file = SPIFFS.open("/env_data", FILE_WRITE);
-    if (!file) {
-      Serial.println("Failed to open file for writing");
-      return;
+  // ファイルを開く
+  File file = SPIFFS.open("/env_data", FILE_WRITE);
+  if (!file) {
+    Serial.println("Failed to open file for writing");
+    return;
+  }
 
-      // ヘッダーをファイルに書き込む
-      file.write((uint8_t *)hdr, sizeof(env_hdr_t));
-  
-      // 環境設定データをファイルに書き込む
-      file.write((uint8_t *)src, sizeof(env_t));
-  
-      // ファイルを閉じる
-      file.close();
-      Serial.println("Environment data saved to SPIFFS");
-    }
+  // ヘッダー情報とenv_tデータのサイズを計算
+  size_t totalSize = sizeof(env_hdr_t) + sizeof(env_t);
+
+  // データを一時的に格納するためのバッファを動的に割り当て
+  uint8_t* buffer = new uint8_t[totalSize];
+  if (!buffer) {
+    Serial.println("Failed to allocate memory for buffer");
+    file.close();
+    return;
+  }
+
+  // バッファにヘッダー情報とenv_tデータをコピー
+  memcpy(buffer, hdr, sizeof(env_hdr_t));
+  memcpy(buffer + sizeof(env_hdr_t), src, sizeof(env_t));
+
+  // バッファの内容をファイルに書き込む
+  if (file.write(buffer, totalSize) != totalSize) {
+    Serial.println("Failed to write data to file");
+  } else {
+    Serial.println("Data saved to SPIFFS");
+  }
+
+  // ファイルを閉じる
+  file.close();
+
+  // 動的に割り当てたメモリを解放
+  delete[] buffer;
 }
 
 
-void env_init(void)
-{
-    Serial.println("---------env_init start---------------");
+void env_init(void) {
+  if (!SPIFFS.begin(true)) {
+    Serial.println("Failed to mount SPIFFS");
+    return;
+  }
 
-    // SPIFFSの初期化
-    if (!SPIFFS.begin(true)) {
-      Serial.println("An Error has occurred while mounting SPIFFS");
-      return;
-    }
+  // ファイルを開く
+  File file = SPIFFS.open("/env_data", FILE_READ);
+  if (!file) {
+    Serial.println("Failed to open file for reading");
+    return;
+  }
 
-    // ファイルを開く
-    File file = SPIFFS.open("/env_data", FILE_READ);
-    if (!file) {
-      Serial.println("Failed to open file for reading");
-      return;
-    }
+  // ファイルから読み込むデータのサイズを取得
+  size_t totalSize = sizeof(env_hdr_t) + sizeof(env_t);
 
-    // ヘッダーを読み出し
-    env_hdr_t hdr;
-    if (file.read((uint8_t *)&hdr, sizeof(env_hdr_t)) != sizeof(env_hdr_t)) {
-      Serial.println("Failed to read header");
-      file.close();
-      return;
-    }
-
-    // 環境設定データを読み出し
-    env_t env;
-    if (file.read((uint8_t *)&env, sizeof(env_t)) != sizeof(env_t)) {
-      Serial.println("Failed to read environment data");
-      file.close();
-      return;
-    }
-
-    // ファイルを閉じる
+  // データを一時的に格納するためのバッファを動的に割り当て
+  uint8_t* buffer = new uint8_t[totalSize];
+  if (!buffer) {
+    Serial.println("Failed to allocate memory for buffer");
     file.close();
+    return;
+  }
 
-    // 読み出したデータを使用する（例：グローバル変数にコピー）
-    // ここで必要な処理を行う
+  // ファイルからデータをバッファに読み込む
+  if (file.read(buffer, totalSize) != totalSize) {
+    Serial.println("Failed to read data from file");
+    delete[] buffer;
+    file.close();
+    return;
+  }
 
-    Serial.println("Environment data loaded from SPIFFS");
+  // バッファからヘッダー情報とenv_tデータをコピー
+  memcpy(&hdrEnv, buffer, sizeof(env_hdr_t));
+  memcpy(&Env, buffer + sizeof(env_hdr_t), sizeof(env_t));
 
+  // 読み込んだデータの確認や処理
+  // 例: Serial.println(Env.someField);
+
+  // 動的に割り当てたメモリを解放
+  delete[] buffer;
+
+  // ファイルを閉じる
+  file.close();
 }
 
 
