@@ -224,6 +224,16 @@ void env_init(void)
 
 void env_init(void) {
 
+  int Env_size = sizeof(env_t);
+  int EnvHdr_size = sizeof(env_hdr_t);
+
+  Serial.begin(115200);
+  Serial.println("Env_size = " + String(Env_size));
+  Serial.println("EnvHdr_size = " + String(EnvHdr_size));
+
+
+  while(1);
+
   Serial.println("-------------env_init-------------start  1");
   env_default(&Env);
   Serial.println("-------------env_init-------------  2");
