@@ -144,7 +144,12 @@ void env_init(void) {
   File file = SPIFFS.open("/env_data", FILE_READ);
   if (!file) {
     Serial.println("Failed to open file for reading");
-    return;
+    hdrEnv.identify[0] = 0x19;
+    hdrEnv.identify[1] = 0xf1;
+    hdrEnv.identify[2] = 0xca;
+    env_default(&Env);
+    env_save(&Env,&hdrEnv);
+    //return;
   }
 
   // ファイルから読み込むデータのサイズを取得
@@ -178,6 +183,16 @@ void env_init(void) {
 
   // ファイルを閉じる
   file.close();
+
+  if(hdrEnv.identify[0] != 0x19 && hdrEnv.identify[1] != 0xf1 && hdrEnv.identify[2] != 0xca)
+  {
+      hdrEnv.identify[0] = 0x19;
+      hdrEnv.identify[1] = 0xf1;
+      hdrEnv.identify[2] = 0xca;
+      env_default(&Env);
+      env_save(&Env,&hdrEnv);
+  }
+
   Serial.println("------ env_init() ----- end");
 }
 
