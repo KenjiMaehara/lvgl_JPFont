@@ -7,6 +7,7 @@
 #include "common.h"
 #include <SPIFFS.h>
 #include <FS.h>
+#include <ArduinoJson.h> // ArduinoJsonライブラリをインクルード
 
 //const char* ssid = "ESP32-AP";
 //const char* password = "123456789";
@@ -18,16 +19,23 @@ void setupWiFi(String ssid, String password);
 static void ap_mode_toggle_handler(lv_event_t *e);
 void handleClientTask(void *parameters);
 
+void saveWiFiConfig(const String& ssid, const String& password);
+void tryConnectToKnownNetworks();
+
+
 //Preferences preferences;
 
 void wifi_apmode() {
 
-  #if 0
-  preferences.begin("wifi", false); // "wifi"は名前空間です
-  String ssid = preferences.getString("ssid", "ESP32-AP"); // デフォルト値は "ESP32-AP"
-  String password = preferences.getString("password", "12345678"); // デフォルト値は "12345678"
-  #endif
+  // SPIFFSの初期化
+  if(!SPIFFS.begin(true)){
+      Serial.println("SPIFFSのマウントに失敗しました");
+      return;
+  }
+  // 保存されたWiFi設定で接続を試みる
+  tryConnectToKnownNetworks();
 
+  // APモードを有効にする
   WiFi.softAP("ESP32-AP", "12345678");
   Serial.println("AP Mode Enabled. SSID: ESP32-AP, Password: 12345678");
 
@@ -44,59 +52,15 @@ void wifi_apmode() {
 
   // フォームが送信されたときに呼び出される関数を設定
   server.on("/setup", HTTP_POST, []() {
-    String ssid = server.arg("ssid");
-    String password = server.arg("password");
+    String newSSID = server.arg("ssid");
+    String newPassword = server.arg("password");
     
-    #if 0
-    preferences.putString("ssid", ssid);
-    preferences.putString("password", password);
-    #endif
-
-    // SPIFFSを初期化
-    if(!SPIFFS.begin(true)){
-      Serial.println("SPIFFSのマウントに失敗しました");
-      return;
-    }
-  
-    // SSIDとパスワードをSPIFFSに保存するコード
-    fs::File file = SPIFFS.open("/wifi_config.txt", FILE_WRITE);
-    if(!file){
-      Serial.println("ファイルを開く際にエラーが発生しました");
-      return;
-    }
-
-    #if 0
-    // ここでSSIDとパスワードの変数が定義されていると仮定します
-    String ssid = "yourSSID"; // 実際のSSIDに置き換えてください
-    String password = "yourPassword"; // 実際のパスワードに置き換えてください
-    #endif
-
-    file.println(ssid);
-    file.println(password);
-    file.close();    
-    Serial.println("SSIDとパスワードを保存しました");
-
-    // 設定を読み込む場合
-    file = SPIFFS.open("/wifi_config.txt", FILE_READ);
-    if(!file){
-      Serial.println("ファイルを読み込む際にエラーが発生しました");
-      return;
-    }
-  
-    ssid = file.readStringUntil('\n');
-    password = file.readStringUntil('\n');
-    file.close();
-  
-    // ここで読み込んだSSIDとパスワードを使って何かをする
-    Serial.println("SSID: " + ssid);
-    Serial.println("Password: " + password);
-  
-    // SPIFFSの使用が終わったら終了する
-    SPIFFS.end();
+    // 新しいSSIDとパスワードが入力されたら、それを保存
+    saveWiFiConfig(newSSID, newPassword);
   
     server.sendHeader("Connection", "close");
     server.send(200, "text/html", "<h1>Setup complete.</h1><p>Device will now restart.</p>");
-    setupWiFi(ssid, password);
+    setupWiFi(newSSID, newPassword);
   });
 
   server.begin();
@@ -105,6 +69,60 @@ void wifi_apmode() {
 String inputPage() {
   return "<!DOCTYPE html><html><head><title>ESP32 WiFi Setup</title></head><body><h1>WiFi Setup</h1><form action='/setup' method='post'><input type='text' name='ssid' placeholder='SSID'><br><input type='password' name='password' placeholder='Password'><br><input type='submit' value='Setup'></form></body></html>";
 }
+
+
+// JSON形式でWiFi設定を保存
+void saveWiFiConfig(const String& ssid, const String& password) {
+  DynamicJsonDocument doc(1024);
+  // 既存の設定を読み込む
+  fs::File configFile = SPIFFS.open("/wifi_config.json", FILE_READ);
+  if (configFile) {
+    deserializeJson(doc, configFile);
+    configFile.close();
+  }
+
+  // 新しい設定を追加
+  JsonArray array = doc.as<JsonArray>();
+  JsonObject newObj = array.createNestedObject();
+  newObj["ssid"] = ssid;
+  newObj["password"] = password;
+
+  // 設定をファイルに保存
+  configFile = SPIFFS.open("/wifi_config.json", FILE_WRITE);
+  if (!configFile) {
+    Serial.println("Failed to open config file for writing");
+    return;
+  }
+  serializeJson(doc, configFile);
+  configFile.close();
+}
+
+// 設定を読み込み、接続を試みる
+void tryConnectToKnownNetworks() {
+  DynamicJsonDocument doc(1024);
+  fs::File configFile = SPIFFS.open("/wifi_config.json", FILE_READ);
+  if (!configFile) {
+    Serial.println("Failed to open config file");
+    return;
+  }
+  deserializeJson(doc, configFile);
+  configFile.close();
+
+  JsonArray array = doc.as<JsonArray>();
+  for (JsonObject obj : array) {
+    String ssid = obj["ssid"].as<String>();
+    String password = obj["password"].as<String>();
+
+    WiFi.begin(ssid.c_str(), password.c_str());
+    Serial.print("Trying to connect to: ");
+    Serial.println(ssid);
+    if (WiFi.waitForConnectResult() == WL_CONNECTED) {
+      Serial.println("Connected!");
+      break; // 接続に成功したらループを抜ける
+    }
+  }
+}
+
 
 
 void setupWiFi(String ssid, String password) {
