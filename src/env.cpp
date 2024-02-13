@@ -90,22 +90,6 @@ void env_update_dev()
 
 void env_save(env_t * src,env_hdr_t * hdr)
 {
-    #if 0
-    int err= 0;
-    uint8_t  crc;
-    uint32_t size = sizeof(env_t) + sizeof(env_hdr_t);
-
-
-    hdr->crc = crc8((uint8_t *)src,sizeof(env_t));
-
-    File envFile = SD.open("env.bin", FILE_WRITE);
-
-    envFile.seek(0);
-    envFile.write((uint8_t * )hdr,sizeof(env_hdr_t));
-    envFile.write((uint8_t * )src,sizeof(env_t));
-    envFile.close();
-    #endif
-
     // SPIFFSの初期化
     if (!SPIFFS.begin(true)) {
       Serial.println("An Error has occurred while mounting SPIFFS");
@@ -133,50 +117,7 @@ void env_save(env_t * src,env_hdr_t * hdr)
 
 void env_init(void)
 {
-    #if 0
-
-    if (!SD.begin(4)) 
-    {
-        Serial.println("SD initialization failed!");
-        return;
-    }
-
-    if (SD.exists("env.bin")) 
-    {
-        Serial.println("env.bin doesn't exist.");
-        hdrEnv.identify[0] = 0x19;
-        hdrEnv.identify[1] = 0xf1;
-        hdrEnv.identify[2] = 0xca;
-        env_default(&Env);
-        env_save(&Env,&hdrEnv);
-    }
-
-     
-    Serial.println("SD initialization done.");
-
-    File envFile = SD.open("env.bin", FILE_READ);
-
-    //envFile.read(&hdrEnv,sizeof(env_hdr_t));
-    //envFile.read(&Env,sizeof(env_hdr_t));
-    //envFile.read(&hdrEnv,sizeof(hdrEnv));
-    //envFile.read(&Env,sizeof(hdrEnv));
-
-	envFile.read((uint8_t * )&hdrEnv,sizeof(env_hdr_t));
-	envFile.read((uint8_t * )&Env,sizeof(env_t));
-
-    envFile.close();
-
-    if(hdrEnv.identify[0] != 0x19 && hdrEnv.identify[1] != 0xf1 && hdrEnv.identify[2] != 0xca)
-    {
-        hdrEnv.identify[0] = 0x19;
-        hdrEnv.identify[1] = 0xf1;
-        hdrEnv.identify[2] = 0xca;
-        env_default(&Env);
-        env_save(&Env,&hdrEnv);
-    }
-
-    Serial.println("Env initialization done.");
-    #endif
+    Serial.println("---------env_init start---------------");
 
     // SPIFFSの初期化
     if (!SPIFFS.begin(true)) {
