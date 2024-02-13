@@ -4,6 +4,7 @@
 #include <WiFi.h>
 #include "common.h"
 #include <SPIFFS.h>
+#include <FS.h>
 
 
 //const char* ssid = "20230616me_IPv6";
@@ -79,7 +80,8 @@ void readWifiConfigFromSPIFFS(String &ssid, String &password) {
         return;
     }
 
-    File file = SPIFFS.open("/wifi_config.txt", FILE_READ);
+    // Fileをfs::Fileに修正
+    fs::File file = SPIFFS.open("/wifi_config.txt", FILE_READ);
     if(!file){
         Serial.println("設定ファイルを開けませんでした");
         return;

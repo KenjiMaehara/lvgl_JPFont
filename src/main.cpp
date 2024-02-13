@@ -7,6 +7,7 @@
 #include <WiFi.h> // WiFiライブラリをインクルード
 #include <env.h>
 #include <SPIFFS.h>
+#include <FS.h>
 
 void setup() {
     
@@ -32,7 +33,7 @@ void setup() {
         return;
     }
 
-    File file = SPIFFS.open("/wifi_config.txt", FILE_READ);
+    fs::File file = SPIFFS.open("/wifi_config.txt", FILE_READ);
     if (!file) {
         Serial.println("設定ファイルを開けませんでした");
         return;

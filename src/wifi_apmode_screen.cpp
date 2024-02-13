@@ -6,6 +6,7 @@
 //#include <Preferences.h>
 #include "common.h"
 #include <SPIFFS.h>
+#include <FS.h>
 
 //const char* ssid = "ESP32-AP";
 //const char* password = "123456789";
@@ -58,16 +59,18 @@ void wifi_apmode() {
     }
   
     // SSIDとパスワードをSPIFFSに保存するコード
-    File file = SPIFFS.open("/wifi_config.txt", FILE_WRITE);
+    fs::File file = SPIFFS.open("/wifi_config.txt", FILE_WRITE);
     if(!file){
       Serial.println("ファイルを開く際にエラーが発生しました");
       return;
     }
 
+    #if 0
     // ここでSSIDとパスワードの変数が定義されていると仮定します
     String ssid = "yourSSID"; // 実際のSSIDに置き換えてください
     String password = "yourPassword"; // 実際のパスワードに置き換えてください
-  
+    #endif
+
     file.println(ssid);
     file.println(password);
     file.close();    
