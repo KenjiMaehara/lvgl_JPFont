@@ -168,7 +168,14 @@ void env_init(void) {
     Serial.println("Failed to read data from file");
     delete[] buffer;
     file.close();
-    return;
+
+	Serial.println("Failed to open file for reading");
+    hdrEnv.identify[0] = 0x19;
+    hdrEnv.identify[1] = 0xf1;
+    hdrEnv.identify[2] = 0xca;
+    env_default(&Env);
+    env_save(&Env,&hdrEnv);
+    //return;
   }
 
   // バッファからヘッダー情報とenv_tデータをコピー
@@ -186,6 +193,7 @@ void env_init(void) {
 
   if(hdrEnv.identify[0] != 0x19 && hdrEnv.identify[1] != 0xf1 && hdrEnv.identify[2] != 0xca)
   {
+	  Serial.println("Failed to read identify data from file");
       hdrEnv.identify[0] = 0x19;
       hdrEnv.identify[1] = 0xf1;
       hdrEnv.identify[2] = 0xca;
