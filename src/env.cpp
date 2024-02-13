@@ -132,6 +132,9 @@ void env_save(env_t *src, env_hdr_t *hdr) {
 
 
 void env_init(void) {
+  Serial.begin(115200);
+  Serial.println("--------- env_init() -------- start");
+
   if (!SPIFFS.begin(true)) {
     Serial.println("Failed to mount SPIFFS");
     return;
@@ -175,6 +178,7 @@ void env_init(void) {
 
   // ファイルを閉じる
   file.close();
+  Serial.println("------ env_init() ----- end");
 }
 
 
