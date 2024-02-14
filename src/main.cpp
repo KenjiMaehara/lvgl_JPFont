@@ -10,6 +10,7 @@
 #include <FS.h>
 
 void setup() {
+    Serial.begin(115200);
     
     env_init();
     //start_setup();

@@ -55,11 +55,12 @@ void wifi_apmode() {
     String newSSID = server.arg("ssid");
     String newPassword = server.arg("password");
     
-    // 新しいSSIDとパスワードが入力されたら、それを保存
-    saveWiFiConfig(newSSID, newPassword);
+
   
     server.sendHeader("Connection", "close");
     server.send(200, "text/html", "<h1>Setup complete.</h1><p>Device will now restart.</p>");
+    // 新しいSSIDとパスワードが入力されたら、それを保存
+    saveWiFiConfig(newSSID, newPassword);
     setupWiFi(newSSID, newPassword);
   });
 
@@ -95,10 +96,27 @@ void saveWiFiConfig(const String& ssid, const String& password) {
   }
   serializeJson(doc, configFile);
   configFile.close();
+
+  // ファイル内容を読み込んで確認
+  configFile = SPIFFS.open("/wifi_config.json", FILE_READ);
+  if (configFile) {
+    Serial.println("Saved WiFi config:");
+    String fileContent;
+    while (configFile.available()) {
+      fileContent += char(configFile.read());
+    }
+    Serial.println(fileContent);
+    configFile.close();
+  } else {
+    Serial.println("Failed to open config file for reading");
+  }
 }
 
 // 設定を読み込み、接続を試みる
 void tryConnectToKnownNetworks() {
+
+  Serial.println("----------tryConnectToKnownNetworks-------------- start");
+
   DynamicJsonDocument doc(1024);
   fs::File configFile = SPIFFS.open("/wifi_config.json", FILE_READ);
   if (!configFile) {
@@ -121,6 +139,8 @@ void tryConnectToKnownNetworks() {
       break; // 接続に成功したらループを抜ける
     }
   }
+
+  Serial.println("----------tryConnectToKnownNetworks-------------- End");
 }
 
 
