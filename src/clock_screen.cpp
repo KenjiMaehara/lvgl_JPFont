@@ -123,6 +123,10 @@ unsigned long lastNtpUpdateTime = ULONG_MAX - ntpUpdateInterval; // 初回実行
 // グローバル変数として時刻を表示するラベルを宣言
 lv_obj_t *time_label;
 
+// WiFiアイコンを作成
+lv_obj_t *wifi_icon = lv_label_create(lv_scr_act());
+
+
 void update_time(lv_timer_t *timer) {
 
     // Wi-Fi接続状態を確認
@@ -165,6 +169,14 @@ void update_time(lv_timer_t *timer) {
 
     // TFT表示用に時刻をシリアル出力
     Serial.println(time_str);
+
+    // 接続状態に応じてシンボルを更新
+    if(WiFi.status() == WL_CONNECTED) {
+        lv_label_set_text(wifi_icon, LV_SYMBOL_WIFI);
+    } else {
+        lv_label_set_text(wifi_icon, LV_SYMBOL_WIFI LV_SYMBOL_CLOSE);
+    }
+    lv_obj_align(wifi_icon, LV_ALIGN_OUT_TOP_RIGHT, -10, 10);
 }
 
 
@@ -172,6 +184,14 @@ void update_time(lv_timer_t *timer) {
 void create_clock_screen(lv_obj_t *scr) {
 
     Serial.println("create_clock_screen Start");
+
+    #if 0
+    // WiFiアイコンを作成
+    wifi_icon = lv_img_create(scr);
+    lv_img_set_src(wifi_icon, "path/to/disconnected_icon.png"); // 初期アイコン
+    lv_obj_align(wifi_icon, LV_ALIGN_OUT_TOP_RIGHT, -10, 10); // 位置を右上に設定
+    #endif
+
     // 時刻を表示するラベルを作成
     time_label = lv_label_create(scr);
     lv_obj_align(time_label, LV_ALIGN_CENTER, 0, 0);
