@@ -113,7 +113,7 @@ void readRFIDTask(void *parameter) {
           }
           else
           {
-              delay(50);
+              delay(100);
               verify_cnt++;
               if(verify_cnt == 2)
               {
