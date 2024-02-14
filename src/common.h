@@ -123,5 +123,7 @@ extern void create_cardTest_screen(lv_obj_t *scr);
 
 void card_set_cb(card_read_cb_t card_cb);
 
+extern void tryConnectToKnownNetworks();
+
 
 #endif

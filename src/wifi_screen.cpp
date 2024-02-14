@@ -54,17 +54,8 @@ void task_connectToWiFi(void * parameter) {
             vTaskDelay(5000 / portTICK_PERIOD_MS); // 5秒後に再接続試行
             WiFi.mode(WIFI_STA); // WiFiモードをSTAに設定
 
-            #if 0
-            preferences.begin("wifi", false); // Preferencesを開始
-            String ssid = preferences.getString("ssid"); // 保存されたSSIDを読み出し
-            String password = preferences.getString("password"); // 保存されたパスワードを読み出し
-            #endif
+            tryConnectToKnownNetworks();
 
-            String ssid, password;
-            readWifiConfigFromSPIFFS(ssid, password); // SPIFFSからSSIDとパスワードを読み込む
-
-
-            WiFi.begin(ssid.c_str(), password.c_str()); // WiFi接続を開始
             //WiFi.begin(ssid, password);
             vTaskDelay(10000 / portTICK_PERIOD_MS); // 10秒ごとに再接続試行
         }
