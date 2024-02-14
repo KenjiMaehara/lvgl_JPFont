@@ -82,6 +82,7 @@ void readRFIDTask(void *parameter) {
                 )    
           )                    
         {
+          #if 0
           if( read_length == 38 && read_buf[38 -1] == CARD_FELICA) {
             Serial.println("FeliCaカード");
           } else if( read_length == 12 && read_buf[12 -1] == CARD_14443A) {
@@ -91,34 +92,35 @@ void readRFIDTask(void *parameter) {
           } else if( read_length == 22 && read_buf[22 -1] == CARD_15693) {
             Serial.println("ISO15693カード");
           }
+          #endif
         
-            // カードデータを16進数文字列に変換
-            String cardDataStr = "";
-            for(int i = 0; i < read_length; i++) {
-              char hexBuf[3];
-              sprintf(hexBuf, "%02X", read_buf[i]);
-              cardDataStr += String(hexBuf);
-            }
-            Serial.print("Card Data: ");
-            Serial.println(cardDataStr);
-
-            int data_length = read_length - 2;
-                    
-            if(memcmp(&read_buf[1],card.data,data_length) !=0 || data_length != card.data_length)
-            {
-                memcpy(card.data,&read_buf[1],data_length);
-                card.data_length = data_length;
-                verify_cnt = 0;
-            }
-            else
-            {
-               verify_cnt++;
-                if(verify_cnt == 2)
-                {
-                    card_callback(&card);
-                    //Serial.printf("card %s\n",card.data);
-                }
-            }
+          // カードデータを16進数文字列に変換
+          String cardDataStr = "";
+          for(int i = 0; i < read_length; i++) {
+            char hexBuf[3];
+            sprintf(hexBuf, "%02X", read_buf[i]);
+            cardDataStr += String(hexBuf);
+          }
+          Serial.print("Card Data: ");
+          Serial.println(cardDataStr);
+          int data_length = read_length - 2;
+                  
+          if(memcmp(&read_buf[1],card.data,data_length) !=0 || data_length != card.data_length)
+          {
+              memcpy(card.data,&read_buf[1],data_length);
+              card.data_length = data_length;
+              verify_cnt = 0;
+          }
+          else
+          {
+              delay(100);
+              verify_cnt++;
+              if(verify_cnt == 2)
+              {
+                  card_callback(&card);
+                  //Serial.printf("card %s\n",card.data);
+              }
+          }
 
 
         } else {
