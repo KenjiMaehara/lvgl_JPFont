@@ -125,5 +125,6 @@ void card_set_cb(card_read_cb_t card_cb);
 
 extern void tryConnectToKnownNetworks();
 
+extern void update_time(lv_timer_t *timer);
 
 #endif
