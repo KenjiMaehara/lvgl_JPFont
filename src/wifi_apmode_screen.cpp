@@ -83,7 +83,12 @@ void saveWiFiConfig(const String& ssid, const String& password) {
   }
 
   // 新しい設定を追加
-  JsonArray array = doc.as<JsonArray>();
+  JsonArray array;
+  if (doc.isNull()) {
+      array = doc.to<JsonArray>(); // docがnullの場合、新しい配列を作成
+  } else {
+      array = doc.as<JsonArray>(); // 既存の配列を使用
+  }
   JsonObject newObj = array.createNestedObject();
   newObj["ssid"] = ssid;
   newObj["password"] = password;
