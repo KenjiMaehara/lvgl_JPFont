@@ -127,6 +127,7 @@ void btn_event_cb(lv_event_t *e) {
     uintptr_t next_screen_index = (uintptr_t)lv_obj_get_user_data(next_screen);
     Serial.print("Next screen index: ");
     Serial.println(next_screen_index);
+    switch_to_screen(next_screen_index);
 
     if (next_screen == screen6) {
         gWifiScan = true;   // Wi-Fi画面へ遷移する場合

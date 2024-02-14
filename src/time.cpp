@@ -1,5 +1,6 @@
 #include <time.h>
 #include "lvgl.h"
+#include "common.h"
 
 // グローバル変数または共通クラス内での宣言
 lv_obj_t* time_labels[8]; // 最大8つの画面用のラベルポインタ配列

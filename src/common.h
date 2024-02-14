@@ -127,4 +127,8 @@ extern void tryConnectToKnownNetworks();
 
 extern void update_time(lv_timer_t *timer);
 
+
+extern void switch_to_screen(int screen_index);
+
+
 #endif
