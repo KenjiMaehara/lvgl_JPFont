@@ -37,6 +37,7 @@ void create_cardTest_screen(lv_obj_t *scr) {
 void onCardRead(card_data_t *card) {
 
   Serial.println("-------------onCardRead Start--------------");
+  buzzer_beep(); // ブザーを鳴らす
 
   char dataStr[256]; // データを文字列に変換するためのバッファ
   size_t strLen = 0;
