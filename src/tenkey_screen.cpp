@@ -20,6 +20,8 @@ lv_obj_t* time_label_keypad;
 // グローバル変数として数字を表示するラベルを宣言
 lv_obj_t *number_label;
 
+lv_obj_t* wifi_label_tenkey;
+
 void create_keypad_screen(lv_obj_t *scr) {
 
     Serial.println("create_keypad_screen start");
@@ -28,6 +30,10 @@ void create_keypad_screen(lv_obj_t *scr) {
     time_label_keypad = lv_label_create(scr);
     lv_obj_align(time_label_keypad, LV_ALIGN_TOP_MID, 0, 5); // 例: 画面の上中央に配置
     lv_label_set_text(time_label_keypad, "00:00"); // 初期テキスト
+
+    wifi_label_tenkey = lv_label_create(scr);
+    lv_obj_align(wifi_label_tenkey, LV_ALIGN_TOP_RIGHT, -10, 10); // 画面の右上に配置
+    lv_label_set_text(wifi_label_tenkey, LV_SYMBOL_WIFI LV_SYMBOL_CLOSE); // 初期テキスト
 
     const int btn_width = 70; // ボタンの幅
     const int btn_height = 50; // ボタンの高さ
