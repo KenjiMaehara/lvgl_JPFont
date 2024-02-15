@@ -124,10 +124,11 @@ void create_clock_screen(lv_obj_t *scr) {
 
     // 時刻表示用のラベルを作成
     time_label_clock = lv_label_create(scr);
-    lv_obj_align(time_label_clock, LV_ALIGN_TOP_MID, 0, 5); // 画面の上中央に配置
+    lv_obj_align(time_label_clock, LV_ALIGN_CENTER, 0, 0); // 画面の中央に配置
     lv_label_set_text(time_label_clock, "00:00"); // 初期テキスト
 
-
+    // ラベルのフォントサイズを大きくする
+    lv_obj_set_style_text_font(time_label_clock, &lv_font_montserrat_48, LV_STATE_DEFAULT); // フォントサイズを変更
 
     add_navigation_buttons(screen1, screen2, screen6);
 
