@@ -133,6 +133,7 @@ extern void switch_to_screen(int screen_index);
 extern lv_obj_t* time_label_keypad;
 extern lv_obj_t* time_label_security;
 extern lv_obj_t* time_label_clock;
+extern lv_obj_t* time_label_area;
 extern void setup_time_update();
 
 

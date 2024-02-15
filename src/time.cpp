@@ -55,6 +55,10 @@ void update_time(void) {
     if (time_label_clock) {
         lv_label_set_text(time_label_clock, timeString);
     }
+
+    if(time_label_area){
+        lv_label_set_text(time_label_area, timeString);
+    }
     
 }
 
