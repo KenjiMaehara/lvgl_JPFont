@@ -103,11 +103,16 @@ void displayWiFiInfo(lv_obj_t *label_ssid, lv_obj_t *label_ip) {
     }
 }
 
-
+lv_obj_t* time_label_ssid_IP;
 
 void create_wifi_screen(lv_obj_t *scr) {
 
     Serial.println("create_wifi_screen start");
+
+    // 時刻表示用のラベルを作成
+    time_label_ssid_IP = lv_label_create(scr);
+    lv_obj_align(time_label_ssid_IP, LV_ALIGN_TOP_MID, 0, 5); // 例: 画面の上中央に配置
+    lv_label_set_text(time_label_ssid_IP, "00:00"); // 初期テキスト
 
     // LVGLオブジェクト
     label_ssid = lv_label_create(scr);

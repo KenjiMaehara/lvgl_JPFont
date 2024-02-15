@@ -13,15 +13,21 @@ static char number_str[64] = ""; // 数字を格納する文字列
 static char input_str[64] = "";
 
 void keypad_btn_event_cb(lv_event_t *e);
+void update_time_label(lv_obj_t* label);
+
+lv_obj_t* time_label_keypad;
 
 // グローバル変数として数字を表示するラベルを宣言
 lv_obj_t *number_label;
 
 void create_keypad_screen(lv_obj_t *scr) {
 
-    //Serial.begin(115200); // シリアル通信の初期化
-    //Serial.println("tenkey_setup Start");
     Serial.println("create_keypad_screen start");
+
+    // 時刻表示用のラベルを作成
+    time_label_keypad = lv_label_create(scr);
+    lv_obj_align(time_label_keypad, LV_ALIGN_TOP_MID, 0, 5); // 例: 画面の上中央に配置
+    lv_label_set_text(time_label_keypad, "00:00"); // 初期テキスト
 
     const int btn_width = 70; // ボタンの幅
     const int btn_height = 50; // ボタンの高さ
@@ -97,4 +103,16 @@ void keypad_btn_event_cb(lv_event_t *e) {
 
     // input_strの内容をnumber_labelに表示
     lv_label_set_text(number_label, input_str);
+}
+
+
+// 時刻を更新するための新しい関数
+void update_time_label(lv_obj_t* label) {
+    time_t now = time(NULL);
+    struct tm *now_tm = localtime(&now);
+
+    char timeString[64]; // 時刻を格納するための文字列
+    strftime(timeString, sizeof(timeString), "%H:%M:%S", now_tm); // 時刻を文字列にフォーマット
+
+    lv_label_set_text(label, timeString); // ラベルに現在時刻を設定
 }

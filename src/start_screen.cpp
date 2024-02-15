@@ -28,27 +28,35 @@ void screen_setup() {
     //ili9488_init();
 
     screen1 = lv_obj_create(NULL);
+    lv_obj_set_user_data(screen1, (void*)(uintptr_t)1); // インデックス1を割り当てる
     create_clock_screen(screen1);
 
     screen2 = lv_obj_create(NULL);
+    lv_obj_set_user_data(screen2, (void*)(uintptr_t)2); // インデックス2を割り当て
     create_keypad_screen(screen2);
 
     screen3 = lv_obj_create(NULL);
+    lv_obj_set_user_data(screen3, (void*)(uintptr_t)3);
     create_security_screen(screen3);
 
     screen4 = lv_obj_create(NULL);
+    lv_obj_set_user_data(screen4, (void*)(uintptr_t)4);
     create_area_screen(screen4);
 
     screen5 = lv_obj_create(NULL);
+    lv_obj_set_user_data(screen5, (void*)(uintptr_t)5);
     create_wifi_screen(screen5);
 
     screen6 = lv_obj_create(NULL);
+    lv_obj_set_user_data(screen6, (void*)(uintptr_t)6);
     create_wifiScan_screen(screen6);
 
     screen7 = lv_obj_create(NULL);
+    lv_obj_set_user_data(screen7, (void*)(uintptr_t)7);
     create_apmode_screen(screen7);
 
     screen8 = lv_obj_create(NULL);
+    lv_obj_set_user_data(screen8, (void*)(uintptr_t)8);
     create_cardTest_screen(screen8);
 
     // すべてのスクリーンが生成された後にボタンにスクリーンを割り当てる
@@ -114,6 +122,12 @@ void btn_event_cb(lv_event_t *e) {
 
     lv_obj_t *next_screen = (lv_obj_t *)lv_obj_get_user_data(btn);
     //lv_obj_t *next_screen = (lv_obj_t *)lv_event_get_target(e);
+
+    // 次の画面のインデックス番号を取得してシリアル出力
+    uintptr_t next_screen_index = (uintptr_t)lv_obj_get_user_data(next_screen);
+    Serial.print("Next screen index: ");
+    Serial.println(next_screen_index);
+    switch_to_screen(next_screen_index);
 
     if (next_screen == screen6) {
         gWifiScan = true;   // Wi-Fi画面へ遷移する場合

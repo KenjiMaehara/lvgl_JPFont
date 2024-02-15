@@ -5,11 +5,16 @@
 #include <NTPClient.h>
 #include "common.h"
 
-
+lv_obj_t* time_label_area;
 
 void create_area_screen(lv_obj_t *scr) {
 
     Serial.println("create_area_screen Start");
+
+    // 時刻表示用のラベルを作成
+    time_label_area = lv_label_create(scr);
+    lv_obj_align(time_label_area, LV_ALIGN_TOP_MID, 0, 5); // 例: 画面の上中央に配置
+    lv_label_set_text(time_label_area, "00:00"); // 初期テキスト
     /* アクティブなスクリーンを取得 */
     //lv_obj_t * scr = lv_scr_act();
 

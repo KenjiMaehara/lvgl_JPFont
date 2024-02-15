@@ -125,5 +125,20 @@ void card_set_cb(card_read_cb_t card_cb);
 
 extern void tryConnectToKnownNetworks();
 
+extern void update_time(lv_timer_t *timer);
+
+
+extern void switch_to_screen(int screen_index);
+
+extern lv_obj_t* time_label_keypad;
+extern lv_obj_t* time_label_security;
+extern lv_obj_t* time_label_clock;
+extern lv_obj_t* time_label_area;
+extern lv_obj_t* time_label_ssid_IP;
+extern lv_obj_t* time_label_wifiScan;
+extern lv_obj_t* time_label_apmode;
+extern lv_obj_t* time_label_card;
+extern void setup_time_update();
+
 
 #endif

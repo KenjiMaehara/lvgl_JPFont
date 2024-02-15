@@ -172,11 +172,15 @@ void setupWiFi(String ssid, String password) {
   // ここで必要な処理を行う
 }
 
+lv_obj_t* time_label_apmode;
 
 void create_apmode_screen(lv_obj_t *scr) {
     Serial.println("create_wifi_screen start");
 
-    // ここに既存のコードを継続
+    // 時刻表示用のラベルを作成
+    time_label_apmode = lv_label_create(scr);
+    lv_obj_align(time_label_apmode, LV_ALIGN_TOP_MID, 0, 5); // 例: 画面の上中央に配置
+    lv_label_set_text(time_label_apmode, "00:00"); // 初期テキスト
 
     // APモード切り替えボタンの作成
     lv_obj_t *ap_mode_btn = lv_btn_create(scr);
