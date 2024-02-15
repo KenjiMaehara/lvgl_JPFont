@@ -22,13 +22,17 @@ void update_time(void) {
         if (currentMillis - lastSyncTime >= 86400000){
             // Sync time with NTP server
             bool accessChekc = timeClient.update();
-            Serial.println("NTP time updating...");
+            Serial.println("NTP time updated");
+            configTime(3600 * 9, 0, "8.8.8.8","time.nist.gov");
+            lastSyncTime = currentMillis;
             // Update the last sync time
+            #if 0
             if(accessChekc){
                 Serial.println("NTP time updated");
                 configTime(3600 * 9, 0, "8.8.8.8","time.nist.gov");
                 lastSyncTime = currentMillis;
             }
+            #endif
             //lastSyncTime = currentMillis;
 
             // Convert the NTP time to your desired format and update your display
