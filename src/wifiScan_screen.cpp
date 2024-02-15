@@ -27,10 +27,16 @@ void onTimer(TimerHandle_t xTimer) {
 
 // グローバル変数としてタイマーハンドルを定義
 TimerHandle_t timer = NULL;
+lv_obj_t* time_label_wifiScan;
 
 void create_wifiScan_screen(lv_obj_t *scr) {
 
     Serial.println("create_wifi_screen start");
+
+    // 時刻表示用のラベルを作成
+    time_label_wifiScan = lv_label_create(scr);
+    lv_obj_align(time_label_wifiScan, LV_ALIGN_TOP_MID, 0, 5); // 画面の上中央に配置
+    lv_label_set_text(time_label_wifiScan, "00:00"); // 初期テキスト
 
     // リストオブジェクトの作成（create_wifi_screen関数内）
     wifi_list = lv_list_create(scr);

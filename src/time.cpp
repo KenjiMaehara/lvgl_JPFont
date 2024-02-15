@@ -64,6 +64,14 @@ void update_time(void) {
         lv_label_set_text(time_label_ssid_IP, timeString);
     }
 
+    if(time_label_wifiScan){
+        lv_label_set_text(time_label_wifiScan, timeString);
+    }
+
+    if(time_label_apmode){
+        lv_label_set_text(time_label_apmode, timeString);
+    }
+
 }
 
 // タイマーコールバック関数

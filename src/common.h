@@ -135,6 +135,8 @@ extern lv_obj_t* time_label_security;
 extern lv_obj_t* time_label_clock;
 extern lv_obj_t* time_label_area;
 extern lv_obj_t* time_label_ssid_IP;
+extern lv_obj_t* time_label_wifiScan;
+extern lv_obj_t* time_label_apmode;
 extern void setup_time_update();
 
 
