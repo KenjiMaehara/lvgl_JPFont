@@ -140,5 +140,7 @@ extern lv_obj_t* time_label_apmode;
 extern lv_obj_t* time_label_card;
 extern void setup_time_update();
 
+extern lv_obj_t* wifi_label_clock;
+extern void setup_wifiCheck_update();
 
 #endif

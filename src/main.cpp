@@ -25,6 +25,8 @@ void setup() {
     led_setup();
     readRFID_setup();
 
+    setup_wifiCheck_update();
+
 
     tryConnectToKnownNetworks();
 
