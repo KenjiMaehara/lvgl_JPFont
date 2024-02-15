@@ -1,13 +1,31 @@
 #include <time.h>
 #include "lvgl.h"
 #include "common.h"
+#include <WiFi.h>
+#include <WiFiUdp.h>
+#include <NTPClient.h>
 
 // グローバル変数または共通クラス内での宣言
 lv_obj_t* time_labels[8]; // 最大8つの画面用のラベルポインタ配列
 int current_screen = 0; // 現在表示中の画面のインデックス
+unsigned long lastSyncTime = 0; // Store the last sync time in milliseconds
+WiFiUDP ntpUDP;
+NTPClient timeClient(ntpUDP, "pool.ntp.org", 3600 * 9, 60000); // JSTのタイムゾーンで設定
 
 // 時刻更新関数
 void update_time(void) {
+    unsigned long currentMillis = millis();
+    // Check if 24 hours (86400000 milliseconds) have passed
+    if (currentMillis - lastSyncTime >= 86400000) {
+        // Sync time with NTP server
+        timeClient.update();
+        // Update the last sync time
+        lastSyncTime = currentMillis;
+
+        // Convert the NTP time to your desired format and update your display
+        // This might involve converting the epoch time to a human-readable format
+        // and then updating the display accordingly
+    }
     time_t now = time(NULL);
     struct tm *now_tm = localtime(&now);
     char timeString[64];

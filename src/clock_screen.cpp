@@ -2,7 +2,7 @@
 #include <lvgl.h>
 #include <TFT_eSPI.h> // ILI9488ドライバを含むライブラリ
 #include <WiFi.h>
-#include <NTPClient.h>
+//#include <NTPClient.h>
 #include "common.h"
 #include <time.h>
 
@@ -64,8 +64,8 @@ void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color
 
 
 // NTPクライアントの設定
-WiFiUDP ntpUDP;
-NTPClient timeClient(ntpUDP, "pool.ntp.org", 3600 * 9); // JSTの場合
+//WiFiUDP ntpUDP;
+//NTPClient timeClient(ntpUDP, "pool.ntp.org", 3600 * 9); // JSTの場合
 
 
 
