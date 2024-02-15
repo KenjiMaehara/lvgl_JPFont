@@ -6,31 +6,41 @@
 #include <NTPClient.h>
 
 // グローバル変数または共通クラス内での宣言
-lv_obj_t* time_labels[8]; // 最大8つの画面用のラベルポインタ配列
+//lv_obj_t* time_labels[8]; // 最大8つの画面用のラベルポインタ配列
 int current_screen = 0; // 現在表示中の画面のインデックス
-unsigned long lastSyncTime = 0; // Store the last sync time in milliseconds
+unsigned long lastSyncTime = 86400000; // Store the last sync time in milliseconds
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "pool.ntp.org", 3600 * 9, 60000); // JSTのタイムゾーンで設定
 
 // 時刻更新関数
 void update_time(void) {
-    unsigned long currentMillis = millis();
-    // Check if 24 hours (86400000 milliseconds) have passed
-    if (currentMillis - lastSyncTime >= 86400000) {
-        // Sync time with NTP server
-        timeClient.update();
-        // Update the last sync time
-        lastSyncTime = currentMillis;
 
-        // Convert the NTP time to your desired format and update your display
-        // This might involve converting the epoch time to a human-readable format
-        // and then updating the display accordingly
+    if(WiFi.status() == WL_CONNECTED){
+        
+        unsigned long currentMillis = millis();
+        // Check if 24 hours (86400000 milliseconds) have passed
+        if (currentMillis - lastSyncTime >= 86400000){
+            // Sync time with NTP server
+            bool accessChekc = timeClient.update();
+            Serial.println("NTP time updating...");
+            // Update the last sync time
+            if(accessChekc){
+                Serial.println("NTP time updated");
+                configTime(3600 * 9, 0, "pool.ntp.org","time.nist.gov");
+                lastSyncTime = currentMillis;
+            }
+            //lastSyncTime = currentMillis;
+
+            // Convert the NTP time to your desired format and update your display
+            // This might involve converting the epoch time to a human-readable format
+            // and then updating the display accordingly
+        }
     }
     time_t now = time(NULL);
     struct tm *now_tm = localtime(&now);
     char timeString[64];
     strftime(timeString, sizeof(timeString), "%H:%M:%S", now_tm);
-
+    Serial.println(timeString);
 
     // キーパッド画面の時刻表示用ラベルのテキストを更新
     if (time_label_keypad) {
