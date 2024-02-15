@@ -13,11 +13,13 @@ void setup() {
     Serial.begin(115200);
     
     env_init();
-    //start_setup();
+
+    
     lvgl_screen_setup();
-    //clock_setup();
+    
     task_setup();
     screen_setup();
+    setup_time_update();
     buzzer_setup();
     sensor_input_setup();
     led_setup();
@@ -25,6 +27,7 @@ void setup() {
 
 
     tryConnectToKnownNetworks();
+
 
 }
 
