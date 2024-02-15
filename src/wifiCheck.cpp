@@ -14,6 +14,15 @@ void wifiCheck(void) {
         }
     }
 
+    if(wifi_label_tenkey) {
+        // 接続状態に応じてシンボルを更新
+        if(WiFi.status() == WL_CONNECTED) {
+            lv_label_set_text(wifi_label_tenkey, LV_SYMBOL_WIFI);
+        } else {
+            lv_label_set_text(wifi_label_tenkey, LV_SYMBOL_WIFI LV_SYMBOL_CLOSE);
+        }
+    }
+
 
 }
 
