@@ -60,6 +60,10 @@ void update_time(void) {
         lv_label_set_text(time_label_area, timeString);
     }
     
+    if(time_label_ssid_IP){
+        lv_label_set_text(time_label_ssid_IP, timeString);
+    }
+
 }
 
 // タイマーコールバック関数
