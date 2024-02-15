@@ -7,10 +7,16 @@
 static void btn_event_cb(lv_event_t *e);
 static void event_handler(lv_event_t * e);
 
+lv_obj_t* time_label_security; // セキュリティスクリーン用の時刻表示ラベル
 
 void create_security_screen(lv_obj_t *scr) {
 
     Serial.println("create_security_screen Start");
+
+    // 時刻表示用のラベルを作成
+    time_label_security = lv_label_create(scr);
+    lv_obj_align(time_label_security, LV_ALIGN_TOP_MID, 0, 5); // 画面の上中央に配置
+    lv_label_set_text(time_label_security, "00:00"); // 初期テキスト
 
     // ボタンの作成と設定
     lv_obj_t * btn_02 = lv_btn_create(scr); // ボタンを作成

@@ -15,27 +15,19 @@ static char input_str[64] = "";
 void keypad_btn_event_cb(lv_event_t *e);
 void update_time_label(lv_obj_t* label);
 
+lv_obj_t* time_label_keypad;
+
 // グローバル変数として数字を表示するラベルを宣言
 lv_obj_t *number_label;
 
 void create_keypad_screen(lv_obj_t *scr) {
 
-    //Serial.begin(115200); // シリアル通信の初期化
-    //Serial.println("tenkey_setup Start");
     Serial.println("create_keypad_screen start");
 
     // 時刻表示用のラベルを作成
-    lv_obj_t *time_label = lv_label_create(scr);
-    lv_label_set_text(time_label, "00:00"); // 初期テキスト
-    lv_obj_align(time_label, LV_ALIGN_OUT_TOP_MID , 0, 10); // 上中央に配置
-    
-    // 新しい関数を定期的に実行するためのタイマーを設定
-    const uint32_t update_period_ms = 1000; // 1秒ごとに更新
-    lv_timer_create([](lv_timer_t * timer) {
-        // タイマーのコールバックでラベルを更新
-        lv_obj_t* label = reinterpret_cast<lv_obj_t*>(timer->user_data);
-        update_time_label(label);
-    }, update_period_ms, time_label);
+    time_label_keypad = lv_label_create(scr);
+    lv_obj_align(time_label_keypad, LV_ALIGN_TOP_MID, 0, 5); // 例: 画面の上中央に配置
+    lv_label_set_text(time_label_keypad, "00:00"); // 初期テキスト
 
     const int btn_width = 70; // ボタンの幅
     const int btn_height = 50; // ボタンの高さ

@@ -130,5 +130,8 @@ extern void update_time(lv_timer_t *timer);
 
 extern void switch_to_screen(int screen_index);
 
+extern lv_obj_t* time_label_keypad;
+extern lv_obj_t* time_label_security;
+
 
 #endif
