@@ -13,12 +13,6 @@ void update_time(void) {
     char timeString[64];
     strftime(timeString, sizeof(timeString), "%H:%M:%S", now_tm);
 
-    #if 0 
-    // 現在アクティブな画面の時刻ラベルを更新
-    if(time_labels[current_screen] != NULL) {
-        lv_label_set_text(time_labels[current_screen], timeString);
-    }
-    #endif
 
     // キーパッド画面の時刻表示用ラベルのテキストを更新
     if (time_label_keypad) {
@@ -30,6 +24,10 @@ void update_time(void) {
         lv_label_set_text(time_label_security, timeString);
     }
 
+    if (time_label_clock) {
+        lv_label_set_text(time_label_clock, timeString);
+    }
+    
 }
 
 // タイマーコールバック関数

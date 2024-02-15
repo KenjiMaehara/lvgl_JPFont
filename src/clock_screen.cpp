@@ -114,76 +114,20 @@ void lvgl_screen_setup() {
 LV_FONT_DECLARE(jpFont04);
 
 
-// グローバル変数としてタイマーカウンタを宣言
-//unsigned long lastNtpUpdateTime = 0;
-const unsigned long ntpUpdateInterval = 86400000; // 24時間 = 86400000ミリ秒
-unsigned long lastNtpUpdateTime = ULONG_MAX - ntpUpdateInterval; // 初回実行時に必ずNTP更新が行われるように設定
 
-
-// グローバル変数として時刻を表示するラベルを宣言
-lv_obj_t *time_label;
-
-void update_time(lv_timer_t *timer) {
-
-    // Wi-Fi接続状態を確認
-    if(WiFi.status() == WL_CONNECTED) {
-        // 現在の時間をミリ秒単位で取得
-        unsigned long currentMillis = millis();
-
-        // 前回のNTP更新から24時間が経過していれば更新
-        if(currentMillis - lastNtpUpdateTime >= ntpUpdateInterval) 
-        {
-            timeClient.update(); // NTPクライアントを更新
-            Serial.println("NTP Update!");
-            Serial.println("NTPサーバーから時刻を更新しました。");
-
-            // NTPサーバーから取得した時刻を表示
-            Serial.print("現在時刻: ");
-            Serial.print(timeClient.getHours());
-            Serial.print(":");
-            Serial.print(timeClient.getMinutes());
-            Serial.print(":");
-            Serial.println(timeClient.getSeconds());
-
-            // GMTオフセットとサマータイムの設定（例：日本標準時の場合）
-            configTime(3600 * 9, 0, "pool.ntp.org", "time.nist.gov");
-
-            lastNtpUpdateTime = currentMillis; // 最終更新時間を更新
-        }
-    }
-
-    // 現在時刻を取得
-    time_t now = time(NULL);
-    struct tm *now_tm = localtime(&now);
-
-    // 時刻を文字列に変換
-    char time_str[64];
-    strftime(time_str, sizeof(time_str), "%H:%M:%S", now_tm);
-
-    // 時刻を表示するラベルを更新
-    lv_label_set_text(time_label, time_str);
-
-    // TFT表示用に時刻をシリアル出力
-    Serial.println(time_str);
-}
-
-
+lv_obj_t* time_label_clock; // セキュリティスクリーン用の時刻表示ラベル
 
 void create_clock_screen(lv_obj_t *scr) {
 
     Serial.println("create_clock_screen Start");
     // 時刻を表示するラベルを作成
-    time_label = lv_label_create(scr);
-    lv_obj_align(time_label, LV_ALIGN_CENTER, 0, 0);
 
-    // ラベルのフォントサイズを大きくする
-    lv_obj_set_style_text_font(time_label, &lv_font_montserrat_48, 0);
+    // 時刻表示用のラベルを作成
+    time_label_clock = lv_label_create(scr);
+    lv_obj_align(time_label_clock, LV_ALIGN_TOP_MID, 0, 5); // 画面の上中央に配置
+    lv_label_set_text(time_label_clock, "00:00"); // 初期テキスト
 
-    // タイマーを作成して時刻を定期的に更新
-    lv_timer_create(update_time, 1000, NULL);
 
-    // 初期表示用に現在時刻を更新
-    update_time(NULL);
 
     add_navigation_buttons(screen1, screen2, screen6);
 
