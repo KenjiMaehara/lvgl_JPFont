@@ -72,6 +72,10 @@ void update_time(void) {
         lv_label_set_text(time_label_apmode, timeString);
     }
 
+    if(time_label_card){
+        lv_label_set_text(time_label_card, timeString);
+    }
+
 }
 
 // タイマーコールバック関数

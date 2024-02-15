@@ -9,9 +9,16 @@ void onCardRead(card_data_t *card);
 lv_obj_t *label;
 lv_obj_t *typeLabel; // カードタイプ表示用の新しいラベル
 
+lv_obj_t* time_label_card;
+
 void create_cardTest_screen(lv_obj_t *scr) {
 
     Serial.println("create_cardTest_screen Start");
+
+    // 時刻表示用のラベルを作成
+    time_label_card = lv_label_create(scr);
+    lv_obj_align(time_label_card, LV_ALIGN_TOP_MID, 0, 5); // 画面の上中央に配置
+    lv_label_set_text(time_label_card, "00:00"); // 初期テキスト
 
     // カードデータ表示用のラベルを作成
     label = lv_label_create(scr); // ラベルオブジェクトを作成
