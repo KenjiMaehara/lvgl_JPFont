@@ -8,9 +8,10 @@
 // グローバル変数または共通クラス内での宣言
 //lv_obj_t* time_labels[8]; // 最大8つの画面用のラベルポインタ配列
 int current_screen = 0; // 現在表示中の画面のインデックス
-unsigned long lastSyncTime = 86400000; // Store the last sync time in milliseconds
+unsigned long lastSyncTime = 0; // Store the last sync time in milliseconds
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "8.8.8.8", 3600 * 9, 60000); // JSTのタイムゾーンで設定
+int gNTPFailCount = 0;
 
 // 時刻更新関数
 void update_time(void) {
@@ -19,18 +20,31 @@ void update_time(void) {
         
         unsigned long currentMillis = millis();
         // Check if 24 hours (86400000 milliseconds) have passed
-        if (currentMillis - lastSyncTime >= 86400000){
+        if (currentMillis >=  lastSyncTime){
             // Sync time with NTP server
             bool accessChekc = timeClient.update();
-            Serial.println("NTP time updated");
-            configTime(3600 * 9, 0, "8.8.8.8","time.nist.gov");
-            lastSyncTime = currentMillis;
+            Serial.println("NTP time updating...");
+            //configTime(3600 * 9, 0, "8.8.8.8","time.nist.gov");
+            //lastSyncTime = currentMillis;
             // Update the last sync time
-            #if 0
+            #if 1
             if(accessChekc){
                 Serial.println("NTP time updated");
                 configTime(3600 * 9, 0, "8.8.8.8","time.nist.gov");
-                lastSyncTime = currentMillis;
+                lastSyncTime = currentMillis + 86400000;
+            } else {
+                Serial.println("NTP time update failed");
+                gNTPFailCount++;
+                if(gNTPFailCount > 5){
+                    gNTPFailCount = 0;
+                    Serial.println("NTP time update failed over 10 times");
+                    lastSyncTime = currentMillis + (60 *1000)*10;
+                    //retry NTP accsess after 10 minutes
+                    //WiFi.disconnect();
+                    //WiFi.begin(ssid, password);
+                    //delay(1000);
+                }
+                delay(1000);
             }
             #endif
             //lastSyncTime = currentMillis;
