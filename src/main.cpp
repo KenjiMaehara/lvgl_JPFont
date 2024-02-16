@@ -28,7 +28,7 @@ void setup() {
     setup_wifiCheck_update();
 
 
-    tryConnectToKnownNetworks();
+    //tryConnectToKnownNetworks();
 
 
 }
