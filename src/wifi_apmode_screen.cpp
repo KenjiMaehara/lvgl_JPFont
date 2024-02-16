@@ -141,6 +141,7 @@ void tryConnectToKnownNetworks() {
     Serial.println(ssid);
     if (WiFi.waitForConnectResult() == WL_CONNECTED) {
       Serial.println("Connected!");
+      delay(5000);
       break; // 接続に成功したらループを抜ける
     }
   }
