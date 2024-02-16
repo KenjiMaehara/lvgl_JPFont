@@ -8,7 +8,7 @@
 // グローバル変数または共通クラス内での宣言
 //lv_obj_t* time_labels[8]; // 最大8つの画面用のラベルポインタ配列
 int current_screen = 0; // 現在表示中の画面のインデックス
-unsigned long lastSyncTime = 60000; // Store the last sync time in milliseconds
+unsigned long lastSyncTime = 30000; // Store the last sync time in milliseconds
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "8.8.8.8", 3600 * 9, 60000); // JSTのタイムゾーンで設定
 
@@ -21,9 +21,12 @@ void update_time(void) {
         // Check if 24 hours (86400000 milliseconds) have passed
         if (currentMillis >= lastSyncTime) {
             // Sync time with NTP server
+            configTime(3600 * 9, 0, "8.8.8.8","time.nist.gov");
+            delay(1000);
+
             bool accessChekc = timeClient.update();
             Serial.println("NTP time updated");
-            configTime(3600 * 9, 0, "8.8.8.8","time.nist.gov");
+            //configTime(3600 * 9, 0, "8.8.8.8","time.nist.gov");
             lastSyncTime = currentMillis + 86400000;
             // Update the last sync time
             //lastSyncTime = currentMillis;
