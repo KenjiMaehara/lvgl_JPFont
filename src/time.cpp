@@ -10,7 +10,7 @@
 int current_screen = 0; // 現在表示中の画面のインデックス
 unsigned long lastSyncTime = 0; // Store the last sync time in milliseconds
 WiFiUDP ntpUDP;
-NTPClient timeClient(ntpUDP, "8.8.8.8", 3600 * 9, 60000); // JSTのタイムゾーンで設定
+NTPClient timeClient(ntpUDP, "pool.ntp.org", 3600 * 9, 60000); // JSTのタイムゾーンで設定
 int gNTPFailCount = 0;
 
 // 時刻更新関数
@@ -30,7 +30,7 @@ void update_time(void) {
             #if 1
             if(accessChekc){
                 Serial.println("NTP time updated");
-                configTime(3600 * 9, 0, "8.8.8.8","time.nist.gov");
+                configTime(3600 * 9, 0, "pool.ntp.org","time.nist.gov");
                 lastSyncTime = currentMillis + 86400000;
             } else {
                 Serial.println("NTP time update failed");
