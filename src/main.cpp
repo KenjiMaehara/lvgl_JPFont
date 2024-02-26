@@ -8,6 +8,7 @@
 #include <env.h>
 #include <SPIFFS.h>
 #include <FS.h>
+#include "AWSPub.h"
 
 void setup() {
     Serial.begin(115200);
@@ -26,7 +27,7 @@ void setup() {
     readRFID_setup();
 
     setup_wifiCheck_update();
-
+    setupAWSIoT();
 
     //tryConnectToKnownNetworks();
 
