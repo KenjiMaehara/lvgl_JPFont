@@ -4,6 +4,7 @@
 #include "FS.h"
 #include "SPIFFS.h"
 #include "SPIFFSRead.h"
+#include "common.h"
 //#include <M5Core2.h>
 
 #define BUZZER_PIN 25 // スピーカーが接続されているGPIOピン番号
@@ -214,6 +215,12 @@ void callback(char* topic, byte* message, unsigned int length) {
     messageTemp += (char)message[i];
   }
   Serial.println(messageTemp);
+  
+  for(int i = 0; i < 5; i++) {
+    buzzer_beep();
+    delay(100);
+    
+  }
   
 
   #if 0
