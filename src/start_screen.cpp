@@ -4,10 +4,11 @@
 #include <WiFi.h>
 #include <NTPClient.h>
 #include "common.h"
+#include "clock_screen.h"
 
 
 void create_keypad_screen(lv_obj_t *scr);
-void create_clock_screen(lv_obj_t *scr);
+//void create_clock_screen(lv_obj_t *scr);
 void create_security_screen(lv_obj_t *scr);
 void create_fourth_screen(lv_obj_t *scr);
 void update_clock(lv_timer_t *timer);
@@ -31,6 +32,8 @@ lv_obj_t* current_lvgl_screen = NULL;
 void screen_setup() {
     //lv_init();
     //ili9488_init();
+
+    create_clock_screen();
 
     #if 0
     screen1 = lv_obj_create(NULL);
@@ -81,7 +84,7 @@ void screen_setup() {
     add_navigation_buttons(screen8, screen1, screen7);
     #endif
 
-    lv_scr_load(screen1);
+    //lv_scr_load(screen1);
 
     //lv_timer_create(update_clock, 1000, NULL);
 }
