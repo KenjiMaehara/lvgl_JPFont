@@ -35,6 +35,7 @@ void screen_setup() {
     lv_obj_set_user_data(screen2, (void*)(uintptr_t)2); // インデックス2を割り当て
     create_keypad_screen(screen2);
 
+    #if 0
     screen3 = lv_obj_create(NULL);
     lv_obj_set_user_data(screen3, (void*)(uintptr_t)3);
     create_security_screen(screen3);
@@ -58,16 +59,19 @@ void screen_setup() {
     screen8 = lv_obj_create(NULL);
     lv_obj_set_user_data(screen8, (void*)(uintptr_t)8);
     create_cardTest_screen(screen8);
+    #endif
 
     // すべてのスクリーンが生成された後にボタンにスクリーンを割り当てる
     add_navigation_buttons(screen1, screen2, screen8);
     add_navigation_buttons(screen2, screen3, screen1);
+    #if 0
     add_navigation_buttons(screen3, screen4, screen2);
     add_navigation_buttons(screen4, screen5, screen3);
     add_navigation_buttons(screen5, screen6, screen4);
     add_navigation_buttons(screen6, screen7, screen5);
     add_navigation_buttons(screen7, screen8, screen6);
     add_navigation_buttons(screen8, screen1, screen7);
+    #endif
 
     lv_scr_load(screen1);
 
