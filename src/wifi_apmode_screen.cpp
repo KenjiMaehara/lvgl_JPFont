@@ -27,6 +27,8 @@ void tryConnectToKnownNetworks();
 
 void wifi_apmode() {
 
+  Serial.println("----------wifi_apmode-------------- start");
+
   // SPIFFSの初期化
   if(!SPIFFS.begin(true)){
       Serial.println("SPIFFSのマウントに失敗しました");
@@ -65,6 +67,8 @@ void wifi_apmode() {
   });
 
   server.begin();
+
+  Serial.println("----------wifi_apmode-------------- End");
 }
 
 String inputPage() {
