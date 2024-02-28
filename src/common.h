@@ -21,13 +21,6 @@ extern void lvgl_screen_setup();
 extern void screen_setup();
 
 
-extern void create_keypad_screen(lv_obj_t *scr);
-extern void create_clock_screen(lv_obj_t *scr);
-extern void create_security_screen(lv_obj_t *scr);
-extern void create_area_screen(lv_obj_t *scr);
-extern void create_wifi_screen(lv_obj_t *scr);
-extern void task_connectToWiFi(void * parameter);
-
 
 extern void add_navigation_buttons(lv_obj_t *scr, lv_obj_t *next_screen, lv_obj_t *prev_screen);
 

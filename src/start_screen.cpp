@@ -23,19 +23,26 @@ lv_obj_t *screen7;
 lv_obj_t *screen8;
 
 
+
+// 現在の画面を指すポインタ
+lv_obj_t* current_lvgl_screen = NULL;
+
+
 void screen_setup() {
     //lv_init();
     //ili9488_init();
 
+    #if 0
     screen1 = lv_obj_create(NULL);
     lv_obj_set_user_data(screen1, (void*)(uintptr_t)1); // インデックス1を割り当てる
     create_clock_screen(screen1);
 
+  
     screen2 = lv_obj_create(NULL);
     lv_obj_set_user_data(screen2, (void*)(uintptr_t)2); // インデックス2を割り当て
     create_keypad_screen(screen2);
 
-    #if 0
+ 
     screen3 = lv_obj_create(NULL);
     lv_obj_set_user_data(screen3, (void*)(uintptr_t)3);
     create_security_screen(screen3);
@@ -61,10 +68,11 @@ void screen_setup() {
     create_cardTest_screen(screen8);
     #endif
 
+    #if 0
     // すべてのスクリーンが生成された後にボタンにスクリーンを割り当てる
     add_navigation_buttons(screen1, screen2, screen8);
     add_navigation_buttons(screen2, screen3, screen1);
-    #if 0
+
     add_navigation_buttons(screen3, screen4, screen2);
     add_navigation_buttons(screen4, screen5, screen3);
     add_navigation_buttons(screen5, screen6, screen4);
@@ -75,8 +83,9 @@ void screen_setup() {
 
     lv_scr_load(screen1);
 
-    lv_timer_create(update_clock, 1000, NULL);
+    //lv_timer_create(update_clock, 1000, NULL);
 }
+
 
 
 
@@ -98,13 +107,15 @@ void add_navigation_buttons(lv_obj_t *scr, lv_obj_t *next_screen, lv_obj_t *prev
     lv_label_set_text(label_back, "Back");
 }
 
-
+#if 0
 
 void create_fourth_screen(lv_obj_t *scr) {
     // 4番目のスクリーンの内容
     // ...
     add_navigation_buttons(scr, screen1, screen3);
 }
+
+#endif
 
 void btn_event_cb(lv_event_t *e) {
 
@@ -162,7 +173,24 @@ void btn_event_cb(lv_event_t *e) {
     Serial.println("btn_event_cb end");
 }
 
+#if 0
 void update_clock(lv_timer_t *timer) {
     // 現在時刻を取得し、screen2のラベルを更新
     // ...
+}
+#endif
+
+
+// 指定された画面をロードする関数
+void load_screen(lv_obj_t* screen) {
+    current_lvgl_screen = screen; // 現在の画面を更新
+    lv_scr_load(screen); // 画面をロードして表示
+}
+
+// 現在の画面を削除する関数
+void delete_current_lvgl_screen(void) {
+    if (current_lvgl_screen != NULL) {
+        lv_obj_del(current_lvgl_screen); // 現在の画面を削除
+        current_lvgl_screen = NULL; // ポインタをNULLに設定
+    }
 }

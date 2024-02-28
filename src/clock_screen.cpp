@@ -5,6 +5,7 @@
 //#include <NTPClient.h>
 #include "common.h"
 #include <time.h>
+#include "start_screen.h"
 
 
 // LVGL用のディスプレイバッファを定義
@@ -117,20 +118,26 @@ LV_FONT_DECLARE(jpFont04);
 
 lv_obj_t* time_label_clock; // セキュリティスクリーン用の時刻表示ラベル
 lv_obj_t* wifi_label_clock; // セキュリティスクリーン用のWi-Fi接続状態表示ラベル
+//lv_obj_t* screen;
 
+//void create_clock_screen(lv_obj_t *scr) {
+void create_clock_screen(void) {
 
-void create_clock_screen(lv_obj_t *scr) {
+    delete_current_lvgl_screen(); // 前の画面を削除
 
     Serial.println("create_clock_screen Start");
     // 時刻を表示するラベルを作成
 
+    lv_obj_t* screen = lv_obj_create(NULL);  // スクリーンを作成
+
     // 時刻表示用のラベルを作成
-    time_label_clock = lv_label_create(scr);
+    //time_label_clock = lv_label_create(scr);
+    time_label_clock = lv_label_create(screen);
     lv_obj_align(time_label_clock, LV_ALIGN_CENTER, 0, 0); // 画面の中央に配置
     lv_label_set_text(time_label_clock, "00:00"); // 初期テキスト
 
 
-    wifi_label_clock = lv_label_create(scr);
+    wifi_label_clock = lv_label_create(screen);
     lv_obj_align(wifi_label_clock, LV_ALIGN_TOP_RIGHT, -10, 10); // 画面の右上に配置
     lv_label_set_text(wifi_label_clock, LV_SYMBOL_WIFI LV_SYMBOL_CLOSE); // 初期テキスト
 
@@ -138,8 +145,10 @@ void create_clock_screen(lv_obj_t *scr) {
     // ラベルのフォントサイズを大きくする
     lv_obj_set_style_text_font(time_label_clock, &lv_font_montserrat_48, LV_STATE_DEFAULT); // フォントサイズを変更
 
-    add_navigation_buttons(screen1, screen2, screen6);
+    //add_navigation_buttons(screen1, screen2, screen6);
 
+
+    load_screen(screen);    // 画面を表示
     Serial.println("create_clock_screen End");
 }
 
