@@ -4,6 +4,8 @@
 #include <lvgl.h>
 #include <TFT_eSPI.h> // ILI9488ドライバを含むライブラリ
 #include "common.h"
+#include "start_screen.h"
+
 
 
 
@@ -22,16 +24,20 @@ lv_obj_t *number_label;
 
 lv_obj_t* wifi_label_tenkey;
 
-void create_keypad_screen(lv_obj_t *scr) {
+void create_keypad_screen(void) {
+
+    delete_current_lvgl_screen(); // 前の画面を削除
 
     Serial.println("create_keypad_screen start");
 
+    lv_obj_t* screen = lv_obj_create(NULL);  // スクリーンを作成
+
     // 時刻表示用のラベルを作成
-    time_label_keypad = lv_label_create(scr);
+    time_label_keypad = lv_label_create(screen);
     lv_obj_align(time_label_keypad, LV_ALIGN_TOP_MID, 0, 5); // 例: 画面の上中央に配置
     lv_label_set_text(time_label_keypad, "00:00"); // 初期テキスト
 
-    wifi_label_tenkey = lv_label_create(scr);
+    wifi_label_tenkey = lv_label_create(screen);
     lv_obj_align(wifi_label_tenkey, LV_ALIGN_TOP_RIGHT, -10, 10); // 画面の右上に配置
     lv_label_set_text(wifi_label_tenkey, LV_SYMBOL_WIFI LV_SYMBOL_CLOSE); // 初期テキスト
 
@@ -59,7 +65,7 @@ void create_keypad_screen(lv_obj_t *scr) {
     for (int row = 0; row < rows; row++) {
         for (int col = 0; col < cols; col++) {
             // ボタンの作成
-            lv_obj_t *btn = lv_btn_create(scr);
+            lv_obj_t *btn = lv_btn_create(screen);
             lv_obj_set_size(btn, btn_width, btn_height);
             lv_obj_set_pos(btn, 55 + 70 + col * (btn_width + spacing), 70 + row * (btn_height + spacing));
 
@@ -76,14 +82,15 @@ void create_keypad_screen(lv_obj_t *scr) {
     }
 
     // 数字を表示するラベルを作成
-    number_label = lv_label_create(scr);
+    number_label = lv_label_create(screen);
     lv_obj_align(number_label, LV_ALIGN_TOP_MID, 0, 10);
     lv_label_set_text(number_label, ""); // 初期状態ではテキストなし
 
     // Set a larger font for the number label
     lv_obj_set_style_text_font(number_label, &lv_font_montserrat_22, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    add_navigation_buttons(screen2, screen3, screen1);
+    //add_navigation_buttons(screen2, screen3, screen1);
+    load_screen(screen);    // 画面を表示
     Serial.println("create_keypad_screen End");
 }
 
