@@ -8,13 +8,6 @@
 #include "tenkey_screen.h"
 
 
-#if 0
-void create_keypad_screen(lv_obj_t *scr);
-//void create_clock_screen(lv_obj_t *scr);
-void create_security_screen(lv_obj_t *scr);
-void create_fourth_screen(lv_obj_t *scr);
-void update_clock(lv_timer_t *timer);
-#endif
 void btn_event_cb(lv_event_t *e);
 
 
