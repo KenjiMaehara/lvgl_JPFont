@@ -182,6 +182,7 @@ void tryConnectToKnownNetworks_fromSPIFFS() {
           WiFi.begin(ssid.c_str(), password.c_str());
           Serial.print("Trying to connect to: ");
           Serial.println(ssid);
+          delay(5000); // Wait for 5 seconds
           if(WiFi.waitForConnectResult() == WL_CONNECTED) {
               Serial.println("Connected!");
               break; // Exit the loop if connected
