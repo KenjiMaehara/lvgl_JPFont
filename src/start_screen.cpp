@@ -8,12 +8,13 @@
 #include "tenkey_screen.h"
 
 
-
+#if 0
 void create_keypad_screen(lv_obj_t *scr);
 //void create_clock_screen(lv_obj_t *scr);
 void create_security_screen(lv_obj_t *scr);
 void create_fourth_screen(lv_obj_t *scr);
 void update_clock(lv_timer_t *timer);
+#endif
 void btn_event_cb(lv_event_t *e);
 
 
@@ -26,8 +27,8 @@ void screen_setup() {
     //lv_init();
     //ili9488_init();
 
-    //create_clock_screen();
-    create_keypad_screen();
+    create_clock_screen();
+    //create_keypad_screen();
 
     #if 0
     screen1 = lv_obj_create(NULL);

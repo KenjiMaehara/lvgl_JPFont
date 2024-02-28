@@ -5,6 +5,7 @@
 #include <TFT_eSPI.h> // ILI9488ドライバを含むライブラリ
 #include "common.h"
 #include "start_screen.h"
+#include "tenkey_screen.h"
 
 
 
@@ -88,6 +89,11 @@ void create_keypad_screen(void) {
 
     // Set a larger font for the number label
     lv_obj_set_style_text_font(number_label, &lv_font_montserrat_22, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+
+
+
+
 
     //add_navigation_buttons(screen2, screen3, screen1);
     load_screen(screen);    // 画面を表示
