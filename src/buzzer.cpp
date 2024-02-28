@@ -43,7 +43,7 @@ void buzzer_beep() {
     xTaskCreate(
         task_soundBuzzer,   // タスクで実行される関数
         "task_soundBuzzer", // タスク名
-        5000,           // スタックサイズ
+        1024,           // スタックサイズ
         NULL,            // パラメータ
         1,               // 優先順位
         NULL             // タスクハンドル
