@@ -23,7 +23,15 @@ void blinkLedTask(void *parameter) {
   // 静的に割り当てられたインスタンスの初期化
   mcp_0x21.begin_I2C(0x21, &Wire);
   for (int i = 0; i < 16; i++) {
-      mcp_0x21.pinMode(i, OUTPUT);
+    mcp_0x21.pinMode(i, OUTPUT);
+  }
+
+  for (int i = 0; i < 8; i++) {
+    gLedState.areaLeds[i] = true;
+  }
+
+  for (int i = 0; i < 8; i++) {
+    mcp_0x21.digitalWrite(i,gLedState.areaLeds[i]);
   }
 
   //ledState.areaLeds[0] = false;
