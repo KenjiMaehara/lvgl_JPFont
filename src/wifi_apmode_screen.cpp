@@ -181,12 +181,14 @@ void tryConnectToKnownNetworks_fromSPIFFS() {
           int commaIndex = line.indexOf(',');
           String ssid = line.substring(0, commaIndex);
           String password = line.substring(commaIndex + 1);
+          ssid.trim(); // Remove leading/trailing whitespaces
+          password.trim(); // Remove leading/trailing whitespaces
           
           // Attempt to connect to the Wi-Fi network using the extracted SSID and password
           WiFi.begin(ssid.c_str(), password.c_str());
           Serial.print("Trying to connect to: ");
           Serial.println(ssid);
-          delay(5000); // Wait for 5 seconds
+          delay(1000); // Wait for 5 seconds
           if(WiFi.waitForConnectResult() == WL_CONNECTED) {
               Serial.println("Connected!");
               break; // Exit the loop if connected
