@@ -157,7 +157,7 @@ void setupAWSIoT() {
   xTaskCreatePinnedToCore(
     subscDataToAWS, /* タスク関数 */
     "subscDataToAWSTask", /* タスク名 */
-    10000,         /* スタックサイズ */
+    1024 * 8,         /* スタックサイズ */
     NULL,          /* タスクパラメータ */
     1,             /* 優先度 */
     NULL,          /* タスクハンドル */

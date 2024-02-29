@@ -27,7 +27,7 @@ void sensor_input_setup() {
 
   #ifdef ENABLE_SENSOR_INPUT_TASK
   // ピン監視タスクの作成
-  xTaskCreate(pinMonitorTask, "Pin Monitor", 10000, NULL, 1, NULL);
+  xTaskCreate(pinMonitorTask, "Pin Monitor", 1024 * 4, NULL, 1, NULL);
   #endif
 }
 

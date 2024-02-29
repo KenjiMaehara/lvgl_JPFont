@@ -16,7 +16,7 @@ void task_setup() {
   xTaskCreate(
     task_connectToWiFi,   // タスクで実行される関数
     "task_ConnectToWiFi", // タスク名
-    10000,           // スタックサイズ
+    1024 * 4,           // スタックサイズ
     NULL,            // パラメータ
     2,               // 優先順位
     NULL             // タスクハンドル
