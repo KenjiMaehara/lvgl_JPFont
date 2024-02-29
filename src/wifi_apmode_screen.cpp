@@ -27,6 +27,8 @@ void tryConnectToKnownNetworks();
 
 void wifi_apmode() {
 
+  Serial.println("----------wifi_apmode-------------- start");
+
   // SPIFFSの初期化
   if(!SPIFFS.begin(true)){
       Serial.println("SPIFFSのマウントに失敗しました");
@@ -65,6 +67,8 @@ void wifi_apmode() {
   });
 
   server.begin();
+
+  Serial.println("----------wifi_apmode-------------- End");
 }
 
 String inputPage() {
@@ -117,6 +121,8 @@ void saveWiFiConfig(const String& ssid, const String& password) {
   }
 }
 
+void tryConnectToKnownNetworks_fromSPIFFS();
+
 // 設定を読み込み、接続を試みる
 void tryConnectToKnownNetworks() {
 
@@ -146,7 +152,58 @@ void tryConnectToKnownNetworks() {
     }
   }
 
+  if(WiFi.status() != WL_CONNECTED) {
+    Serial.println("Failed to connect to any known network. Going into AP mode.");
+    tryConnectToKnownNetworks_fromSPIFFS();
+  }
+
   Serial.println("----------tryConnectToKnownNetworks-------------- End");
+}
+
+
+
+void tryConnectToKnownNetworks_fromSPIFFS() {
+  Serial.println("Starting to connect to known networks...");
+ // Existing code to try to connect to known networks...
+ // If connection to known networks fails, proceed to read from wifi_SSID.conf
+  if(WiFi.status() != WL_CONNECTED) {
+      Serial.println("Trying to connect using SSID from wifi_SSID.conf...");
+      
+      // Open the wifi_SSID.conf file from SPIFFS
+      fs::File configFile = SPIFFS.open("/wifi_SSID.conf", FILE_READ);
+      if(!configFile){
+          Serial.println("Failed to open wifi_SSID.conf");
+          return; // Exit if the file cannot be opened
+      }
+     // Assume the file contains SSID and Password in each line separated by a comma
+      while(configFile.available()){
+          String line = configFile.readStringUntil('\n');
+          int commaIndex = line.indexOf(',');
+          String ssid = line.substring(0, commaIndex);
+          String password = line.substring(commaIndex + 1);
+          ssid.trim(); // Remove leading/trailing whitespaces
+          password.trim(); // Remove leading/trailing whitespaces
+          
+          // Attempt to connect to the Wi-Fi network using the extracted SSID and password
+          WiFi.begin(ssid.c_str(), password.c_str());
+          Serial.print("Trying to connect to: ");
+          Serial.println(ssid);
+          delay(1000); // Wait for 5 seconds
+          if(WiFi.waitForConnectResult() == WL_CONNECTED) {
+              Serial.println("Connected!");
+              break; // Exit the loop if connected
+          }
+      }
+      configFile.close();
+  }
+
+  if(WiFi.status() == WL_CONNECTED) {
+      // Successfully connected
+      Serial.println("Connected to Wi-Fi.");
+  } else {
+      // Failed to connect
+      Serial.println("Failed to connect to any Wi-Fi network.");
+  }
 }
 
 
