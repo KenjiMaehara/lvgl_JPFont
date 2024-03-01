@@ -43,6 +43,10 @@ void pinMonitorTask(void *pvParameters) {
   Adafruit_MCP23X17* mcp_0x22 = new Adafruit_MCP23X17();
   mcp_0x22->begin_I2C(0x22, &Wire);
 
+  for (int i = 0; i < 8; i++) {
+    mcp_0x22->pinMode(i, INPUT);
+  }
+
   for (;;) {
 
     //if (mcp_0x22->begin_I2C(0x22, &Wire)) 
@@ -50,7 +54,7 @@ void pinMonitorTask(void *pvParameters) {
       //Serial.println("MCP23017 connection successful");
 
       for (int i = 0; i < 8; i++) {
-        mcp_0x22->pinMode(i, INPUT);
+        //mcp_0x22->pinMode(i, INPUT);
 
         int pinValue = mcp_0x22->digitalRead(i);
         if (pinValue != last_pinValue[i]) {
