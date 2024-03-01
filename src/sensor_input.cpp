@@ -39,11 +39,14 @@ void pinMonitorTask(void *pvParameters) {
   Serial.println("-------------pinMonitorTask Start-------------");
   bool pin_change = false;
 
+  // MCP23017デバイスのインスタンスを動的に作成
+  Adafruit_MCP23X17* mcp_0x22 = new Adafruit_MCP23X17();
+  mcp_0x22->begin_I2C(0x22, &Wire);
+
   for (;;) {
-    // MCP23017デバイスのインスタンスを動的に作成
-    Adafruit_MCP23X17* mcp_0x22 = new Adafruit_MCP23X17();
-    
-    if (mcp_0x22->begin_I2C(0x22, &Wire)) { // アドレス0x22のMCP23017を初期化
+
+    //if (mcp_0x22->begin_I2C(0x22, &Wire)) 
+    { // アドレス0x22のMCP23017を初期化
       //Serial.println("MCP23017 connection successful");
 
       for (int i = 0; i < 8; i++) {
@@ -67,10 +70,8 @@ void pinMonitorTask(void *pvParameters) {
 
       } 
       // MCP23017デバイスのインスタンスを解放
-      delete mcp_0x22;
-    } else {
-      Serial.println("MCP23017 connection failed");
-    }
+      //delete mcp_0x22;
+    } 
     vTaskDelay(pdMS_TO_TICKS(500));  // ポーリング間隔
   }
 }

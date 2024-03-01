@@ -30,30 +30,29 @@ void blinkLedTask(void *parameter) {
 
   //ledState.areaLeds[0] = false;
 
-    while (true) {
-        if (xSemaphoreTake(ledSemaphore, portMAX_DELAY)) {
-          // MCP23017デバイスのインスタンスを動的に作成
-          Adafruit_MCP23X17* mcp_0x21 = new Adafruit_MCP23X17();
+  // MCP23017デバイスのインスタンスを動的に作成
+  Adafruit_MCP23X17* mcp_0x21 = new Adafruit_MCP23X17();
 
-          mcp_0x21->begin_I2C(0x21, &Wire);
-          for (int i = 0; i < 16; i++) {
-            mcp_0x21->pinMode(i, OUTPUT);
-          }
-          // セマフォを取得できたらAREA_LEDを状態に応じて点灯/消灯
-          for (int i = 0; i < 8; i++) {
-              mcp_0x21->digitalWrite(i, gLedState.areaLeds[i]);
-          }
+  mcp_0x21->begin_I2C(0x21, &Wire);
+  for (int i = 0; i < 16; i++) {
+    mcp_0x21->pinMode(i, OUTPUT);
+  }
 
-          // 入力に応じてEMG_LEDを点灯/消灯
-          for (int i = 0; i < 8; i++) {
-            mcp_0x21->digitalWrite(i+8, gLedState.emgLeds[i]);
-          }
-
-          // MCP23017デバイスのインスタンスを解放
-          delete mcp_0x21;
+  while (true) {
+      if (xSemaphoreTake(ledSemaphore, portMAX_DELAY)) {
+        
+        // セマフォを取得できたらAREA_LEDを状態に応じて点灯/消灯
+        for (int i = 0; i < 8; i++) {
+            mcp_0x21->digitalWrite(i, gLedState.areaLeds[i]);
         }
-
-    }
+       // 入力に応じてEMG_LEDを点灯/消灯
+        for (int i = 0; i < 8; i++) {
+          mcp_0x21->digitalWrite(i+8, gLedState.emgLeds[i]);
+        }
+       // MCP23017デバイスのインスタンスを解放
+        //delete mcp_0x21;
+      }
+ }
 }
 
 
