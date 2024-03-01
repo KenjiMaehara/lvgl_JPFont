@@ -29,7 +29,7 @@ void blinkLedTask(void *parameter) {
     Serial.println("--------------blinkLedTask Start--------------");
 
   //ledState.areaLeds[0] = false;
-
+  vTaskDelay(pdMS_TO_TICKS(5000)); // 5秒待つ
   // MCP23017デバイスのインスタンスを動的に作成
   Adafruit_MCP23X17* mcp_0x21 = new Adafruit_MCP23X17();
 
@@ -38,8 +38,17 @@ void blinkLedTask(void *parameter) {
     mcp_0x21->pinMode(i, OUTPUT);
   }
 
+  for (int i = 0; i < 8; i++) {
+      gLedState.areaLeds[i] = 1;
+  }
+
+  for (int i = 0; i < 8; i++) {
+      mcp_0x21->digitalWrite(i, gLedState.areaLeds[i]);
+  }
+
   while (true) {
-      if (xSemaphoreTake(ledSemaphore, portMAX_DELAY)) {
+      //if (xSemaphoreTake(ledSemaphore, portMAX_DELAY)) 
+      {
         
         // セマフォを取得できたらAREA_LEDを状態に応じて点灯/消灯
         for (int i = 0; i < 8; i++) {
@@ -52,6 +61,7 @@ void blinkLedTask(void *parameter) {
        // MCP23017デバイスのインスタンスを解放
         //delete mcp_0x21;
       }
+      vTaskDelay(pdMS_TO_TICKS(1000)); // 100ms待つ
  }
 }
 
