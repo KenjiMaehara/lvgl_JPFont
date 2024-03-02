@@ -7,7 +7,7 @@
 #include "clock_screen.h"
 
 
-static void btn_event_cb(lv_event_t *e);
+//static void btn_event_cb(lv_event_t *e);
 static void event_handler(lv_event_t * e);
 
 lv_obj_t* time_label_security; // セキュリティスクリーン用の時刻表示ラベル
