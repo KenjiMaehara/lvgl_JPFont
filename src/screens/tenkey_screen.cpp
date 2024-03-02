@@ -3,7 +3,7 @@
 #include <Arduino.h>
 #include <lvgl.h>
 #include <TFT_eSPI.h> // ILI9488ドライバを含むライブラリ
-#include "common.h"
+#include "../common.h"
 #include "start_screen.h"
 #include "tenkey_screen.h"
 

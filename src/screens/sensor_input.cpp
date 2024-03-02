@@ -2,7 +2,7 @@
 #include <Adafruit_MCP23X17.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
-#include "common.h"
+#include "../common.h"
 
 
 

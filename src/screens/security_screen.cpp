@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <lvgl.h>
 #include <TFT_eSPI.h> // ILI9488ドライバを含むライブラリ
-#include "common.h"
+#include "../common.h"
 
 
 static void btn_event_cb(lv_event_t *e);

@@ -4,7 +4,7 @@
 #include <lvgl.h>
 #include <TFT_eSPI.h> // ILI9488ドライバを含むライブラリ
 //#include <Preferences.h>
-#include "common.h"
+#include "../common.h"
 #include <SPIFFS.h>
 #include <FS.h>
 #include <ArduinoJson.h> // ArduinoJsonライブラリをインクルード
