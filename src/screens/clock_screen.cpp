@@ -156,7 +156,7 @@ void create_clock_screen(void) {
     // 画面1へ「Go to Screen 2」ボタンを追加
     lv_obj_t * btn1 = lv_btn_create(gScreen); // ボタンを作成
     lv_obj_add_event_cb(btn1, go_to_screen2_event_handler, LV_EVENT_CLICKED, NULL);
-    lv_obj_align(btn1, LV_ALIGN_CENTER, 0, 0); // ボタンの位置を中央に設定
+    lv_obj_align(btn1, LV_ALIGN_TOP_LEFT, 10, 10); // ボタンの位置を画面の左上に設定
     lv_obj_t * label = lv_label_create(btn1); // ボタンのラベルを作成
     lv_label_set_text(label, "Go to Screen 2"); // ラベルのテキストを設定
 

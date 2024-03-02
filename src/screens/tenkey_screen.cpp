@@ -27,6 +27,9 @@ lv_obj_t *number_label;
 
 lv_obj_t* wifi_label_tenkey;
 
+static void go_to_next_screen_event_handler(lv_event_t * e);
+
+
 void create_keypad_screen(void) {
 
     delete_current_lvgl_screen(); // 前の画面を削除
@@ -93,20 +96,25 @@ void create_keypad_screen(void) {
     lv_obj_set_style_text_font(number_label, &lv_font_montserrat_22, LV_PART_MAIN | LV_STATE_DEFAULT);
 
 
-    lv_obj_t* btn = lv_btn_create(gScreen);
-    lv_obj_set_pos(btn, 10, 10); // ボタンの位置を設定
-    lv_obj_set_size(btn, 120, 50); // ボタンのサイズを設定
-    lv_obj_t* label = lv_label_create(btn);
-    lv_label_set_text(label, "Go to Screen 2");
-    lv_obj_add_event_cb(btn, screen_switch_event_handler, LV_EVENT_CLICKED, (void*)create_security_screen);
-
-
+     // 画面1へ「Go to Screen 2」ボタンを追加
+    lv_obj_t * btn1 = lv_btn_create(gScreen); // ボタンを作成
+    lv_obj_add_event_cb(btn1, go_to_next_screen_event_handler, LV_EVENT_CLICKED, NULL);
+    lv_obj_align(btn1, LV_ALIGN_TOP_LEFT, 10, 10); // ボタンの位置を画面の左上に設定
+    lv_obj_t * label = lv_label_create(btn1); // ボタンのラベルを作成
+    lv_label_set_text(label, "Go to Screen 2"); // ラベルのテキストを設定
 
     load_screen(gScreen);    // 画面を表示
 
     Serial.println("create_keypad_screen End");
 }
 
+
+static void go_to_next_screen_event_handler(lv_event_t * e) {
+    lv_event_code_t code = lv_event_get_code(e);
+    if(code == LV_EVENT_CLICKED) {
+        create_security_screen();
+    }
+}
 
 
 void keypad_btn_event_cb(lv_event_t *e) {
@@ -130,6 +138,7 @@ void keypad_btn_event_cb(lv_event_t *e) {
     // input_strの内容をnumber_labelに表示
     lv_label_set_text(number_label, input_str);
 }
+
 
 
 // 時刻を更新するための新しい関数

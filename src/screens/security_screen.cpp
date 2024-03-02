@@ -20,7 +20,7 @@ void create_security_screen(void) {
 
     gScreen = lv_obj_create(NULL);  // スクリーンを作成
 
-    #if 1
+    #if 0
     // 時刻表示用のラベルを作成
     time_label_security = lv_label_create(gScreen);
     lv_obj_align(time_label_security, LV_ALIGN_TOP_MID, 0, 5); // 画面の上中央に配置
