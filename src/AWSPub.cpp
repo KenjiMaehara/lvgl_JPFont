@@ -157,7 +157,7 @@ void setupAWSIoT() {
   xTaskCreatePinnedToCore(
     subscDataToAWS, /* タスク関数 */
     "subscDataToAWSTask", /* タスク名 */
-    10000,         /* スタックサイズ */
+    1024 * 8,         /* スタックサイズ */
     NULL,          /* タスクパラメータ */
     1,             /* 優先度 */
     NULL,          /* タスクハンドル */
@@ -169,11 +169,13 @@ void setupAWSIoT() {
 void subscDataToAWS(void * parameter){
 
   for(;;){ // 無限ループ
-    if (!client.connected()) {
+    if (!client.connected() && WiFi.status() == WL_CONNECTED) {
       reconnect();
     }
 
-    client.loop();
+    if(client.connected()){
+      client.loop();
+    }
 
     vTaskDelay(100 / portTICK_PERIOD_MS); // 100ミリ秒の遅延
   }

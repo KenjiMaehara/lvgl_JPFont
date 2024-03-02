@@ -25,7 +25,7 @@ void setup() {
     buzzer_setup();
     sensor_input_setup();
     led_setup();
-    readRFID_setup();
+    //readRFID_setup();
 
     setup_wifiCheck_update();
     setupAWSIoT();

@@ -5,6 +5,9 @@
 //#include <NTPClient.h>
 #include "common.h"
 #include <time.h>
+#include "start_screen.h"
+#include "tenkey_screen.h"
+#include "clock_screen.h"
 
 
 // LVGL用のディスプレイバッファを定義
@@ -113,24 +116,30 @@ void lvgl_screen_setup() {
 
 LV_FONT_DECLARE(jpFont04);
 
-
+static void screen_switch_event_handler(lv_event_t* e);
 
 lv_obj_t* time_label_clock; // セキュリティスクリーン用の時刻表示ラベル
 lv_obj_t* wifi_label_clock; // セキュリティスクリーン用のWi-Fi接続状態表示ラベル
+//lv_obj_t* screen;
 
+//void create_clock_screen(lv_obj_t *scr) {
+void create_clock_screen(void) {
 
-void create_clock_screen(lv_obj_t *scr) {
+    delete_current_lvgl_screen(); // 前の画面を削除
 
     Serial.println("create_clock_screen Start");
     // 時刻を表示するラベルを作成
 
+    lv_obj_t* screen = lv_obj_create(NULL);  // スクリーンを作成
+
     // 時刻表示用のラベルを作成
-    time_label_clock = lv_label_create(scr);
+    //time_label_clock = lv_label_create(scr);
+    time_label_clock = lv_label_create(screen);
     lv_obj_align(time_label_clock, LV_ALIGN_CENTER, 0, 0); // 画面の中央に配置
     lv_label_set_text(time_label_clock, "00:00"); // 初期テキスト
 
 
-    wifi_label_clock = lv_label_create(scr);
+    wifi_label_clock = lv_label_create(screen);
     lv_obj_align(wifi_label_clock, LV_ALIGN_TOP_RIGHT, -10, 10); // 画面の右上に配置
     lv_label_set_text(wifi_label_clock, LV_SYMBOL_WIFI LV_SYMBOL_CLOSE); // 初期テキスト
 
@@ -138,9 +147,26 @@ void create_clock_screen(lv_obj_t *scr) {
     // ラベルのフォントサイズを大きくする
     lv_obj_set_style_text_font(time_label_clock, &lv_font_montserrat_48, LV_STATE_DEFAULT); // フォントサイズを変更
 
-    add_navigation_buttons(screen1, screen2, screen6);
+    //add_navigation_buttons(screen1, screen2, screen6);
 
+
+    lv_obj_t* btn = lv_btn_create(screen);
+    lv_obj_set_pos(btn, 10, 10); // ボタンの位置を設定
+    lv_obj_set_size(btn, 120, 50); // ボタンのサイズを設定
+    lv_obj_t* label = lv_label_create(btn);
+    lv_label_set_text(label, "Go to Screen 2");
+    lv_obj_add_event_cb(btn, screen_switch_event_handler, LV_EVENT_CLICKED, (void*)create_keypad_screen);
+
+
+
+    load_screen(screen);    // 画面を表示
     Serial.println("create_clock_screen End");
 }
 
 
+
+// イベントハンドラ内でのキャスト
+void screen_switch_event_handler(lv_event_t* e) {
+    void (*create_screen_func)(void) = (void (*)(void))lv_event_get_user_data(e);
+    create_screen_func(); // 関数を呼び出す
+}

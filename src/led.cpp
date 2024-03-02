@@ -29,31 +29,53 @@ void blinkLedTask(void *parameter) {
     Serial.println("--------------blinkLedTask Start--------------");
 
   //ledState.areaLeds[0] = false;
+  vTaskDelay(pdMS_TO_TICKS(5000)); // 5秒待つ
+  //xSemaphoreTake(ledSemaphore, portMAX_DELAY);
+  for (int i = 0; i < 8; i++) {
+      gLedState.areaLeds[i] = true;
+  }
 
-    while (true) {
-        if (xSemaphoreTake(ledSemaphore, portMAX_DELAY)) {
-          // MCP23017デバイスのインスタンスを動的に作成
-          Adafruit_MCP23X17* mcp_0x21 = new Adafruit_MCP23X17();
 
-          mcp_0x21->begin_I2C(0x21, &Wire);
-          for (int i = 0; i < 16; i++) {
-            mcp_0x21->pinMode(i, OUTPUT);
-          }
-          // セマフォを取得できたらAREA_LEDを状態に応じて点灯/消灯
-          for (int i = 0; i < 8; i++) {
-              mcp_0x21->digitalWrite(i, gLedState.areaLeds[i]);
-          }
+  for (int i = 0; i < 8; i++) {
+    Serial.print("gLedState.areaLeds[");
+    Serial.print(i);
+    Serial.print("] =");
+    Serial.println(gLedState.areaLeds[i]);
+  }
 
-          // 入力に応じてEMG_LEDを点灯/消灯
-          for (int i = 0; i < 8; i++) {
-            mcp_0x21->digitalWrite(i+8, gLedState.emgLeds[i]);
-          }
+  Adafruit_MCP23X17* mcp_0x21 = new Adafruit_MCP23X17();
+  mcp_0x21->begin_I2C(0x21, &Wire);
 
-          // MCP23017デバイスのインスタンスを解放
-          delete mcp_0x21;
+  for (int i = 0; i < 16; i++) {
+    mcp_0x21->pinMode(i, OUTPUT);
+  }
+  // セマフォを取得できたらAREA_LEDを状態に応じて点灯/消灯
+  for (int i = 0; i < 8; i++) {
+      mcp_0x21->digitalWrite(i, gLedState.areaLeds[i]);
+  }
+
+  while (true) {
+      if (xSemaphoreTake(ledSemaphore, portMAX_DELAY)) 
+      {
+        // MCP23017デバイスのインスタンスを動的に作成
+        //Adafruit_MCP23X17* mcp_0x21 = new Adafruit_MCP23X17();
+
+
+
+
+        // セマフォを取得できたらAREA_LEDを状態に応じて点灯/消灯
+        for (int i = 0; i < 8; i++) {
+            mcp_0x21->digitalWrite(i, gLedState.areaLeds[i]);
         }
-
-    }
+        // 入力に応じてEMG_LEDを点灯/消灯
+        for (int i = 0; i < 8; i++) {
+          mcp_0x21->digitalWrite(i+8, gLedState.emgLeds[i]);
+        }
+        // MCP23017デバイスのインスタンスを解放
+        //delete mcp_0x21;
+      }
+      vTaskDelay(pdMS_TO_TICKS(1000)); // 100ms待つ
+ }
 }
 
 
@@ -68,7 +90,7 @@ void led_setup() {
   
   #ifdef ENABLE_LED_TASK
   // LED点滅タスクを作成
-  xTaskCreate(blinkLedTask, "Blink LED Task", 2048, NULL, 1, NULL);
+  xTaskCreate(blinkLedTask, "Blink LED Task", 1024 * 4, NULL, 1, NULL);
   #endif
 }
 
