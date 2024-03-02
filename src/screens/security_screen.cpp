@@ -18,18 +18,18 @@ void create_security_screen(void) {
 
     Serial.println("create_security_screen Start");
 
-    lv_obj_t* screen = lv_obj_create(NULL);  // スクリーンを作成
+    gScreen = lv_obj_create(NULL);  // スクリーンを作成
 
     #if 1
     // 時刻表示用のラベルを作成
-    time_label_security = lv_label_create(screen);
+    time_label_security = lv_label_create(gScreen);
     lv_obj_align(time_label_security, LV_ALIGN_TOP_MID, 0, 5); // 画面の上中央に配置
     lv_label_set_text(time_label_security, "00:00"); // 初期テキスト
 
 
     
     // ボタンの作成と設定
-    lv_obj_t * btn_02 = lv_btn_create(screen); // ボタンを作成
+    lv_obj_t * btn_02 = lv_btn_create(gScreen); // ボタンを作成
     lv_obj_set_size(btn_02, 400, 100); // ボタンのサイズ設定
     lv_obj_center(btn_02); // ボタンを中心に配置
     lv_obj_add_event_cb(btn_02, event_handler, LV_EVENT_ALL, NULL);
@@ -45,7 +45,7 @@ void create_security_screen(void) {
     #endif
 
     //add_navigation_buttons(scr, screen1, screen2);
-    load_screen(screen);    // 画面を表示
+    load_screen(gScreen);    // 画面を表示
     Serial.println("create_security_screen End");
 }
 

@@ -33,14 +33,14 @@ void create_keypad_screen(void) {
 
     Serial.println("create_keypad_screen start");
 
-    lv_obj_t* screen = lv_obj_create(NULL);  // スクリーンを作成
+    gScreen = lv_obj_create(NULL);  // スクリーンを作成
 
     // 時刻表示用のラベルを作成
-    time_label_keypad = lv_label_create(screen);
+    time_label_keypad = lv_label_create(gScreen);
     lv_obj_align(time_label_keypad, LV_ALIGN_TOP_MID, 0, 5); // 例: 画面の上中央に配置
     lv_label_set_text(time_label_keypad, "00:00"); // 初期テキスト
 
-    wifi_label_tenkey = lv_label_create(screen);
+    wifi_label_tenkey = lv_label_create(gScreen);
     lv_obj_align(wifi_label_tenkey, LV_ALIGN_TOP_RIGHT, -10, 10); // 画面の右上に配置
     lv_label_set_text(wifi_label_tenkey, LV_SYMBOL_WIFI LV_SYMBOL_CLOSE); // 初期テキスト
 
@@ -68,7 +68,7 @@ void create_keypad_screen(void) {
     for (int row = 0; row < rows; row++) {
         for (int col = 0; col < cols; col++) {
             // ボタンの作成
-            lv_obj_t *btn = lv_btn_create(screen);
+            lv_obj_t *btn = lv_btn_create(gScreen);
             lv_obj_set_size(btn, btn_width, btn_height);
             lv_obj_set_pos(btn, 55 + 70 + col * (btn_width + spacing), 70 + row * (btn_height + spacing));
 
@@ -85,7 +85,7 @@ void create_keypad_screen(void) {
     }
 
     // 数字を表示するラベルを作成
-    number_label = lv_label_create(screen);
+    number_label = lv_label_create(gScreen);
     lv_obj_align(number_label, LV_ALIGN_TOP_MID, 0, 10);
     lv_label_set_text(number_label, ""); // 初期状態ではテキストなし
 
@@ -93,7 +93,7 @@ void create_keypad_screen(void) {
     lv_obj_set_style_text_font(number_label, &lv_font_montserrat_22, LV_PART_MAIN | LV_STATE_DEFAULT);
 
 
-    lv_obj_t* btn = lv_btn_create(screen);
+    lv_obj_t* btn = lv_btn_create(gScreen);
     lv_obj_set_pos(btn, 10, 10); // ボタンの位置を設定
     lv_obj_set_size(btn, 120, 50); // ボタンのサイズを設定
     lv_obj_t* label = lv_label_create(btn);
@@ -102,7 +102,7 @@ void create_keypad_screen(void) {
 
 
 
-    load_screen(screen);    // 画面を表示
+    load_screen(gScreen);    // 画面を表示
 
     Serial.println("create_keypad_screen End");
 }
