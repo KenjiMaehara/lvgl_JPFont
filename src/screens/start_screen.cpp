@@ -180,10 +180,10 @@ void load_screen(lv_obj_t* screen) {
 
 // 現在の画面を削除する関数
 void delete_current_lvgl_screen(void) {
-    if (current_lvgl_screen != NULL) {
-        lv_obj_del(current_lvgl_screen); // 現在の画面を削除
+    if (gScreen != NULL) {
+        lv_obj_del(gScreen); // 現在の画面を削除
         Serial.println("delete_current_lvgl_screen");
-        current_lvgl_screen = NULL; // ポインタをNULLに設定
+        gScreen = NULL; // ポインタをNULLに設定
     } else {
         Serial.println("current_lvgl_screen is NULL");
     }
