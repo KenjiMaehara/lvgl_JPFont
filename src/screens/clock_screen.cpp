@@ -167,6 +167,9 @@ void create_clock_screen(void) {
 
 // イベントハンドラ内でのキャスト
 void screen_switch_event_handler(lv_event_t* e) {
+
+    Serial.println("-----screen_switch_event_handler start----------");
+
     void (*create_screen_func)(void) = (void (*)(void))lv_event_get_user_data(e);
     create_screen_func(); // 関数を呼び出す
 }
