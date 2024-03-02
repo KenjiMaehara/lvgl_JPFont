@@ -116,7 +116,7 @@ void lvgl_screen_setup() {
 
 LV_FONT_DECLARE(jpFont04);
 
-static void screen_switch_event_handler(lv_event_t* e);
+void screen_switch_event_handler(lv_event_t* e);
 
 lv_obj_t* time_label_clock; // セキュリティスクリーン用の時刻表示ラベル
 lv_obj_t* wifi_label_clock; // セキュリティスクリーン用のWi-Fi接続状態表示ラベル

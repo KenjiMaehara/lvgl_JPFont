@@ -6,6 +6,8 @@
 #include "../common.h"
 #include "start_screen.h"
 #include "tenkey_screen.h"
+#include "clock_screen.h"
+#include "security_screen.h"
 
 
 
@@ -91,12 +93,17 @@ void create_keypad_screen(void) {
     lv_obj_set_style_text_font(number_label, &lv_font_montserrat_22, LV_PART_MAIN | LV_STATE_DEFAULT);
 
 
+    lv_obj_t* btn = lv_btn_create(screen);
+    lv_obj_set_pos(btn, 10, 10); // ボタンの位置を設定
+    lv_obj_set_size(btn, 120, 50); // ボタンのサイズを設定
+    lv_obj_t* label = lv_label_create(btn);
+    lv_label_set_text(label, "Go to Screen 2");
+    lv_obj_add_event_cb(btn, screen_switch_event_handler, LV_EVENT_CLICKED, (void*)create_security_screen);
 
 
 
-
-    //add_navigation_buttons(screen2, screen3, screen1);
     load_screen(screen);    // 画面を表示
+
     Serial.println("create_keypad_screen End");
 }
 

@@ -2,6 +2,9 @@
 #include <lvgl.h>
 #include <TFT_eSPI.h> // ILI9488ドライバを含むライブラリ
 #include "../common.h"
+#include "security_screen.h"
+#include "start_screen.h"
+#include "clock_screen.h"
 
 
 static void btn_event_cb(lv_event_t *e);
@@ -11,15 +14,19 @@ lv_obj_t* time_label_security; // セキュリティスクリーン用の時刻�
 
 void create_security_screen(lv_obj_t *scr) {
 
+    delete_current_lvgl_screen(); // 前の画面を削除
+
     Serial.println("create_security_screen Start");
 
+    lv_obj_t* screen = lv_obj_create(NULL);  // スクリーンを作成
+
     // 時刻表示用のラベルを作成
-    time_label_security = lv_label_create(scr);
+    time_label_security = lv_label_create(screen);
     lv_obj_align(time_label_security, LV_ALIGN_TOP_MID, 0, 5); // 画面の上中央に配置
     lv_label_set_text(time_label_security, "00:00"); // 初期テキスト
 
     // ボタンの作成と設定
-    lv_obj_t * btn_02 = lv_btn_create(scr); // ボタンを作成
+    lv_obj_t * btn_02 = lv_btn_create(screen); // ボタンを作成
     lv_obj_set_size(btn_02, 400, 100); // ボタンのサイズ設定
     lv_obj_center(btn_02); // ボタンを中心に配置
     lv_obj_add_event_cb(btn_02, event_handler, LV_EVENT_ALL, NULL);
@@ -34,7 +41,7 @@ void create_security_screen(lv_obj_t *scr) {
     lv_obj_set_style_text_color(label_02, lv_color_make(255, 255, 255), 0); // テキストを白色に設定
 
 
-    add_navigation_buttons(scr, screen1, screen2);
+    //add_navigation_buttons(scr, screen1, screen2);
 
     Serial.println("create_security_screen End");
 }
