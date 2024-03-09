@@ -24,6 +24,7 @@ extern void screen_setup();
 
 extern void add_navigation_buttons(lv_obj_t *scr, lv_obj_t *next_screen, lv_obj_t *prev_screen);
 
+void delete_previous_screen(lv_obj_t* previous_screen);
 
 //extern lv_obj_t *screen1;
 //extern lv_obj_t *screen2;

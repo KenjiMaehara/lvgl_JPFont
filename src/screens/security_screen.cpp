@@ -92,5 +92,6 @@ static void event_handler(lv_event_t * e) {
 
 static void btn_event_handler3(lv_event_t* e) {
     //show_screen4(); // Screen 4へ遷移
+    delete_previous_screen(screen3);
     create_area_screen();
 }

@@ -59,5 +59,6 @@ void create_area_screen(void) {
 
 
 static void go_to_next_screen_event_handler(lv_event_t * e) {
+    delete_previous_screen(screen4);
     create_clock_screen();
 }
