@@ -253,7 +253,7 @@ void create_apmode_screen(lv_obj_t *scr) {
     lv_obj_set_style_text_font(lv_obj_get_child(ap_mode_btn, 0), &lv_font_montserrat_16, 0); // フォントサイズ変更
     lv_obj_center(label);
 
-    add_navigation_buttons(screen7, screen1, screen6);
+    //add_navigation_buttons(screen7, screen1, screen6);
     #ifdef ENABLE_APMODE_TASK
     // タスクの作成と実行
     xTaskCreate(
