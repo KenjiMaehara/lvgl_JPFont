@@ -125,7 +125,7 @@ void create_wifi_screen(lv_obj_t *scr) {
     // WiFi情報を表示
     displayWiFiInfo(label_ssid, label_ip);
 
-    add_navigation_buttons(screen5, screen6, screen4);
+    //add_navigation_buttons(screen5, screen6, screen4);
 
     Serial.println("create_wifi_screen End");
 }

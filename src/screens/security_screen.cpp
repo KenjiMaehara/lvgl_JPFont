@@ -5,6 +5,7 @@
 #include "security_screen.h"
 #include "start_screen.h"
 #include "clock_screen.h"
+#include "area_screen.h"
 
 
 //static void btn_event_cb(lv_event_t *e);
@@ -91,5 +92,5 @@ static void event_handler(lv_event_t * e) {
 
 static void btn_event_handler3(lv_event_t* e) {
     //show_screen4(); // Screen 4へ遷移
-    create_clock_screen();
+    create_area_screen();
 }
