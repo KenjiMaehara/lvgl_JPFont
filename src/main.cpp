@@ -19,16 +19,16 @@ void setup() {
     
     lvgl_screen_setup();
     
-    task_setup();
+    //task_setup();
     screen_setup();
-    setup_time_update();
-    buzzer_setup();
-    sensor_input_setup();
-    led_setup();
+    //setup_time_update();
+    //buzzer_setup();
+    //sensor_input_setup();
+    //led_setup();
     //readRFID_setup();
 
-    setup_wifiCheck_update();
-    setupAWSIoT();
+    //setup_wifiCheck_update();
+    //setupAWSIoT();
 
     //tryConnectToKnownNetworks();
 
