@@ -41,7 +41,7 @@ void create_keypad_screen(void) {
         lv_obj_add_event_cb(btn2, go_to_next_screen_event_handler, LV_EVENT_CLICKED, NULL);
         lv_obj_align(btn2, LV_ALIGN_CENTER, 0, 0);
         lv_obj_t* label2 = lv_label_create(btn2);
-        lv_label_set_text(label2, "Go to Screen 1");
+        lv_label_set_text(label2, "Go to Screen 3");
     }
     lv_scr_load(screen2);
 
