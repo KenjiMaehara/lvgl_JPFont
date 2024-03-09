@@ -28,92 +28,31 @@ lv_obj_t *number_label;
 lv_obj_t* wifi_label_tenkey;
 
 static void go_to_next_screen_event_handler(lv_event_t * e);
-
+static lv_obj_t* screen2 = nullptr;
 
 void create_keypad_screen(void) {
 
-    delete_current_lvgl_screen(); // 前の画面を削除
-
     Serial.println("create_keypad_screen start");
 
-    gScreen = lv_obj_create(NULL);  // スクリーンを作成
-
-    // 時刻表示用のラベルを作成
-    time_label_keypad = lv_label_create(gScreen);
-    lv_obj_align(time_label_keypad, LV_ALIGN_TOP_MID, 0, 5); // 例: 画面の上中央に配置
-    lv_label_set_text(time_label_keypad, "00:00"); // 初期テキスト
-
-    wifi_label_tenkey = lv_label_create(gScreen);
-    lv_obj_align(wifi_label_tenkey, LV_ALIGN_TOP_RIGHT, -10, 10); // 画面の右上に配置
-    lv_label_set_text(wifi_label_tenkey, LV_SYMBOL_WIFI LV_SYMBOL_CLOSE); // 初期テキスト
-
-    const int btn_width = 70; // ボタンの幅
-    const int btn_height = 50; // ボタンの高さ
-    const int cols = 3; // 列数
-    const int rows = 4; // 行数
-
-    // テンキーボタンのラベル
-    const char *btn_labels[rows][cols] = {
-        {"1", "2", "3"},
-        {"4", "5", "6"},
-        {"7", "8", "9"},
-        {"C", "0", "E"}
-    };
-
-    // スタイルを定義
-    static lv_style_t style;
-    lv_style_init(&style);
-    lv_style_set_border_color(&style, lv_color_black());
-    lv_style_set_border_width(&style, 2); // 枠線の幅を2ピクセルに設定
-
-    const int spacing = 10; // ボタン間の余白
-
-    for (int row = 0; row < rows; row++) {
-        for (int col = 0; col < cols; col++) {
-            // ボタンの作成
-            lv_obj_t *btn = lv_btn_create(gScreen);
-            lv_obj_set_size(btn, btn_width, btn_height);
-            lv_obj_set_pos(btn, 55 + 70 + col * (btn_width + spacing), 70 + row * (btn_height + spacing));
-
-            // ボタンのラベルの作成
-            lv_obj_t *label = lv_label_create(btn);
-            lv_label_set_text(label, btn_labels[row][col]);
-
-            // ボタンにスタイルを適用
-            lv_obj_add_style(btn, &style, 0);
-
-            // ボタンにイベントハンドラを追加（必要に応じて）
-            lv_obj_add_event_cb(btn, keypad_btn_event_cb, LV_EVENT_CLICKED, NULL);
-        }
+    if (screen2 == nullptr) {
+        screen2 = lv_obj_create(NULL);
+        // 画面2の構成要素を設定
+        lv_obj_t* btn2 = lv_btn_create(screen2);
+        lv_obj_add_event_cb(btn2, go_to_next_screen_event_handler, LV_EVENT_CLICKED, NULL);
+        lv_obj_align(btn2, LV_ALIGN_CENTER, 0, 0);
+        lv_obj_t* label2 = lv_label_create(btn2);
+        lv_label_set_text(label2, "Go to Screen 1");
     }
-
-    // 数字を表示するラベルを作成
-    number_label = lv_label_create(gScreen);
-    lv_obj_align(number_label, LV_ALIGN_TOP_MID, 0, 10);
-    lv_label_set_text(number_label, ""); // 初期状態ではテキストなし
-
-    // Set a larger font for the number label
-    lv_obj_set_style_text_font(number_label, &lv_font_montserrat_22, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-
-     // 画面1へ「Go to Screen 2」ボタンを追加
-    lv_obj_t * btn1 = lv_btn_create(gScreen); // ボタンを作成
-    lv_obj_add_event_cb(btn1, go_to_next_screen_event_handler, LV_EVENT_CLICKED, NULL);
-    lv_obj_align(btn1, LV_ALIGN_TOP_LEFT, 10, 10); // ボタンの位置を画面の左上に設定
-    lv_obj_t * label = lv_label_create(btn1); // ボタンのラベルを作成
-    lv_label_set_text(label, "Go to Screen 2"); // ラベルのテキストを設定
-
-    load_screen(gScreen);    // 画面を表示
+    lv_scr_load(screen2);
 
     Serial.println("create_keypad_screen End");
 }
 
 
 static void go_to_next_screen_event_handler(lv_event_t * e) {
-    lv_event_code_t code = lv_event_get_code(e);
-    if(code == LV_EVENT_CLICKED) {
-        create_security_screen();
-    }
+
+    create_security_screen();
+
 }
 
 

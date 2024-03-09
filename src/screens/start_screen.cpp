@@ -23,58 +23,6 @@ void screen_setup() {
     create_clock_screen();
     //create_keypad_screen();
 
-    #if 0
-    screen1 = lv_obj_create(NULL);
-    lv_obj_set_user_data(screen1, (void*)(uintptr_t)1); // インデックス1を割り当てる
-    create_clock_screen(screen1);
-
-  
-    screen2 = lv_obj_create(NULL);
-    lv_obj_set_user_data(screen2, (void*)(uintptr_t)2); // インデックス2を割り当て
-    create_keypad_screen(screen2);
-
- 
-    screen3 = lv_obj_create(NULL);
-    lv_obj_set_user_data(screen3, (void*)(uintptr_t)3);
-    create_security_screen(screen3);
-
-    screen4 = lv_obj_create(NULL);
-    lv_obj_set_user_data(screen4, (void*)(uintptr_t)4);
-    create_area_screen(screen4);
-
-    screen5 = lv_obj_create(NULL);
-    lv_obj_set_user_data(screen5, (void*)(uintptr_t)5);
-    create_wifi_screen(screen5);
-
-    screen6 = lv_obj_create(NULL);
-    lv_obj_set_user_data(screen6, (void*)(uintptr_t)6);
-    create_wifiScan_screen(screen6);
-
-    screen7 = lv_obj_create(NULL);
-    lv_obj_set_user_data(screen7, (void*)(uintptr_t)7);
-    create_apmode_screen(screen7);
-
-    screen8 = lv_obj_create(NULL);
-    lv_obj_set_user_data(screen8, (void*)(uintptr_t)8);
-    create_cardTest_screen(screen8);
-    #endif
-
-    #if 0
-    // すべてのスクリーンが生成された後にボタンにスクリーンを割り当てる
-    add_navigation_buttons(screen1, screen2, screen8);
-    add_navigation_buttons(screen2, screen3, screen1);
-
-    add_navigation_buttons(screen3, screen4, screen2);
-    add_navigation_buttons(screen4, screen5, screen3);
-    add_navigation_buttons(screen5, screen6, screen4);
-    add_navigation_buttons(screen6, screen7, screen5);
-    add_navigation_buttons(screen7, screen8, screen6);
-    add_navigation_buttons(screen8, screen1, screen7);
-    #endif
-
-    //lv_scr_load(screen1);
-
-    //lv_timer_create(update_clock, 1000, NULL);
 }
 
 
@@ -171,20 +119,3 @@ void update_clock(lv_timer_t *timer) {
 }
 #endif
 
-
-// 指定された画面をロードする関数
-void load_screen(lv_obj_t* screen) {
-    current_lvgl_screen = screen; // 現在の画面を更新
-    lv_scr_load(screen); // 画面をロードして表示
-}
-
-// 現在の画面を削除する関数
-void delete_current_lvgl_screen(void) {
-    if (gScreen != NULL) {
-        lv_obj_del(gScreen); // 現在の画面を削除
-        Serial.println("delete_current_lvgl_screen");
-        gScreen = NULL; // ポインタをNULLに設定
-    } else {
-        Serial.println("current_lvgl_screen is NULL");
-    }
-}

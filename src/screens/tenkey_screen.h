@@ -1,7 +1,7 @@
 #ifndef TENKEY_SCREEN_H
 #define TENKEY_SCREEN_H
 
-extern void create_keypad_screen(void);
+void create_keypad_screen(void);
 extern void update_time_label(lv_obj_t* label);
 
 #endif
