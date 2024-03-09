@@ -10,6 +10,7 @@
 #include <FS.h>
 #include "AWSPub.h"
 #include "esp_heap_caps.h"
+#include "arduinoCloud.h"
 
 void setup() {
     Serial.begin(115200);
@@ -29,6 +30,7 @@ void setup() {
 
     setup_wifiCheck_update();
     setupAWSIoT();
+    arduinoCloud_setup();
 
     //tryConnectToKnownNetworks();
 
