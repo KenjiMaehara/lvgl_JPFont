@@ -168,7 +168,7 @@ void create_clock_screen(void) {
 
 
 static void go_to_screen2_event_handler(lv_event_t * e) {
-    delete_previous_screen(screen1);
+    delete_previous_screen(&screen1);
     create_keypad_screen();
 }
 
@@ -183,9 +183,9 @@ void screen_switch_event_handler(lv_event_t* e) {
 }
 
 
-void delete_previous_screen(lv_obj_t* previous_screen) {
-    if (previous_screen != NULL) {
-        lv_obj_del(previous_screen);
-        previous_screen = NULL; // ポインタをNULLに設定
+void delete_previous_screen(lv_obj_t** previous_screen) {
+    if (*previous_screen != NULL) {
+        lv_obj_del(*previous_screen);
+        *previous_screen = NULL; // ポインタをNULLに設定
     }
 }
