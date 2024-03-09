@@ -2,7 +2,7 @@
 #include <lvgl.h>
 #include <TFT_eSPI.h> // ILI9488ドライバを含むライブラリ
 #include <WiFi.h>
-#include "common.h"
+#include "../common.h"
 #include <SPIFFS.h>
 #include <FS.h>
 
@@ -125,7 +125,7 @@ void create_wifi_screen(lv_obj_t *scr) {
     // WiFi情報を表示
     displayWiFiInfo(label_ssid, label_ip);
 
-    add_navigation_buttons(screen5, screen6, screen4);
+    //add_navigation_buttons(screen5, screen6, screen4);
 
     Serial.println("create_wifi_screen End");
 }

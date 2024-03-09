@@ -1,6 +1,6 @@
 #include <WiFi.h>
 #include <lvgl.h>
-#include "common.h"
+#include "../common.h"
 
 void wifiCheck(void) {
 

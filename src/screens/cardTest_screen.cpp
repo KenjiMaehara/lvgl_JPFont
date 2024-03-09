@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <lvgl.h>
 #include <TFT_eSPI.h> // ILI9488ドライバを含むライブラリ
-#include "common.h"
+#include "../common.h"
 
 
 void onCardRead(card_data_t *card);
@@ -34,7 +34,7 @@ void create_cardTest_screen(lv_obj_t *scr) {
     card_set_cb(onCardRead);
 
 
-    add_navigation_buttons(screen8, screen1, screen7);
+    //add_navigation_buttons(screen8, screen1, screen7);
 
     Serial.println("create_cardTest_screen End");
 }

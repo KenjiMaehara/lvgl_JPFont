@@ -2,7 +2,7 @@
 #include <lvgl.h>
 #include <TFT_eSPI.h> // ILI9488ドライバを含むライブラリ
 #include "common.h"
-#include "wifi_screen.h"
+#include "screens/wifi_screen.h"
 
 
 

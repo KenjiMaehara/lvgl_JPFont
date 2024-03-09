@@ -25,10 +25,10 @@ extern void screen_setup();
 extern void add_navigation_buttons(lv_obj_t *scr, lv_obj_t *next_screen, lv_obj_t *prev_screen);
 
 
-extern lv_obj_t *screen1;
-extern lv_obj_t *screen2;
-extern lv_obj_t *screen3;
-extern lv_obj_t *screen4;
+//extern lv_obj_t *screen1;
+//extern lv_obj_t *screen2;
+//extern lv_obj_t *screen3;
+//extern lv_obj_t *screen4;
 extern lv_obj_t *screen5;
 extern lv_obj_t *screen6;
 extern lv_obj_t *screen7;
