@@ -1,6 +1,7 @@
 #include <ArduinoIoTCloud.h>
-#include <WiFiNINA.h>
-#include "arduino_secrets.h"
+//#include <WiFiNINA.h>
+//#include "arduino_secrets.h"
+#include <WiFi.h>
 #include "arduinoCloud.h"
 
 /////// WiFi設定の入力 ///////
@@ -14,6 +15,9 @@ const char DEVICE_KEY[] = "your_device_key";               // デバイスのキ
 void onArduinoCloudReady() {
   Serial.println("Arduino Cloud connection established.");
 }
+
+void initArduinoCloud();
+void cloudTask(void *pvParameters);
 
 void arduinoCloud_setup() {
   //Serial.begin(9600);
