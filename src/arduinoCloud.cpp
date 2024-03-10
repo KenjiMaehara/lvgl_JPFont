@@ -4,9 +4,11 @@
 #include <WiFi.h>
 #include "arduinoCloud.h"
 
+#if 0
 /////// WiFi設定の入力 ///////
 const char WIFI_SSID[] = SECRET_SSID;    // WiFiネットワーク名
 const char WIFI_PASSWORD[] = SECRET_PASS; // WiFiパスワード
+#endif
 
 /////// Arduino Cloud設定 ///////
 const char DEVICE_LOGIN_NAME[] = "your_device_login_name"; // デバイスのログイン名
