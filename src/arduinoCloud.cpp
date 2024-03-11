@@ -3,6 +3,7 @@
 //#include "arduino_secrets.h"
 #include <WiFi.h>
 #include "arduinoCloud.h"
+#include <Arduino_ESP32_OTA.h>
 
 #if 0
 /////// WiFi設定の入力 ///////
@@ -42,12 +43,14 @@ void arduinoCloud_setup() {
 
 void initArduinoCloud() {
   ArduinoCloud.begin(DEVICE_LOGIN_NAME, DEVICE_KEY);
-  ArduinoCloud.onReady(onArduinoCloudReady);
+  //ArduinoCloud.onReady(onArduinoCloudReady);
+  //ArduinoCloud.onReady(onArduinoCloudReady);
 }
 
 void cloudTask(void *pvParameters) {
   for (;;) {
-    if (ArduinoCloud.ready()) {
+    //if (ArduinoCloud.ready()) {
+    if (ArduinoCloud.connected()) {
       // ここでArduino Cloudへのデータ送信を行う
       Serial.println("Sending data to Arduino Cloud...");
       // 例: ArduinoCloud.updateThing("sensorValue", value);
